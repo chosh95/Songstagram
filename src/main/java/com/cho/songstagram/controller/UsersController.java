@@ -2,22 +2,17 @@ package com.cho.songstagram.controller;
 
 import com.cho.songstagram.domain.Users;
 import com.cho.songstagram.service.UsersService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 
-@RestController
+@Controller
+@RequiredArgsConstructor
 public class UsersController {
 
-    @Autowired
-    UsersService usersService;
+    private final UsersService usersService;
 
-    @GetMapping("/users/list")
-    public List<Users> showUsers(){
-        List<Users> allUsers = usersService.getAllUsers();
-        return allUsers;
-    }
 }

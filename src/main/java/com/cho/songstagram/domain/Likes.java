@@ -18,4 +18,5 @@ public class Likes {
     @JoinColumn(name = "posts_id")
     private Posts posts;
 
+    private Long userId;
 }
