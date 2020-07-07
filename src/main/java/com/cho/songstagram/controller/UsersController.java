@@ -21,18 +21,19 @@ public class UsersController {
 
     private final UsersService usersService;
 
-    @GetMapping("/login")
-    public String login(){
-        return "login";
+    @GetMapping("/user/login")
+    public String login(UserDto userDto){
+        return "/user/login";
     }
 
-    @PostMapping("/login")
+    @PostMapping("/user/login")
     public String loginPost(UserDto userDto, HttpSession session){
         Users users = usersService.findByEmail(userDto.getEmail())
                 .orElse(new Users());
-
+        System.out.println(userDto.getEmail() + " " + userDto.getPassword());
         if(users.getId()==null || !users.matchPassword(userDto.getPassword())){
-            return "redirect:/login";
+            System.out.println(users.getId() + " " + users.getPassword());
+            return "redirect:/user/login";
         }
 
         session.setAttribute("loginUser",users);
@@ -40,15 +41,15 @@ public class UsersController {
         return "redirect:/";
     }
 
-    @GetMapping("/signIn")
+    @GetMapping("/user/signIn")
     public String signIn(){
-        return "signIn";
+        return "/user/signIn";
     }
 
-    @PostMapping("/singIn")
+    @PostMapping("/user/singIn")
     public String signInPro(@Valid @ModelAttribute("userDto") UserDto userDto, BindingResult result){
         if(result.hasErrors()){
-            return "signIn";
+            return "/user/signIn";
         }
         Users users = Users.builder()
                 .password(userDto.getPassword())
@@ -58,12 +59,12 @@ public class UsersController {
                 .build();
         usersService.addUser(users);
 
-        return "redirect:/login";
+        return "redirect:/user/login";
     }
 
-    @GetMapping("/logout")
+    @GetMapping("/user/logout")
     public String logout(HttpSession session){
         session.setAttribute("loginUser",null);
-        return "logout";
+        return "/user/logout";
     }
 }

@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="layout/default">
+
+<th:block layout:fragment="content">
+    <!-- Begin Page Content -->
+    <div class="container-fluid" style="margin-top: 100px">
+        <form th:object="${userDto}" action="#" th:action="@{/user/login}" method="post">
+            <h2>로그인</h2>
+            <input th:field="${userDto.email}" type="text" placeholder="이메일을 입력하세요"/>
+            <input th:field="${userDto.password}" type="password" placeholder="비밀번호를 입력하세요"/>
+            <button type="submit">로그인하기</button>
+        </form>
+    </div>
+</th:block>
+</html>

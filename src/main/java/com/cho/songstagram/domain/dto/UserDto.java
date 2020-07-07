@@ -1,6 +1,7 @@
 package com.cho.songstagram.domain.dto;
 
 import lombok.Getter;
+import lombok.Setter;
 import org.hibernate.validator.constraints.UniqueElements;
 
 import javax.validation.constraints.Email;
@@ -8,6 +9,7 @@ import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
 
 @Getter
+@Setter
 public class UserDto {
 
     @NotBlank(message = "이메일을 입력해주세요.")
@@ -19,8 +21,6 @@ public class UserDto {
     @NotBlank(message = "비밀번호를 입력해주세요")
     private String password;
 
-    @NotBlank(message = "이름을 입력해주세요.")
-    @Size(min = 3, max = 10, message = "이름은 3자에서 10자까지 가능합니다.")
     private String name;
 
     private String picture;

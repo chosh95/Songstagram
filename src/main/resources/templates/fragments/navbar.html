@@ -4,25 +4,29 @@
 <th:block th:fragment="navbarFragment">
 
     <!-- Navbar -->
-    <nav class="navbar navbar-dark bg-primary navbar-expand-sm">
-
-        <a class="navbar-brand " th:href="@{/}">Songstagram</a>
-
-        <button class="navbar-toggler" type="button" data-toggle="collapse"
-                data-target="#navMenu">
+    <nav class="navbar navbar-expand-md navbar-light bg-light fixed-top shadow-lg">
+        <a class="navbar-brand " th:href="@{/}"><img th:src="@{/icon/song.png}" width="30" height="30" class="d-inline-block align-top"></a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navMenu">
             <span class="navbar-toggler-icon"></span>
         </button>
-
         <div class="collapse navbar-collapse" id="navMenu">
-            <ul>
-                <li th:if="${session.loginUser!=null}" ><a th:text="${session.loginUser.getName()}"></a></li>
-                <li th:if="${session.loginUser!=null}" ><a th:href="@{/logout}">로그아웃</a> </li>
-                <li th:if="${session.loginUser==null}" ><a th:href="@{/login}">로그인</a> </li>
-                <li th:if="${session.loginUser==null}" ><a th:href="@{/singIn}">회원가입</a> </li>
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item" th:if="${session.loginUser!=null}" >
+                    <a th:text="${session.loginUser.getName()}"> </a>
+                </li>
+                <li class="nav-item" th:if="${session.loginUser!=null}" >
+                    <a class="nav-link" th:href="@{/user/logout}">로그아웃</a>
+                </li>
+                <li class="nav-item" th:if="${session.loginUser==null}" >
+                    <a class="nav-link" th:href="@{/user/login}">로그인</a>
+                </li>
+                <li class="nav-item" th:if="${session.loginUser==null}" >
+                    <a class="nav-link" th:href="@{/user/singIn}">회원가입</a>
+                </li>
             </ul>
         </div>
     </nav>
-    <!-- End of Topbar -->
+    <!-- End of navbar -->
 
 </th:block>
 </html>

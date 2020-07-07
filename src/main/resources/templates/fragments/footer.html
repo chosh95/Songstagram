@@ -1,13 +1,19 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <th:block th:fragment="footerFragment">
-    <footer class="sticky-footer bg-white">
-        <div class="container my-auto">
-            <div class="copyright text-center my-auto">
-                <span>Copyright &copy; seong ho cho 2020</span><br>
-                <span>개발자 연락처 : chosh-95@hanmail.net</span>
-            </div>
+    <div class="container-fluid" style="margin-top:50px;padding-top:30px;padding-bottom: 30px">
+        <div class="container copyright text-center my-auto">
+            <p>Copyright &copy; seong ho cho 2020</p>
+            <p>개발자 연락처 : chosh-95@hanmail.net</p>
+            <p>
+                <a class="badge badge-light" href="https://github.com/chosh95">
+                    <img th:src="@{/icon/github.png}" width="20" height="20" class="d-inline-block align-top">
+                </a>
+                <a class="badge badge-light" href="https://www.instagram.com/cho_____sh/">
+                    <img th:src="@{/icon/insta.png}" width="20" height="20" class="d-inline-block align-top">
+                </a>
+            </p>
         </div>
-    </footer>
+    </div>
 </th:block>
 </html>
