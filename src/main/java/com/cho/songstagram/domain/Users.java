@@ -1,6 +1,5 @@
 package com.cho.songstagram.domain;
 
-import com.sun.istack.Nullable;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -20,32 +19,26 @@ public class Users {
     @Column(nullable = false)
     private String name;
 
-    private String picture;
+    @Column(nullable = false)
     private String email;
 
-    @Enumerated(EnumType.STRING)
+    private String picture;
+
     @Column(nullable = false)
-    private Role role;
+    private String password;
 
     @OneToMany(mappedBy = "users")
     private List<Posts> postsList;
 
-
     @Builder
-    public Users(String name, String email, String picture, Role role){
+    public Users(String name, String email, String password, String picture){
         this.name = name;
         this.email = email;
         this.picture = picture;
-        this.role = role;
+        this.password = password;
     }
 
-    public String getRoleKey(){
-        return this.role.getKey();
-    }
-
-    public Users update(String name, String picture) {
-        this.name = name;
-        this.picture = picture;
-        return this;
+    public boolean matchPassword(String password){
+        return this.password.equals(password);
     }
 }
