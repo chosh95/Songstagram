@@ -25,7 +25,7 @@ public class PostsController {
         Posts posts = new Posts();
         ImageFile imageFile = imageFileService.storeFile(file);
         String fileUri = ServletUriComponentsBuilder.fromCurrentContextPath()
-                .path("/downloadFile/")
+                .path("/images/")
                 .path(imageFile.getId())
                 .toUriString();
         ResponseFileDto responseFileDto = new ResponseFileDto();

@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+
+<th:block th:fragment="navbarFragment">
+
+    <!-- Navbar -->
+    <nav class="navbar navbar-dark bg-primary navbar-expand-sm">
+
+        <a class="navbar-brand " th:href="@{/}">Songstagram</a>
+
+        <button class="navbar-toggler" type="button" data-toggle="collapse"
+                data-target="#navMenu">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navMenu">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a th:href="@{/login}" class="nav-link">로그인</a>
+                </li>
+                <li class="nav-item">
+                    <a th:href="@{/logout}" class="nav-link">로그아웃</a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+    <!-- End of Topbar -->
+
+</th:block>
+</html>
