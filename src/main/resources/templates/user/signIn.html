@@ -6,20 +6,28 @@
 <th:block layout:fragment="content">
     <!-- Begin Page Content -->
     <div class="container-fluid" style="margin-top: 100px">
-        <form th:object="${loginUserDto}" action="#" th:action="@{/user/login}" method="post">
-            <h2>로그인</h2>
+        <form th:object="${signInUserDto}" action="#" th:action="@{/user/signIn}" method="post">
+            <h2>회원가입하기</h2>
             <ul>
                 <li>
                     이메일 : <input th:field="*{email}" type="text" placeholder="이메일을 입력하세요"/>
                     <p th:if="${#fields.hasErrors('email')}" th:errors="*{email}" style="color: red">emailError</p>
+                    <p th:if="${emailExist}" th:text="${emailExist}" style="color: red">emailExistError</p>
                 </li>
                 <li>
                     비밀번호 : <input th:field="*{password}" type="password" placeholder="비밀번호를 입력하세요"/>
                     <p th:if="${#fields.hasErrors('password')}" th:errors="*{password}" style="color: red">passwordError</p>
-                    <p th:if="${idPwMsg}" th:text="${idPwMsg}" style="color: red">
                 </li>
                 <li>
-                    <button type="submit">로그인하기</button>
+                    비밀번호 확인 : <input th:field="*{password2}" type="password" placeholder="비밀번호를 입력하세요"/>
+                    <p th:if="${passwordMsg}" th:text="${passwordMsg}" style="color: red">passwordError</p>
+                </li>
+                <li>
+                    이름 : <input th:field="*{name}" type="text" placeholder="이름을 입력하세요"/>
+                    <p th:if="${#fields.hasErrors('name')}" th:errors="*{name}" style="color: #ff0000">nameError</p>
+                </li>
+                <li>
+                    <button type="submit">회원가입하기</button>
                 </li>
             </ul>
         </form>
