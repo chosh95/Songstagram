@@ -11,9 +11,13 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
+import java.io.File;
+import java.io.IOException;
 
 @Controller
 @RequiredArgsConstructor
@@ -50,24 +54,29 @@ public class UsersController {
     }
 
     @PostMapping("/user/signIn")
-    public String signInPro(@Valid @ModelAttribute("signInUserDto") SignInUserDto signInUserDto,
-                            BindingResult result, Model model){
+    public String upload(@Valid @ModelAttribute("signInUserDto") SignInUserDto signInUserDto,
+                         BindingResult result, Model model, @RequestParam("files") MultipartFile files) throws IOException {
+
         Users users = usersService.findByEmail(signInUserDto.getEmail())
                 .orElse(new Users());
 
         if(result.hasErrors() || users.getId()!=null || !signInUserDto.matchPassword()){
-          if(users.getId()!=null)
-              model.addAttribute("emailExist","이메일이 이미 존재합니다");
-          if(!signInUserDto.matchPassword())
-              model.addAttribute("passwordMsg","확인 비밀번호가 다릅니다.");
-          return "/user/signIn";
+            if(users.getId()!=null)
+                model.addAttribute("emailExist","이메일이 이미 존재합니다");
+            if(!signInUserDto.matchPassword())
+                model.addAttribute("passwordMsg","확인 비밀번호가 다릅니다.");
+            return "/user/signIn";
         }
+
+        String baseDir = "C:\\git\\Songstagram\\src\\main\\resources\\static\\images";
+        String filePath = baseDir + "\\" + signInUserDto.getEmail() + files.getOriginalFilename();
+        files.transferTo(new File(filePath));
 
         System.out.println(signInUserDto.getEmail());
         Users newUser = Users.builder()
                 .password(signInUserDto.getPassword())
                 .email(signInUserDto.getEmail())
-                .picture(signInUserDto.getPicture())
+                .picture(signInUserDto.getEmail() + files.getOriginalFilename())
                 .name(signInUserDto.getName())
                 .build();
         usersService.addUser(newUser);

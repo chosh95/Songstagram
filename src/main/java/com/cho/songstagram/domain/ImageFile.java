@@ -13,18 +13,9 @@ public class ImageFile {
     private String id;
 
     private String fileName;
-    private String fileType;
+    private String fileOriName;
+    private String fileUrl;
 
-    @Lob
-    private byte[] data;
-
-    @OneToOne(cascade = CascadeType.ALL,fetch = FetchType.LAZY)
-    @JoinColumn(name="imageFile_id")
+    @OneToOne
     private Posts posts;
-
-    public ImageFile(String fileName, String fileType, byte[] data){
-        this.fileName = fileName;
-        this.fileType = fileType;
-        this.data = data;
-    }
 }
