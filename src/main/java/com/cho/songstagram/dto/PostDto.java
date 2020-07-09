@@ -5,11 +5,11 @@ import com.cho.songstagram.domain.Users;
 import lombok.Data;
 
 @Data
-public class postDto {
+public class PostDto {
 
     private String singer;
     private String songName;
     private String content;
-    private Users users;
     private String picture;
+    private String userId;
 }

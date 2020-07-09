@@ -17,6 +17,8 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.UUID;
 
@@ -69,20 +71,15 @@ public class UsersController {
             return "/user/signIn";
         }
 
-        String baseDir = "C:\\git\\Songstagram\\uploads\\";
-        String originalName = files.getOriginalFilename();
-        UUID uuid = UUID.randomUUID();
-        String newName = uuid.toString() + "_" + originalName;
+        String picture = addFile(files);
 
-        files.transferTo(new File(baseDir + newName));
-
-        System.out.println(signInUserDto.getEmail());
         Users newUser = Users.builder()
                 .password(signInUserDto.getPassword())
                 .email(signInUserDto.getEmail())
-                .picture(newName)
                 .name(signInUserDto.getName())
+                .picture(picture)
                 .build();
+
         usersService.addUser(newUser);
 
         return "redirect:/user/login";
@@ -94,4 +91,12 @@ public class UsersController {
         return "/user/logout";
     }
 
+    public String addFile(MultipartFile files) throws IOException {
+        if(files.isEmpty()) return null;
+        UUID uuid = UUID.randomUUID();
+        String newName = uuid.toString() + "_" + files.getOriginalFilename();
+        String baseDir = "C:\\git\\Songstagram\\uploads\\";
+        files.transferTo(new File(baseDir + newName));
+        return newName;
+    }
 }

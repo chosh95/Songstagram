@@ -41,4 +41,8 @@ public class Users {
     public boolean matchPassword(String password){
         return this.password.equals(password);
     }
+
+    public void addPicture(String picture){
+        this.picture = picture;
+    }
 }

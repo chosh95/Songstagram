@@ -21,6 +21,7 @@ public class Posts extends BaseTimeEntity{
     private String singer;
     private String songName;
     private String content;
+    private String picture;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "users_id")
@@ -29,19 +30,16 @@ public class Posts extends BaseTimeEntity{
     @OneToMany(mappedBy = "posts")
     private List<Comments> commentsList;
 
-    @OneToOne(mappedBy = "posts", fetch = FetchType.LAZY)
-    private ImageFile imageFile;
-
     @OneToMany(mappedBy = "posts")
     private List<Likes> likesList;
 
     @Builder
-    public Posts(String singer, String songName, String content, Users users, ImageFile imageFile){
+    public Posts(String singer, String songName, String content, String picture, Users users){
         this.singer = singer;
         this.songName = songName;
         this.content = content;
         this.users = users;
-        this.imageFile = imageFile;
+        this.picture = picture;
         likesList = null;
         commentsList = null;
     }
