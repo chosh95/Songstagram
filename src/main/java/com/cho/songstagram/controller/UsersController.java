@@ -18,6 +18,7 @@ import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.io.File;
 import java.io.IOException;
+import java.util.UUID;
 
 @Controller
 @RequiredArgsConstructor
@@ -68,15 +69,18 @@ public class UsersController {
             return "/user/signIn";
         }
 
-        String baseDir = "C:\\git\\Songstagram\\src\\main\\resources\\static\\images";
-        String filePath = baseDir + "\\" + signInUserDto.getEmail() + files.getOriginalFilename();
-        files.transferTo(new File(filePath));
+        String baseDir = "C:\\git\\Songstagram\\uploads\\";
+        String originalName = files.getOriginalFilename();
+        UUID uuid = UUID.randomUUID();
+        String newName = uuid.toString() + "_" + originalName;
+
+        files.transferTo(new File(baseDir + newName));
 
         System.out.println(signInUserDto.getEmail());
         Users newUser = Users.builder()
                 .password(signInUserDto.getPassword())
                 .email(signInUserDto.getEmail())
-                .picture(signInUserDto.getEmail() + files.getOriginalFilename())
+                .picture(newName)
                 .name(signInUserDto.getName())
                 .build();
         usersService.addUser(newUser);
@@ -86,8 +90,8 @@ public class UsersController {
 
     @GetMapping("/user/logout")
     public String logout(HttpSession session){
-//        session.setAttribute("loginUser",null);
         session.removeAttribute("loginUser");
         return "/user/logout";
     }
+
 }

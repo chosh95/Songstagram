@@ -12,11 +12,13 @@
         <div class="collapse navbar-collapse" id="navMenu">
             <ul class="navbar-nav ml-auto">
                 <li class="nav-item" th:if="${session.loginUser!=null}" >
-                    <a th:text="${session.loginUser.getName()}"> </a>
-                    <img th:src="@{${'/images/' + session.loginUser.getPicture()}}" alt="프로필이미지" style="width: 30px; height: 30px;" src="#">
+                    <img src="#" th:src="@{'/uploads/' + ${session.loginUser.getPicture()}}" alt="프로필이미지" style="height: 30px; width: 30px;">
                 </li>
                 <li class="nav-item" th:if="${session.loginUser!=null}" >
                     <a class="nav-link" th:href="@{/user/logout}">로그아웃</a>
+                </li>
+                <li class="nav-item" th:if="${session.loginUser!=null}" >
+                    <a class="nav-link" th:href="@{/post/write}">글쓰기</a>
                 </li>
                 <li class="nav-item" th:if="${session.loginUser==null}" >
                     <a class="nav-link" th:href="@{/user/login}">로그인</a>
