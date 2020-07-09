@@ -5,8 +5,42 @@
 
 <th:block layout:fragment="content">
     <!-- Begin Page Content -->
-    <div class="container-fluid" style="margin-top: 100px">
-        <!-- Content Here!! -->
+    <div class="container" style="margin-top: 100px">
+        <div class="row">
+            <div class="col-sm-2"></div>
+            <div class="col-sm-8">
+                <div class="card">
+                    <div class="card-header bg-white ">
+                        <h2>글작성하기</h2>
+                    </div>
+                    <div class="card-body">
+                        <form th:object="${postDto}" action="#" th:action="@{/post/write}" method="post" class="form-group" enctype="multipart/form-data">
+                            <div class="form-group">
+                                <label>사진</label>
+                                <input type="file" name="files" id="files" class="form-control">
+                                <span th:if="${emptyFileMsg}" th:text="${emptyFileMsg}" style="color: red">emptyFileMsg</span>
+                            </div>
+                            <div class="form-group">
+                                <label>가수</label>
+                                <input th:field="*{singer}" type="text" class="form-control"/>
+                            </div>
+                            <div class="form-group">
+                                <label>곡 제목</label>
+                                <input th:field="*{songName}" type="text" class="form-control"/>
+                            </div>
+                            <div class="form-group">
+                                <label>글</label>
+                                <input th:field="*{content}" type="text" class="form-control"/>
+                            </div>
+                            <div class="form-group text-right">
+                                <button class="btn btn-primary" type="submit">글작성하기</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="col-sm-2"></div>
+        </div>
     </div>
 </th:block>
 </html>

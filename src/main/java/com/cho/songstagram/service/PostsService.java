@@ -7,6 +7,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
+
 @Service
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -14,14 +16,12 @@ public class PostsService {
 
     private final PostsRepository postsRepository;
 
-    public void addPost(String content, String singer, String songName, String picture, Users users){
-        postsRepository.save(Posts.builder()
-                .content(content)
-                .singer(singer)
-                .songName(songName)
-                .picture(picture)
-                .users(users)
-                .build());
+    @Transactional
+    public void save(Posts posts){
+        postsRepository.save(posts);
     }
 
+    public Optional<Posts> findById(Long id){
+        return postsRepository.findById(id);
+    }
 }

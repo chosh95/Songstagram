@@ -38,9 +38,10 @@ public class Posts extends BaseTimeEntity{
         this.singer = singer;
         this.songName = songName;
         this.content = content;
-        this.users = users;
         this.picture = picture;
+        this.users = users;
         likesList = null;
         commentsList = null;
+        this.users.getPostsList().add(this);
     }
 }

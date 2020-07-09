@@ -24,6 +24,9 @@ public class UsersService {
     public Optional<Users> findByEmail(String email){
         return usersRepository.findByEmail(email);
     }
+
+    public Optional<Users> findById(Long id){ return usersRepository.findById(id);}
+
     public List<Users> getAllUsers(){
         List<Users> usersList = usersRepository.findAll();
         return usersList;

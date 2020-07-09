@@ -1,5 +1,6 @@
 package com.cho.songstagram.controller;
 
+import com.cho.songstagram.domain.Posts;
 import com.cho.songstagram.domain.Users;
 import com.cho.songstagram.dto.LoginUserDto;
 import com.cho.songstagram.dto.SignInUserDto;
@@ -8,10 +9,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpSession;
@@ -20,6 +18,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @Controller
@@ -91,11 +91,21 @@ public class UsersController {
         return "/user/logout";
     }
 
+    @GetMapping("/user/profile/{userId}")
+    public String profile(@PathVariable("userId") Long userId, HttpSession session, Model model){
+        Users users = usersService.findById(userId)
+                .orElse(new Users());
+        List<Posts> postsList = users.getPostsList();
+        model.addAttribute("postsList",postsList);
+        return "/user/profile";
+    }
+
+
     public String addFile(MultipartFile files) throws IOException {
         if(files.isEmpty()) return null;
         UUID uuid = UUID.randomUUID();
         String newName = uuid.toString() + "_" + files.getOriginalFilename();
-        String baseDir = "C:\\git\\Songstagram\\uploads\\";
+        String baseDir = "C:\\git\\Songstagram\\uploads\\profile\\";
         files.transferTo(new File(baseDir + newName));
         return newName;
     }

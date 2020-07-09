@@ -36,13 +36,11 @@ public class Users {
         this.email = email;
         this.picture = picture;
         this.password = password;
+        postsList = null;
     }
 
     public boolean matchPassword(String password){
         return this.password.equals(password);
     }
 
-    public void addPicture(String picture){
-        this.picture = picture;
-    }
 }

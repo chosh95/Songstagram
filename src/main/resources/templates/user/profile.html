@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="layout/default">
+
+<th:block layout:fragment="content">
+    <!-- Begin Page Content -->
+    <div class="container-fluid" style="margin-top: 100px">
+        <!-- Content Here!! -->
+        <div class="col-sm-2"></div>
+        <div class="col-md">
+            <div class="card" th:each="post : ${postsList}" style="width: 300px;">
+                <div class="card-body text-center">
+                    <img class="card-img-top" src="#" alt="post picture" th:src="@{'/uploads/post/' + ${post.getPicture()}}">
+                    <div class="card-body">
+                        <h4 class="card-title" th:text="${post.getSongName()} + ' - ' + ${post.getSinger()}">곡</h4>
+                        <p class="card-text" th:text="${post.getContent()}">content</p>
+        <!--                <a href="#" class="btn btn-primary">See Profile</a>-->
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-2"></div>
+    </div>
+</th:block>
+</html>
