@@ -18,9 +18,9 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.*;
 
 @Controller
 @RequiredArgsConstructor
@@ -96,17 +96,27 @@ public class UsersController {
         Users users = usersService.findById(userId)
                 .orElse(new Users());
         List<Posts> postsList = users.getPostsList();
+        postsList.sort(new ListComparator());
         model.addAttribute("postsList",postsList);
         return "/user/profile";
     }
 
 
     public String addFile(MultipartFile files) throws IOException {
-        if(files.isEmpty()) return null;
+        if(files.isEmpty()) return "profile.png";
         UUID uuid = UUID.randomUUID();
         String newName = uuid.toString() + "_" + files.getOriginalFilename();
         String baseDir = "C:\\git\\Songstagram\\uploads\\profile\\";
         files.transferTo(new File(baseDir + newName));
         return newName;
+    }
+
+    private static class ListComparator implements Comparator {
+        @Override
+        public int compare(Object o1, Object o2) {
+            LocalDateTime a = ((Posts)o1).getCreatedDate();
+            LocalDateTime b = ((Posts)o2).getCreatedDate();
+            return b.compareTo(a);
+        }
     }
 }

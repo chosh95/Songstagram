@@ -5,9 +5,9 @@
 <th:block layout:fragment="content">
     <!-- Propeller Card -->
     <div class="container-fluid" style="margin-top: 100px">
-    <div class="row">
+        <div class="col-sm-2"></div>
         <div class="col">
-            <div class="card pmd-card col-sm-4" style="margin-bottom: 30px;"  th:each="post : ${postsList}" >
+            <div class="card pmd-card col-sm-4" style="margin-bottom: 30px;">
                 <!-- Card Header -->
                 <div class="card-header d-flex flex-row bg-white">
                     <a class="pmd-avatar-list-img" th:href="@{'/user/profile/' + ${post.getUsers().getId()}}">
@@ -30,30 +30,9 @@
                     <p class="card-subtitle mb-3" th:text="${post.getSinger()}">Secondary text</p>
                     <p class="card-text" th:text="${post.getContent()}"></p>
                 </div>
-                <div>
-                    <a th:href="@{'/post/read/' + ${post.getId()}}"><button class="btn btn-primary">더보기</button> </a>
-                </div>
             </div>
         </div>
-    </div>
-    </div>
-
-    <div class="container-fluid" style="margin-top: 100px">
-        <!-- Content Here!! -->
-        <div class="row">
-            <div class="col-sm-3" style="padding-bottom: 30px" th:each="post : ${postsList}">
-                <div class="card h-100">
-                    <div class="card-body text-center ">
-                        <img class="card-img-top" src="#" alt="post picture" th:src="@{'/uploads/post/' + ${post.getPicture()}}">
-                        <div class="card-body">
-                            <h5 class="card-title" th:text="${post.getSongName()} + ' - ' + ${post.getSinger()}">곡</h5>
-                            <p class="card-text" th:text="${post.getContent()}">content</p>
-            <!--                <a href="#" class="btn btn-primary">See Profile</a>-->
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <div class="col-sm-2"></div>
     </div>
 </th:block>
 </html>

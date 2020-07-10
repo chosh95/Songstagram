@@ -12,13 +12,8 @@
         <div class="collapse navbar-collapse" id="navMenu">
             <ul class="navbar-nav ml-auto">
                 <li class="nav-item" th:if="${session.loginUser!=null}" >
-                    <a th:href="@{'user/profile/' + ${session.loginUser.getId()}}">
-                        <span th:if="${session.loginUser.getPicture()!=null}">
-                            <img src="#" th:src="@{'/uploads/profile/' + ${session.loginUser.getPicture()}}" alt="프로필이미지" style="height: 30px; width: 30px;">
-                        </span>
-                        <span th:if="${session.loginUser.getPicture()==null}">
-                            <img src="#" th:src="@{/icon/profile.png}" alt="기본프로필이미지" style="height: 30px; width: 30px;">
-                        </span>
+                    <a th:href="@{'/user/profile/' + ${session.loginUser.getId()}}">
+                        <img src="#" th:src="@{'/uploads/profile/' + ${session.loginUser.getPicture()}}" alt="프로필이미지" style="height: 30px; width: 30px;">
                     </a>
                 </li>
                 <li class="nav-item" th:if="${session.loginUser!=null}" >
