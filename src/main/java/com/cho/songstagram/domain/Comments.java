@@ -1,5 +1,6 @@
 package com.cho.songstagram.domain;
 
+import lombok.Builder;
 import lombok.Getter;
 import org.springframework.stereotype.Component;
 
@@ -20,4 +21,12 @@ public class Comments extends BaseTimeEntity{
     private Posts posts;
 
     private String userName;
+
+    @Builder
+    public Comments(String content, Posts posts, String userName){
+        this.content = content;
+        this.posts = posts;
+        this.userName = userName;
+        posts.getCommentsList().add(this);
+    }
 }
