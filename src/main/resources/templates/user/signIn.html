@@ -18,7 +18,7 @@
                             <div class="form-group">
                                 <label>이메일</label>
                                 <input th:field="*{email}" type="text" class="form-control"/>
-                                <span th:if="${#fields.hasErrors('email')}" th:errors="*{email}" style="color: red">emailError</span>
+                                <span th:if="${#fields.hasErrors('email')}" th:errors="*{email}" style="color: #ff0000">emailError</span>
                                 <span th:if="${emailExist}" th:text="${emailExist}" style="color: red">emailExistError</span>
                             </div>
                             <div class="form-group">

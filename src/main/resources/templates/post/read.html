@@ -29,6 +29,11 @@
                     <h2 class="card-title" th:text="${post.getSongName()}">Title goes here</h2>
                     <p class="card-subtitle mb-3" th:text="${post.getSinger()}">Secondary text</p>
                     <p class="card-text" th:text="${post.getContent()}"></p>
+                    <div class="text-right">
+                        <span th:if="${session.loginUser.getId()}==${post.getUsers().getId()}">
+                            <a  th:href="@{'/post/updateGet/'+${post.getId()}}"><button class="btn btn-secondary">수정하기</button></a>
+                        </span>
+                    </div>
                 </div>
 
                 <div class="card-footer">
@@ -45,7 +50,7 @@
                             <input th:field="*{comment}" type="text" class="form-control"/>
                         </div>
                         <div class="form-group text-right">
-                            <button class="btn btn-primary" type="submit">작성하기</button>
+                            <button class="btn btn-primary" type="submit">댓글작성하기</button>
                         </div>
                     </form>
                 </div>

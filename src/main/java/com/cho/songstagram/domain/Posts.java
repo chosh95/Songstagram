@@ -44,4 +44,10 @@ public class Posts extends BaseTimeEntity{
         commentsList = null;
         this.users.getPostsList().add(this);
     }
+
+    public void update(String singer, String songName, String content){
+        this.singer = singer;
+        this.songName = songName;
+        this.content = content;
+    }
 }

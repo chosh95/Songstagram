@@ -11,29 +11,24 @@
             <div class="col-sm-8">
                 <div class="card">
                     <div class="card-header bg-white ">
-                        <h2>글작성하기</h2>
+                        <h2>글수정하기</h2>
                     </div>
                     <div class="card-body">
-                        <form th:object="${postDto}" action="#" th:action="@{/post/write}" method="post" class="form-group" enctype="multipart/form-data">
-                            <div class="form-group">
-                                <label>사진</label>
-                                <input type="file" name="files" id="files" class="form-control">
-                                <span th:if="${emptyFileMsg}" th:text="${emptyFileMsg}" style="color: red">emptyFileMsg</span>
-                            </div>
+                        <form th:object="${postDto}" action="#" th:action="@{'/post/update/'+${postId}}" method="post" class="form-group">
                             <div class="form-group">
                                 <label>가수</label>
                                 <input th:field="*{singer}" type="text" class="form-control"/>
-                                <span th:if="${#fields.hasErrors('singer')}" th:errors="*{singer}" style="color: #ff0000">emailError</span>
+                                <span th:if="${#fields.hasErrors('singer')}" th:errors="*{singer}" style="color: #ff0000">singerError</span>
                             </div>
                             <div class="form-group">
                                 <label>곡 제목</label>
                                 <input th:field="*{songName}" type="text" class="form-control"/>
-                                <span th:if="${#fields.hasErrors('songName')}" th:errors="*{songName}" style="color: #ff0000">emailError</span>
+                                <span th:if="${#fields.hasErrors('songName')}" th:errors="*{songName}" style="color: #ff0000">songNameError</span>
                             </div>
                             <div class="form-group">
                                 <label>글</label>
                                 <input th:field="*{content}" type="text" class="form-control"/>
-                                <span th:if="${#fields.hasErrors('content')}" th:errors="*{content}" style="color: #ff0000">emailError</span>
+                                <span th:if="${#fields.hasErrors('content')}" th:errors="*{content}" style="color: #ff0000">contentError</span>
                             </div>
                             <div class="form-group text-right">
                                 <button class="btn btn-primary" type="submit">글작성하기</button>

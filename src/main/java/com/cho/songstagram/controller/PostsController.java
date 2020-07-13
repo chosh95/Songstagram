@@ -11,10 +11,13 @@ import com.cho.songstagram.service.UsersService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
@@ -35,12 +38,15 @@ public class PostsController {
     }
 
     @PostMapping("/post/write")
-    public String writePost(@ModelAttribute("postDto") PostDto postDto,
+    public String writePost(@Valid @ModelAttribute("postDto") PostDto postDto, BindingResult result,
                             @RequestParam("files") MultipartFile files,
                             HttpSession session, Model model) throws IOException {
 
         if(files.isEmpty()){
             model.addAttribute("emptyFileMsg","사진을 입력해주세요.");
+            return "/post/write";
+        }
+        if(result.hasErrors()){
             return "/post/write";
         }
 
@@ -69,7 +75,36 @@ public class PostsController {
         model.addAttribute("post",posts);
         List<Comments> commentsList = commentsService.findCommentsByPosts(posts);
         model.addAttribute("commentsList",commentsList);
-        return "post/read";
+        return "/post/read";
+    }
+
+    @GetMapping("/post/updateGet/{post_id}")
+    public String update(@PathVariable("post_id") Long postId, @ModelAttribute("postDto") PostDto postDto, Model model){
+        Posts posts = postsService.findById(postId)
+                .orElse(new Posts());
+        postDto.setContent(posts.getContent());
+        postDto.setPicture(posts.getPicture());
+        postDto.setSinger(posts.getSinger());
+        postDto.setSongName(posts.getSongName());
+        postDto.setUserId(posts.getUsers().getId());
+        model.addAttribute("postId",postId);
+        return "/post/update";
+    }
+
+    @PostMapping("/post/update/{post_id}")
+    public String updatePost(@PathVariable("post_id") Long postId,
+                             @Valid @ModelAttribute("postDto") PostDto postDto, BindingResult result, Model model){
+
+        if(result.hasErrors()) {
+            model.addAttribute("postId",postId);
+            return "/post/update";
+        }
+
+        Posts posts = postsService.findById(postId)
+                .orElse(new Posts());
+        posts.update(postDto.getSinger(), postDto.getSongName(), postDto.getContent());
+        postsService.save(posts);
+        return "redirect:/post/read/{post_id}";
     }
 
     public String addFile(MultipartFile files) throws IOException {
@@ -80,4 +115,5 @@ public class PostsController {
         files.transferTo(new File(baseDir + newName));
         return newName;
     }
+
 }
