@@ -30,6 +30,25 @@
                     <p class="card-subtitle mb-3" th:text="${post.getSinger()}">Secondary text</p>
                     <p class="card-text" th:text="${post.getContent()}"></p>
                 </div>
+
+                <div class="card-footer">
+                    <div th:each="comment:${commentsList}">
+                        <div>
+                            <img th:src="@{'/uploads/profile/' + ${comment.getUsers().getPicture()}}" src="#" height="40px" width="40px" alt="프로필이미지"/>
+                            <h2 th:text="${comment.getUsers().getName()}"></h2>
+                            <p th:text="${comment.getContent()}"></p>
+                        </div>
+                    </div>
+                    <form th:object="${commentDto}" action="#" th:action="@{'/comment/write/' + ${post.getId()} + '&' + ${session.loginUser.getId()}}" method="post" class="form-group">
+                        <div class="form-group">
+                            <label>댓글 작성</label>
+                            <input th:field="*{comment}" type="text" class="form-control"/>
+                        </div>
+                        <div class="form-group text-right">
+                            <button class="btn btn-primary" type="submit">작성하기</button>
+                        </div>
+                    </form>
+                </div>
             </div>
         </div>
         <div class="col-sm-2"></div>

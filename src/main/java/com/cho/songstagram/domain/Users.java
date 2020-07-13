@@ -30,6 +30,9 @@ public class Users {
     @OneToMany(mappedBy = "users")
     private List<Posts> postsList;
 
+    @OneToMany(mappedBy = "users")
+    private List<Comments> comemntsList;
+
     @Builder
     public Users(String name, String email, String password, String picture){
         this.name = name;
@@ -37,6 +40,7 @@ public class Users {
         this.picture = picture;
         this.password = password;
         postsList = null;
+        comemntsList = null;
     }
 
     public boolean matchPassword(String password){

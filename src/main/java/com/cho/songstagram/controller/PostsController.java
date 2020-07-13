@@ -1,8 +1,11 @@
 package com.cho.songstagram.controller;
 
+import com.cho.songstagram.domain.Comments;
 import com.cho.songstagram.domain.Posts;
 import com.cho.songstagram.domain.Users;
+import com.cho.songstagram.dto.CommentDto;
 import com.cho.songstagram.dto.PostDto;
+import com.cho.songstagram.service.CommentsService;
 import com.cho.songstagram.service.PostsService;
 import com.cho.songstagram.service.UsersService;
 import lombok.RequiredArgsConstructor;
@@ -14,6 +17,7 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpSession;
 import java.io.File;
 import java.io.IOException;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -23,6 +27,7 @@ public class PostsController {
 
     private final UsersService usersService;
     private final PostsService postsService;
+    private final CommentsService commentsService;
 
     @GetMapping("/post/write")
     public String write(@ModelAttribute("postDto") PostDto postDto){
@@ -58,10 +63,12 @@ public class PostsController {
     }
 
     @GetMapping("/post/read/{post_id}")
-    public String readPost(@PathVariable("post_id") Long postId, Model model){
+    public String readPost(@PathVariable("post_id") Long postId, @ModelAttribute("commentDto") CommentDto commentDto, Model model){
         Posts posts = postsService.findById(postId)
                 .orElse(new Posts());
         model.addAttribute("post",posts);
+        List<Comments> commentsList = commentsService.findCommentsByPosts(posts);
+        model.addAttribute("commentsList",commentsList);
         return "post/read";
     }
 
