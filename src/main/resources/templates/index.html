@@ -8,14 +8,15 @@
     <div class="container-fluid" style="margin-top: 100px">
         <div class="row">
             <div class="col">
-                <div class="card pmd-card col-sm-4" style="margin-bottom: 30px;"  th:each="post : ${postsList}" >
+                <div class="card pmd-card col-sm-4 mx-auto" style="margin-bottom: 30px;"  th:each="post : ${postsList}" >
                     <!-- Card Header -->
                     <div class="card-header d-flex flex-row bg-white">
-                        <a class="pmd-avatar-list-img" th:href="@{'/user/profile/' + ${post.getUsers().getId()}}">
-                            <img src="#" width="40" height="40"  th:src="@{'/uploads/profile/' + ${post.getUsers().getPicture()}}">
-                        </a>
+
                         <div class="media-body">
-                            <h3 class="card-title" th:text="${post.getUsers().getName()}">Two-line item</h3>
+                            <a class="pmd-avatar-list-img" th:href="@{'/user/profile/' + ${post.getUsers().getId()}}">
+                                <img src="#" width="40" height="40"  th:src="@{'/uploads/profile/' + ${post.getUsers().getPicture()}}">
+                                <h3 class="card-title" th:text="${post.getUsers().getName()}">Two-line item</h3>
+                            </a>
                             <p class="card-subtitle" th:text="${post.getCreatedDate()}">Secondary text</p>
                         </div>
                     </div>

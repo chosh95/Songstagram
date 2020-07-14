@@ -14,14 +14,12 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.io.File;
 import java.io.IOException;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 @Controller
@@ -78,7 +76,7 @@ public class PostsController {
         return "/post/read";
     }
 
-    @GetMapping("/post/updateGet/{post_id}")
+    @GetMapping("/post/update/{post_id}")
     public String update(@PathVariable("post_id") Long postId, @ModelAttribute("postDto") PostDto postDto, Model model){
         Posts posts = postsService.findById(postId)
                 .orElse(new Posts());
@@ -105,6 +103,14 @@ public class PostsController {
         posts.update(postDto.getSinger(), postDto.getSongName(), postDto.getContent());
         postsService.save(posts);
         return "redirect:/post/read/{post_id}";
+    }
+
+    @GetMapping("/post/delete/{post_id}")
+    public String delete(@PathVariable("post_id") Long postId){
+        Posts posts = postsService.findById(postId)
+                .orElse(new Posts());
+        postsService.delete(posts);
+        return "/post/delete";
     }
 
     public String addFile(MultipartFile files) throws IOException {

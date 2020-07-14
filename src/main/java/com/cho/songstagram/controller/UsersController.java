@@ -45,10 +45,22 @@ public class UsersController {
                 model.addAttribute("idPwMsg","아이디, 비밀번호를 다시 확인해주세요.");
             return "/user/login";
         }
-
+        if(session.getAttribute("loginUser") != null)
+            session.removeAttribute("loginUser");
         session.setAttribute("loginUser",users);
 
         return "redirect:/";
+    }
+
+    @GetMapping("/user/doLogin")
+    public String doLogin(){
+        return "/user/doLogin";
+    }
+
+    @GetMapping("/user/logout")
+    public String logout(HttpSession session){
+        session.invalidate();
+        return "/user/logout";
     }
 
     @GetMapping("/user/signIn")
@@ -83,12 +95,6 @@ public class UsersController {
         usersService.addUser(newUser);
 
         return "redirect:/user/login";
-    }
-
-    @GetMapping("/user/logout")
-    public String logout(HttpSession session){
-        session.removeAttribute("loginUser");
-        return "/user/logout";
     }
 
     @GetMapping("/user/profile/{userId}")
