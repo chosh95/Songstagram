@@ -6,7 +6,7 @@
 
     <!-- Propeller Card -->
     <div class="container-fluid" style="margin-top: 100px">
-        <div class="container">
+        <div class="container mx-auto col-sm-4">
             <span th:if="${userId}==${session.loginUser.getId()}">
                 <a th:href="@{'/user/update/' + ${userId}}"><button class="btn btn-secondary">회원정보수정</button> </a>
                 <a th:href="@{'/user/delete/' + ${userId}}"><button class="btn btn-warning">회원탈퇴</button> </a>

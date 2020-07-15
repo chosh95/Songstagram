@@ -39,15 +39,17 @@
 
                 <div class="card-footer">
                     <div th:each="comment:${commentsList}">
-                        <span>
+                        <div>
                             <a th:href="@{'/user/profile/' + ${comment.getUsers().getId()}}">
                                 <img th:src="@{'/uploads/profile/' + ${comment.getUsers().getPicture()}}" src="#" height="20px" width="20px" alt="프로필이미지"/>
                                 <h5 th:text="${comment.getUsers().getName()}"></h5>
                             </a>
                             <span th:text="${comment.getContent()}"></span>
-                            <span th:if="${comment.getUsers().getId()}==${session.loginUser.getId()}">
-                                <a th:href="@{'/comment/delete/' + ${comment.getId()} + '&' + ${post.getId()}}" th:text="삭제하기"></a>
-                            </span>
+                            <div class="text-right">
+                                <span th:if="${comment.getUsers().getId()}==${session.loginUser.getId()}">
+                                    <a th:href="@{'/comment/delete/' + ${comment.getId()} + '&' + ${post.getId()}}" th:text="삭제하기"></a>
+                                </span>
+                            </div>
                         </div>
                     </div>
                     <form th:object="${commentDto}" action="#" th:action="@{'/comment/write/' + ${post.getId()} + '&' + ${session.loginUser.getId()}}" method="post" class="form-group">

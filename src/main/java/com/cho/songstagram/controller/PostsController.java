@@ -19,6 +19,7 @@ import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.util.List;
 import java.util.UUID;
 
@@ -109,6 +110,7 @@ public class PostsController {
     public String delete(@PathVariable("post_id") Long postId){
         Posts posts = postsService.findById(postId)
                 .orElse(new Posts());
+        removeFile(posts.getPicture());
         postsService.delete(posts);
         return "/post/delete";
     }
@@ -122,4 +124,10 @@ public class PostsController {
         return newName;
     }
 
+    public void removeFile(String path){
+        String originalPath = "C:\\git\\Songstagram\\uploads\\post\\" + path;
+        File file = new File(originalPath);
+        if(file.delete())
+            System.out.println("delete Success");
+    }
 }

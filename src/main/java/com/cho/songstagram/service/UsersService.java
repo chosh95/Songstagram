@@ -17,7 +17,7 @@ public class UsersService {
     private final UsersRepository usersRepository;
 
     @Transactional
-    public void addUser(Users user){
+    public void save(Users user){
         usersRepository.save(user);
     }
 

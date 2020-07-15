@@ -5,6 +5,7 @@ import com.cho.songstagram.domain.Users;
 import com.cho.songstagram.dto.DeleteUserDto;
 import com.cho.songstagram.dto.LoginUserDto;
 import com.cho.songstagram.dto.SignInUserDto;
+import com.cho.songstagram.dto.UpdateUserDto;
 import com.cho.songstagram.service.UsersService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -94,7 +95,7 @@ public class UsersController {
                 .picture(picture)
                 .build();
 
-        usersService.addUser(newUser);
+        usersService.save(newUser);
 
         return "redirect:/user/login";
     }
@@ -111,11 +112,31 @@ public class UsersController {
     }
 
     @GetMapping("/user/update/{userId}")
-    public String updateUserGet(@PathVariable("userId") Long userId, Model model){
+    public String updateUserGet(@PathVariable("userId") Long userId,
+                                @ModelAttribute("updateUserDto") UpdateUserDto updateUserDto, Model model){
         Users users = usersService.findById(userId)
                 .orElse(new Users());
-        model.addAttribute("user",users);
+        updateUserDto.setName(users.getName());
+        updateUserDto.setPicture(users.getPicture());
         return "/user/update";
+    }
+
+    @PostMapping("/user/update/{userId}")
+    public String updateUserPost(@PathVariable("userId") Long userId, @RequestParam("files") MultipartFile files,
+                                 @Valid @ModelAttribute("updateUserDto") UpdateUserDto updateUserDto,
+                                 BindingResult result, HttpSession session) throws IOException {
+        Users users = usersService.findById(userId)
+                .orElse(new Users());
+        if(result.hasErrors()){
+            return "/user/update";
+        }
+        removeFile(users.getPicture());
+        String picture = addFile(files);
+        users.updatePicture(picture);
+        users.updateName(updateUserDto.getName());
+        usersService.save(users);
+        session.setAttribute("loginUser",users); //세션 덮어쓰기
+        return "redirect:/user/profile/{userId}";
     }
 
     @GetMapping("/user/delete/{userId}")
@@ -139,6 +160,8 @@ public class UsersController {
             model.addAttribute("userId",userId);
             return "/user/delete";
         }
+        if(!users.getPicture().equals("profile.png"))
+            removeFile(users.getPicture());
         usersService.delete(users);
         session.invalidate();
         return "redirect:/";
@@ -160,5 +183,12 @@ public class UsersController {
             LocalDateTime b = ((Posts)o2).getCreatedDate();
             return b.compareTo(a);
         }
+    }
+
+    public void removeFile(String path){
+        String originalPath = "C:\\git\\Songstagram\\uploads\\profile\\" + path;
+        File file = new File(originalPath);
+        if(file.delete())
+            System.out.println("delete Success");
     }
 }

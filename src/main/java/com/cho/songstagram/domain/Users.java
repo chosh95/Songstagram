@@ -47,4 +47,11 @@ public class Users {
         return this.password.equals(password);
     }
 
+    public void updatePicture(String picture){
+        this.picture = picture;
+    }
+
+    public void updateName(String name){
+        this.name = name;
+    }
 }
