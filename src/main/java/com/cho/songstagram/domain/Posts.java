@@ -27,7 +27,7 @@ public class Posts extends BaseTimeEntity{
     @JoinColumn(name = "users_id")
     private Users users;
 
-    @OneToMany(mappedBy = "posts")
+    @OneToMany(mappedBy = "posts", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Comments> commentsList;
 
     @OneToMany(mappedBy = "posts")

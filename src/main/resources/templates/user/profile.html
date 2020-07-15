@@ -6,37 +6,43 @@
 
     <!-- Propeller Card -->
     <div class="container-fluid" style="margin-top: 100px">
-    <div class="row">
-        <div class="col">
-            <div class="card pmd-card col-sm-4  mx-auto" style="margin-bottom: 30px;"  th:each="post : ${postsList}" >
-                <!-- Card Header -->
-                <div class="card-header d-flex flex-row bg-white">
-                    <a class="pmd-avatar-list-img" th:href="@{'/user/profile/' + ${post.getUsers().getId()}}">
-                        <img src="#" width="40" height="40"  th:src="@{'/uploads/profile/' + ${post.getUsers().getPicture()}}">
-                        <h3 class="card-title" th:text="${post.getUsers().getName()}">Two-line item</h3>
-                    </a>
-                    <div class="media-body">
-                        <p class="card-subtitle" th:text="${post.getCreatedDate()}">Secondary text</p>
+        <div class="container">
+            <span th:if="${userId}==${session.loginUser.getId()}">
+                <a th:href="@{'/user/update/' + ${userId}}"><button class="btn btn-secondary">회원정보수정</button> </a>
+                <a th:href="@{'/user/delete/' + ${userId}}"><button class="btn btn-warning">회원탈퇴</button> </a>
+            </span>
+        </div>
+        <div class="row">
+            <div class="col">
+                <div class="card pmd-card col-sm-4  mx-auto" style="margin-bottom: 30px;"  th:each="post : ${postsList}" >
+                    <!-- Card Header -->
+                    <div class="card-header d-flex flex-row bg-white">
+                        <a class="pmd-avatar-list-img" th:href="@{'/user/profile/' + ${post.getUsers().getId()}}">
+                            <img src="#" width="40" height="40"  th:src="@{'/uploads/profile/' + ${post.getUsers().getPicture()}}">
+                            <h3 class="card-title" th:text="${post.getUsers().getName()}">Two-line item</h3>
+                        </a>
+                        <div class="media-body">
+                            <p class="card-subtitle" th:text="${post.getCreatedDate()}">Secondary text</p>
+                        </div>
                     </div>
-                </div>
 
-                <!-- Card Media -->
-                <div class="pmd-card-media">
-                    <img th:src="@{'/uploads/post/' + ${post.getPicture()}}" src="#" width="1184" height="666" class="img-fluid" alt="main image">
-                </div>
+                    <!-- Card Media -->
+                    <div class="pmd-card-media">
+                        <img th:src="@{'/uploads/post/' + ${post.getPicture()}}" src="#" width="1184" height="666" class="img-fluid" alt="main image">
+                    </div>
 
-                <!-- Card Body -->
-                <div class="card-body">
-                    <h2 class="card-title" th:text="${post.getSongName()}">Title goes here</h2>
-                    <p class="card-subtitle mb-3" th:text="${post.getSinger()}">Secondary text</p>
-                    <p class="card-text" th:text="${post.getContent()}"></p>
-                </div>
-                <div class="text-right">
-                    <a th:href="@{'/post/read/' + ${post.getId()}}"><button class="btn btn-primary">더보기</button> </a>
+                    <!-- Card Body -->
+                    <div class="card-body">
+                        <h2 class="card-title" th:text="${post.getSongName()}">Title goes here</h2>
+                        <p class="card-subtitle mb-3" th:text="${post.getSinger()}">Secondary text</p>
+                        <p class="card-text" th:text="${post.getContent()}"></p>
+                    </div>
+                    <div class="text-right">
+                        <a th:href="@{'/post/read/' + ${post.getId()}}"><button class="btn btn-primary">더보기</button> </a>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
     </div>
 </th:block>
 </html>

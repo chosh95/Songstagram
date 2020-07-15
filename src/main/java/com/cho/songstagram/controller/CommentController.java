@@ -18,27 +18,20 @@ import org.springframework.web.bind.annotation.PostMapping;
 @Controller
 public class CommentController {
 
-    private final PostsService postsService;
-    private final UsersService usersService;
     private final CommentsService commentsService;
 
     @PostMapping("/comment/write/{post_id}&{user_id}")
     public String commentWrite(@PathVariable("post_id") Long postId,
                                @PathVariable("user_id") Long userId,
                                @ModelAttribute("commentDto")CommentDto commentDto){
+        commentsService.save(postId,userId,commentDto);
+        return "redirect:/post/read/{post_id}";
+    }
 
-        Posts posts = postsService.findById(postId)
-                .orElse(new Posts());
-        Users users = usersService.findById(userId)
-                .orElse(new Users());
-        Comments comments = Comments.builder()
-                .content(commentDto.getComment())
-                .users(users)
-                .posts(posts)
-                .build();
-
-        commentsService.save(comments);
-
+    @GetMapping("/comment/delete/{comment_id}&{post_id}")
+    public String commentDelete(@PathVariable("comment_id") Long commentId,
+                                @PathVariable("post_id") Long postId){
+        commentsService.delete(commentId);
         return "redirect:/post/read/{post_id}";
     }
 }

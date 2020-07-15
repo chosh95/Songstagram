@@ -27,10 +27,10 @@ public class Users {
     @Column(nullable = false)
     private String password;
 
-    @OneToMany(mappedBy = "users")
+    @OneToMany(mappedBy = "users", cascade = CascadeType.ALL,orphanRemoval = true)
     private List<Posts> postsList;
 
-    @OneToMany(mappedBy = "users")
+    @OneToMany(mappedBy = "users", cascade = CascadeType.ALL,orphanRemoval = true)
     private List<Comments> comemntsList;
 
     @Builder
