@@ -1,6 +1,7 @@
 package com.cho.songstagram.controller;
 
 import com.cho.songstagram.domain.Comments;
+import com.cho.songstagram.domain.Likes;
 import com.cho.songstagram.domain.Posts;
 import com.cho.songstagram.domain.Users;
 import com.cho.songstagram.dto.CommentDto;
@@ -20,6 +21,7 @@ import javax.validation.Valid;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -72,7 +74,17 @@ public class PostsController {
         Posts posts = postsService.findById(postId)
                 .orElse(new Posts());
         model.addAttribute("post",posts);
+        
         List<Comments> commentsList = commentsService.findCommentsByPosts(posts);
+        
+        List<Long> usersList = new ArrayList<>(); //좋아요 누른 user 모음
+        for (Likes likes : posts.getLikesList()){
+            System.out.println(likes.getUsers().getId());
+            usersList.add(likes.getUsers().getId());
+        }
+
+        
+        model.addAttribute("usersList",usersList);
         model.addAttribute("commentsList",commentsList);
         return "/post/read";
     }

@@ -1,6 +1,8 @@
 package com.cho.songstagram.domain;
 
+import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -8,6 +10,7 @@ import java.util.List;
 
 @Entity
 @Getter
+@NoArgsConstructor
 public class Likes {
 
     @Id @GeneratedValue
@@ -18,5 +21,13 @@ public class Likes {
     @JoinColumn(name = "posts_id")
     private Posts posts;
 
-    private Long userId;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "users_id")
+    private Users users;
+
+    @Builder
+    public Likes(Posts posts, Users users){
+        this.posts = posts;
+        this.users = users;
+    }
 }
