@@ -85,7 +85,6 @@ public class PostsController {
         postDto.setPicture(posts.getPicture());
         postDto.setSinger(posts.getSinger());
         postDto.setSongName(posts.getSongName());
-        postDto.setUserId(posts.getUsers().getId());
         model.addAttribute("postId",postId);
         return "/post/update";
     }

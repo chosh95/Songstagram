@@ -33,6 +33,7 @@ public class Users {
     @OneToMany(mappedBy = "users", cascade = CascadeType.ALL,orphanRemoval = true)
     private List<Comments> comemntsList;
 
+
     @Builder
     public Users(String name, String email, String password, String picture){
         this.name = name;

@@ -188,7 +188,6 @@ public class UsersController {
     public void removeFile(String path){
         String originalPath = "C:\\git\\Songstagram\\uploads\\profile\\" + path;
         File file = new File(originalPath);
-        if(file.delete())
-            System.out.println("delete Success");
+        file.delete();
     }
 }
