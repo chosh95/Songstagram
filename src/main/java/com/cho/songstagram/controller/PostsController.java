@@ -35,7 +35,7 @@ public class PostsController {
 
     @GetMapping("/post/write")
     public String write(@ModelAttribute("postDto") PostDto postDto){
-        return "/post/write";
+        return "post/write";
     }
 
     @PostMapping("/post/write")
@@ -45,10 +45,10 @@ public class PostsController {
 
         if(files.isEmpty()){
             model.addAttribute("emptyFileMsg","사진을 입력해주세요.");
-            return "/post/write";
+            return "post/write";
         }
         if(result.hasErrors()){
-            return "/post/write";
+            return "post/write";
         }
 
         String picture = addFile(files);
@@ -83,7 +83,7 @@ public class PostsController {
         }
         model.addAttribute("commentsList",commentDtoList);
 
-        return "/post/read";
+        return "post/read";
     }
 
     @GetMapping("/post/update/{post_id}")
@@ -95,7 +95,7 @@ public class PostsController {
         postDto.setSinger(posts.getSinger());
         postDto.setSongName(posts.getSongName());
         model.addAttribute("postId",postId);
-        return "/post/update";
+        return "post/update";
     }
 
     @PostMapping("/post/update/{post_id}")
@@ -104,7 +104,7 @@ public class PostsController {
 
         if(result.hasErrors()) {
             model.addAttribute("postId",postId);
-            return "/post/update";
+            return "post/update";
         }
 
         Posts posts = postsService.findById(postId)
@@ -120,7 +120,7 @@ public class PostsController {
                 .orElse(new Posts());
         removeFile(posts.getPicture());
         postsService.delete(posts);
-        return "/post/delete";
+        return "post/delete";
     }
 
     public String addFile(MultipartFile files) throws IOException {
@@ -128,12 +128,14 @@ public class PostsController {
         UUID uuid = UUID.randomUUID();
         String newName = uuid.toString() + "_" + files.getOriginalFilename();
         String baseDir = "C:\\git\\Songstagram\\uploads\\post\\";
+//        String baseDir ="\\var\\app\\current\\uploads\\post\\";
         files.transferTo(new File(baseDir + newName));
         return newName;
     }
 
     public void removeFile(String path){
         String originalPath = "C:\\git\\Songstagram\\uploads\\post\\" + path;
+//        String originalPath ="\\var\\app\\current\\uploads\\post\\" + path;
         File file = new File(originalPath);
         if(file.delete())
             System.out.println("delete Success");

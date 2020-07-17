@@ -12,16 +12,15 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.naming.Binding;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.List;
+import java.util.UUID;
 
 @Controller
 @RequiredArgsConstructor
@@ -32,7 +31,7 @@ public class UsersController {
 
     @GetMapping("/user/login")
     public String loginUserGet(@ModelAttribute("loginUserDto") LoginUserDto loginUserDto){
-        return "/user/login";
+        return "user/login";
     }
 
     @PostMapping("/user/login")
@@ -45,7 +44,7 @@ public class UsersController {
         if(result.hasErrors() || users.getId()==null || !users.matchPassword(loginUserDto.getPassword())){
             if(users.getId()==null || !users.matchPassword(loginUserDto.getPassword()))
                 model.addAttribute("idPwMsg","아이디, 비밀번호를 다시 확인해주세요.");
-            return "/user/login";
+            return "user/login";
         }
         if(session.getAttribute("loginUser") != null)
             session.removeAttribute("loginUser");
@@ -56,18 +55,18 @@ public class UsersController {
 
     @GetMapping("/user/doLogin")
     public String doLogin(){
-        return "/user/doLogin";
+        return "user/doLogin";
     }
 
     @GetMapping("/user/logout")
     public String logoutUserGet(HttpSession session){
         session.invalidate();
-        return "/user/logout";
+        return "user/logout";
     }
 
     @GetMapping("/user/signIn")
     public String signInUserGet(@ModelAttribute("signInUserDto") SignInUserDto signInUserDto){
-        return "/user/signIn";
+        return "user/signIn";
     }
 
     @PostMapping("/user/signIn")
@@ -82,7 +81,7 @@ public class UsersController {
                 model.addAttribute("emailExist","이메일이 이미 존재합니다");
             if(!signInUserDto.matchPassword())
                 model.addAttribute("passwordMsg","확인 비밀번호가 다릅니다.");
-            return "/user/signIn";
+            return "user/signIn";
         }
 
         String picture = addFile(files);
@@ -100,7 +99,7 @@ public class UsersController {
     }
 
     @GetMapping("/user/profile/{userId}")
-    public String profileUserGet(@PathVariable("userId") Long userId, HttpSession session, Model model){
+    public String profileUserGet(@PathVariable("userId") Long userId, Model model){
         Users users = usersService.findById(userId)
                 .orElse(new Users());
         List<Posts> postsList = users.getPostsList();
@@ -113,17 +112,17 @@ public class UsersController {
 
         model.addAttribute("postsList",postDtoList);
         model.addAttribute("userId",users.getId());
-        return "/user/profile";
+        return "user/profile";
     }
 
     @GetMapping("/user/update/{userId}")
     public String updateUserGet(@PathVariable("userId") Long userId,
-                                @ModelAttribute("updateUserDto") UpdateUserDto updateUserDto, Model model){
+                                @ModelAttribute("updateUserDto") UpdateUserDto updateUserDto){
         Users users = usersService.findById(userId)
                 .orElse(new Users());
         updateUserDto.setName(users.getName());
         updateUserDto.setPicture(users.getPicture());
-        return "/user/update";
+        return "user/update";
     }
 
     @PostMapping("/user/update/{userId}")
@@ -133,7 +132,7 @@ public class UsersController {
         Users users = usersService.findById(userId)
                 .orElse(new Users());
         if(result.hasErrors()){
-            return "/user/update";
+            return "user/update";
         }
         removeFile(users.getPicture());
         String picture = addFile(files);
@@ -148,7 +147,7 @@ public class UsersController {
     public String deleteUserGet(@PathVariable("userId") Long userId,
                                 @ModelAttribute("deleteUserDto")DeleteUserDto deleteUserDto, Model model){
         model.addAttribute("userId",userId);
-        return "/user/delete";
+        return "user/delete";
     }
 
     @PostMapping("/user/delete/{userId}")
@@ -159,11 +158,11 @@ public class UsersController {
         if(!users.matchPassword(deleteUserDto.getPassword())){
             model.addAttribute("pwMsg","비밀번호가 틀렸습니다.");
             model.addAttribute("userId",userId);
-            return "/user/delete";
+            return "user/delete";
         }
         if(result.hasErrors()){
             model.addAttribute("userId",userId);
-            return "/user/delete";
+            return "user/delete";
         }
         if(!users.getPicture().equals("profile.png"))
             removeFile(users.getPicture());
@@ -177,6 +176,7 @@ public class UsersController {
         UUID uuid = UUID.randomUUID();
         String newName = uuid.toString() + "_" + files.getOriginalFilename();
         String baseDir = "C:\\git\\Songstagram\\uploads\\profile\\";
+//        String baseDir ="\\var\\app\\current\\uploads\\profile\\";
         files.transferTo(new File(baseDir + newName));
         return newName;
     }
@@ -192,7 +192,8 @@ public class UsersController {
 
     public void removeFile(String path){
         String originalPath = "C:\\git\\Songstagram\\uploads\\profile\\" + path;
+//        String originalPath = "\\var\\app\\current\\uploads\\profile\\" + path;
         File file = new File(originalPath);
-        file.delete();
+        boolean tmp = file.delete();
     }
 }
