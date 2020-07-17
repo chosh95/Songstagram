@@ -48,4 +48,13 @@ public class CommentsService {
     public List<Comments> findCommentsByPosts(Posts posts){
         return commentsRepository.findCommentsByPosts(posts);
     }
+    public CommentDto convertToDto(Comments comments){
+        return CommentDto.builder()
+                .comment(comments.getContent())
+                .commentId(comments.getId())
+                .userId(comments.getUsers().getId())
+                .userName(comments.getUsers().getName())
+                .userPicture(comments.getUsers().getPicture())
+                .build();
+    }
 }

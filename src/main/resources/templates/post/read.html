@@ -10,14 +10,14 @@
             <div class="card pmd-card col-sm-6 mx-auto" style="margin-bottom: 30px;">
                 <div class="card-body d-flex flex-row">
                     <!-- Avatar -->
-                    <a th:href="@{'/user/profile/' + ${post.getUsers().getId()}}">
-                        <img src="#" th:src="@{'/uploads/profile/' + ${post.getUsers().getPicture()}}" class="rounded-circle mr-3" height="50px" width="50px" alt="avatar">
+                    <a th:href="@{'/user/profile/' + ${post.getUserId()}}">
+                        <img src="#" th:src="@{'/uploads/profile/' + ${post.getUserPicture()}}" class="rounded-circle mr-3" height="50px" width="50px" alt="avatar">
                     </a>
                     <!-- Content -->
                     <div>
                         <!-- Title -->
-                        <a th:href="@{'/user/profile/' + ${post.getUsers().getId()}}">
-                            <h4 class="card-title font-weight-bold mb-2" th:text="${post.getUsers().getName()}">User Name</h4>
+                        <a th:href="@{'/user/profile/' + ${post.getUserId()}}">
+                            <h4 class="card-title font-weight-bold mb-2" th:text="${post.getUserName()}">User Name</h4>
                         </a>
                         <!-- Subtitle -->
                         <p class="card-text"><i class="far fa-clock pr-2"></i><span th:text="${post.getCreatedDate()}"></span></p>
@@ -27,53 +27,40 @@
                 <!-- Card Media -->
                 <div class="pmd-card-media">
                     <img th:src="@{'/uploads/post/' + ${post.getPicture()}}" src="#" width="1184" height="666" class="img-fluid" alt="main image">
-                    <span th:if="${usersList.contains(session.loginUser.getId())}">
-                        <a th:href="@{'/likes/delete/'+${post.getId()} + '&' + ${session.loginUser.getId()}}"><img th:src="@{/icon/redHeart.png}" src="#" style="height: 20px; width: 20px;"> </a>
-                        <span th:text="${usersList.size()}"></span>
+                    <span th:if="${post.getLikeIdList().contains(session.loginUser.getId())}">
+                        <a th:href="@{'/likes/delete/'+${post.getPostId()} + '&' + ${session.loginUser.getId()}}"><img th:src="@{/icon/redHeart.png}" src="#" style="height: 20px; width: 20px;"> </a>
+                        <span th:text="${post.getLikeIdList().size()}"></span>
                     </span>
-                    <span th:unless="${usersList.contains(session.loginUser.getId())}">
-                        <a th:href="@{'/likes/save/'+${post.getId()} + '&' + ${session.loginUser.getId()}}"><img th:src="@{/icon/emptyHeart.png}" src="#" style="height: 20px; width: 20px;"></a>
-                        <span th:text="${usersList.size()}"></span>
+                    <span th:unless="${post.getLikeIdList().contains(session.loginUser.getId())}">
+                        <a th:href="@{'/likes/save/'+${post.getPostId()} + '&' + ${session.loginUser.getId()}}"><img th:src="@{/icon/emptyHeart.png}" src="#" style="height: 20px; width: 20px;"></a>
+                        <span th:text="${post.getLikeIdList().size()}"></span>
                     </span><br>
                     <h2 class="card-title" th:text="${post.getSinger()} + ' - ' + ${post.getSongName()}">Title goes here</h2>
                     <p class="card-text" th:text="${post.getContent()}"></p>
                     <div class="text-right">
-                        <span th:if="${session.loginUser.getId()}==${post.getUsers().getId()}">
-                            <a th:href="@{'/post/update/'+${post.getId()}}"><button class="btn btn-secondary">수정하기</button></a>
-                            <a th:href="@{'/post/delete/'+${post.getId()}}"><button class="btn btn-warning">삭제하기</button> </a>
+                        <span th:if="${session.loginUser.getId()}==${post.getUserId()}">
+                            <a th:href="@{'/post/update/'+${post.getPostId()}}"><button class="btn btn-secondary">수정하기</button></a>
+                            <a th:href="@{'/post/delete/'+${post.getPostId()}}"><button class="btn btn-warning">삭제하기</button> </a>
                         </span>
                     </div>
                 </div>
 
-                <!-- Card Body -->
-<!--                <div class="card-body">-->
-<!--                    <h2 class="card-title" th:text="${post.getSongName()}">Title goes here</h2>-->
-<!--                    <p class="card-subtitle mb-3" th:text="${post.getSinger()}">Secondary text</p>-->
-<!--                    <p class="card-text" th:text="${post.getContent()}"></p>-->
-<!--                    <div class="text-right">-->
-<!--                        <span th:if="${session.loginUser.getId()}==${post.getUsers().getId()}">-->
-<!--                            <a th:href="@{'/post/update/'+${post.getId()}}"><button class="btn btn-secondary">수정하기</button></a>-->
-<!--                            <a th:href="@{'/post/delete/'+${post.getId()}}"><button class="btn btn-warning">삭제하기</button> </a>-->
-<!--                        </span>-->
-<!--                    </div>-->
-<!--                </div>-->
-
                 <div class="card-footer">
                     <div th:each="comment:${commentsList}">
                         <div>
-                            <a th:href="@{'/user/profile/' + ${comment.getUsers().getId()}}">
-                                <img th:src="@{'/uploads/profile/' + ${comment.getUsers().getPicture()}}" src="#" height="20px" width="20px" alt="프로필이미지"/>
-                                <h5 th:text="${comment.getUsers().getName()}"></h5>
+                            <a th:href="@{'/user/profile/' + ${comment.getUserId()}}">
+                                <img th:src="@{'/uploads/profile/' + ${comment.getUserPicture()}}" src="#" class="rounded-circle mr-3" height="20px" width="20px" alt="프로필이미지"/>
+                                <h5 th:text="${comment.getUserName()}"></h5>
                             </a>
-                            <span th:text="${comment.getContent()}"></span>
+                            <span th:text="${comment.getComment()}"></span>
                             <div class="text-right">
-                                <span th:if="${comment.getUsers().getId()}==${session.loginUser.getId()}">
-                                    <a th:href="@{'/comment/delete/' + ${comment.getId()} + '&' + ${post.getId()}}" th:text="삭제하기"></a>
+                                <span th:if="${comment.getUserId()}==${session.loginUser.getId()}">
+                                    <a th:href="@{'/comment/delete/' + ${comment.getCommentId()} + '&' + ${post.getPostId()}}" th:text="삭제하기"></a>
                                 </span>
                             </div>
                         </div>
                     </div>
-                    <form th:object="${commentDto}" action="#" th:action="@{'/comment/write/' + ${post.getId()} + '&' + ${session.loginUser.getId()}}" method="post" class="form-group">
+                    <form th:object="${commentDto}" action="#" th:action="@{'/comment/write/' + ${post.getPostId()} + '&' + ${session.loginUser.getId()}}" method="post" class="form-group">
                         <div class="form-group">
                             <label>댓글 작성</label>
                             <input th:field="*{comment}" type="text" class="form-control"/>

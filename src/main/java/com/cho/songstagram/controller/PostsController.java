@@ -73,19 +73,16 @@ public class PostsController {
     public String readPost(@PathVariable("post_id") Long postId, @ModelAttribute("commentDto") CommentDto commentDto, Model model){
         Posts posts = postsService.findById(postId)
                 .orElse(new Posts());
-        model.addAttribute("post",posts);
+        PostDto postDto = postsService.convertToDto(posts);
+        model.addAttribute("post",postDto);
         
         List<Comments> commentsList = commentsService.findCommentsByPosts(posts);
-        
-        List<Long> usersList = new ArrayList<>(); //좋아요 누른 user 모음
-        for (Likes likes : posts.getLikesList()){
-            System.out.println(likes.getUsers().getId());
-            usersList.add(likes.getUsers().getId());
+        List<CommentDto> commentDtoList = new ArrayList<>();
+        for (Comments comments : commentsList) {
+            commentDtoList.add(commentsService.convertToDto(comments));
         }
+        model.addAttribute("commentsList",commentDtoList);
 
-        
-        model.addAttribute("usersList",usersList);
-        model.addAttribute("commentsList",commentsList);
         return "/post/read";
     }
 

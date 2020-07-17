@@ -8,6 +8,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -27,5 +29,14 @@ public class LikesService {
 
     public Optional<Likes> findByPostsAndUsers(Posts posts, Users users){
         return likesRepository.findByPostsAndUsers(posts, users);
+    }
+
+    public List<Long> findLikeIdList(Posts posts){
+        List<Likes> byPosts = likesRepository.findByPosts(posts);
+        List<Long> likesIdList = new ArrayList<>();
+        for (Likes likes : byPosts) {
+            likesIdList.add(likes.getUsers().getId());
+        }
+        return likesIdList;
     }
 }

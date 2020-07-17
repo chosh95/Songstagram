@@ -14,17 +14,17 @@
         </div>
         <div class="row">
             <div class="col">
-                <div class="card pmd-card col-sm-4  mx-auto" style="margin-bottom: 30px;"  th:each="post : ${postsList}" >
+                <div class="card pmd-card col-sm-4 mx-auto" style="margin-bottom: 30px;"  th:each="post : ${postsList}" >
                     <div class="card-body d-flex flex-row">
                         <!-- Avatar -->
-                        <a th:href="@{'/user/profile/' + ${post.getUsers().getId()}}">
-                            <img src="#" th:src="@{'/uploads/profile/' + ${post.getUsers().getPicture()}}" class="rounded-circle mr-3" height="50px" width="50px" alt="avatar">
+                        <a th:href="@{'/user/profile/' + ${post.getUserId()}}">
+                            <img src="#" th:src="@{'/uploads/profile/' + ${post.getUserPicture()}}" class="rounded-circle mr-3" height="50px" width="50px" alt="avatar">
                         </a>
                         <!-- Content -->
                         <div>
                             <!-- Title -->
-                            <a th:href="@{'/user/profile/' + ${post.getUsers().getId()}}">
-                                <h4 class="card-title font-weight-bold mb-2" th:text="${post.getUsers().getName()}">User Name</h4>
+                            <a th:href="@{'/user/profile/' + ${post.getUserId()}}">
+                                <h4 class="card-title font-weight-bold mb-2" th:text="${post.getUserName()}">User Name</h4>
                             </a>
                             <!-- Subtitle -->
                             <p class="card-text"><i class="far fa-clock pr-2"></i><span th:text="${post.getCreatedDate()}"></span></p>
@@ -38,12 +38,10 @@
 
                     <!-- Card Body -->
                     <div class="card-body">
-                        <h2 class="card-title" th:text="${post.getSongName()}">Title goes here</h2>
-                        <p class="card-subtitle mb-3" th:text="${post.getSinger()}">Secondary text</p>
-                        <p class="card-text" th:text="${post.getContent()}"></p>
+                        <h4 class="card-title" th:text="${post.getSinger()} + ' - ' + ${post.getSongName()}">Title goes here</h4>
                     </div>
                     <div class="text-right">
-                        <a th:href="@{'/post/read/' + ${post.getId()}}"><button class="btn btn-primary">더보기</button> </a>
+                        <a th:href="@{'/post/read/' + ${post.getPostId()}}"><button class="btn btn-primary">더보기</button> </a>
                     </div>
                 </div>
             </div>

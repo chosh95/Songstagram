@@ -2,10 +2,8 @@ package com.cho.songstagram.controller;
 
 import com.cho.songstagram.domain.Posts;
 import com.cho.songstagram.domain.Users;
-import com.cho.songstagram.dto.DeleteUserDto;
-import com.cho.songstagram.dto.LoginUserDto;
-import com.cho.songstagram.dto.SignInUserDto;
-import com.cho.songstagram.dto.UpdateUserDto;
+import com.cho.songstagram.dto.*;
+import com.cho.songstagram.service.PostsService;
 import com.cho.songstagram.service.UsersService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -29,6 +27,7 @@ import java.util.*;
 @RequiredArgsConstructor
 public class UsersController {
 
+    private final PostsService postsService;
     private final UsersService usersService;
 
     @GetMapping("/user/login")
@@ -106,7 +105,13 @@ public class UsersController {
                 .orElse(new Users());
         List<Posts> postsList = users.getPostsList();
         postsList.sort(new ListComparator());
-        model.addAttribute("postsList",postsList);
+
+        List<PostDto> postDtoList = new ArrayList<>();
+        for (Posts posts : postsList) {
+            postDtoList.add(postsService.convertToDto(posts));
+        }
+
+        model.addAttribute("postsList",postDtoList);
         model.addAttribute("userId",users.getId());
         return "/user/profile";
     }

@@ -1,6 +1,7 @@
 package com.cho.songstagram.controller;
 
 import com.cho.songstagram.domain.Posts;
+import com.cho.songstagram.dto.PostDto;
 import com.cho.songstagram.service.PostsService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Required;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Controller
@@ -22,10 +24,15 @@ public class HomeController {
 
     @GetMapping("/")
     public String home(Model model){
-        Pageable firstPage = PageRequest.of(0,9, Sort.by("createdDate").descending());
+        Pageable firstPage = PageRequest.of(0,5, Sort.by("createdDate").descending());
         Page<Posts> page = postsService.findAll(firstPage);
         List<Posts> posts = page.getContent();
-        model.addAttribute("postsList",posts);
+        List<PostDto> postDtoList = new ArrayList<>();
+        for (Posts post : posts) {
+            postDtoList.add(postsService.convertToDto(post));
+        }
+
+        model.addAttribute("postsList",postDtoList);
         return "index";
     }
 }
