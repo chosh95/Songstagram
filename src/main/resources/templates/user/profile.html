@@ -6,11 +6,24 @@
 
     <!-- Propeller Card -->
     <div class="container-fluid" style="margin-top: 100px">
-        <div class="container mx-auto col-sm-4">
-            <span th:if="${userId}==${session.loginUser.getId()}">
-                <a th:href="@{'/user/update/' + ${userId}}"><button class="btn btn-secondary">회원정보수정</button> </a>
-                <a th:href="@{'/user/delete/' + ${userId}}"><button class="btn btn-warning">회원탈퇴</button> </a>
-            </span>
+        <div class="card pmd-card col-sm-4 mx-auto" style="margin-bottom: 30px;" >
+            <div class="card-body d-flex flex-row">
+                <!-- Avatar -->
+                <a th:href="@{'/user/profile/' + ${userId}}">
+                    <img src="#" th:src="@{'/uploads/profile/' + ${userPicture}}" class="rounded-circle mr-3" height="50px" width="50px" alt="avatar">
+                </a>
+                <div>
+                    <a th:href="@{'/user/profile/' + ${userId}}">
+                        <h4 class="card-title font-weight-bold mb-2" th:text="${userName}">User Name</h4>
+                    </a>
+                </div>
+            </div>
+            <div class="card-body text-right">
+                    <span th:if="${userId}==${session.loginUser.getId()}">
+                        <a th:href="@{'/user/update/' + ${userId}}"><button class="btn btn-secondary">회원정보수정</button> </a>
+                        <a th:href="@{'/user/delete/' + ${userId}}"><button class="btn btn-warning">회원탈퇴</button> </a>
+                    </span>
+            </div>
         </div>
         <div class="row">
             <div class="col">

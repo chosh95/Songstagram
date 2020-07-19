@@ -112,6 +112,8 @@ public class UsersController {
 
         model.addAttribute("postsList",postDtoList);
         model.addAttribute("userId",users.getId());
+        model.addAttribute("userName",users.getName());
+        model.addAttribute("userPicture",users.getPicture());
         return "user/profile";
     }
 
