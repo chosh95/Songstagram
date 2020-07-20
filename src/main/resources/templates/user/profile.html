@@ -22,6 +22,7 @@
                     <span th:if="${userId}==${session.loginUser.getId()}">
                         <a th:href="@{'/user/update/' + ${userId}}"><button class="btn btn-secondary">회원정보수정</button> </a>
                         <a th:href="@{'/user/delete/' + ${userId}}"><button class="btn btn-warning">회원탈퇴</button> </a>
+                        <a th:href="@{/user/logout}"><button class="btn btn-secondary">로그아웃</button></a>
                     </span>
             </div>
         </div>
