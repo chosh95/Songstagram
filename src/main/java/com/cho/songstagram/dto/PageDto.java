@@ -31,8 +31,6 @@ public class PageDto {
         nextPage = this.max + 1;
         if (nextPage > pageCnt) nextPage = pageCnt;
 
-        System.out.println(min);
-        System.out.println(max);
         this.numList = new int[max-min+1];
         for (int i = 0; i < numList.length; i++) {
             numList[i] = min + i;

@@ -6,6 +6,7 @@ import com.cho.songstagram.dto.*;
 import com.cho.songstagram.service.PostsService;
 import com.cho.songstagram.service.UsersService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -28,6 +29,7 @@ public class UsersController {
 
     private final PostsService postsService;
     private final UsersService usersService;
+    private final PasswordEncoder passwordEncoder;
 
     @GetMapping("/user/login")
     public String loginUserGet(@ModelAttribute("loginUserDto") LoginUserDto loginUserDto){
@@ -41,11 +43,16 @@ public class UsersController {
         Users users = usersService.findByEmail(loginUserDto.getEmail())
                 .orElse(new Users());
 
-        if(result.hasErrors() || users.getId()==null || !users.matchPassword(loginUserDto.getPassword())){
-            if(users.getId()==null || !users.matchPassword(loginUserDto.getPassword()))
-                model.addAttribute("idPwMsg","아이디, 비밀번호를 다시 확인해주세요.");
+        //오류 검사. id, pw가 틀리면 메세지 전송
+        if(users.getId()==null || !passwordEncoder.matches(loginUserDto.getPassword(),users.getPassword())) {
+            model.addAttribute("idPwMsg", "아이디, 비밀번호를 다시 확인해주세요.");
             return "user/login";
         }
+        if(result.hasErrors()){
+            return "user/login";
+        }
+
+        // loginUser 세션 관리 있으면 지우고 다시 생성, 없으면 바로 생성
         if(session.getAttribute("loginUser") != null)
             session.removeAttribute("loginUser");
         session.setAttribute("loginUser",users);
@@ -60,7 +67,7 @@ public class UsersController {
 
     @GetMapping("/user/logout")
     public String logoutUserGet(HttpSession session){
-        session.invalidate();
+        session.invalidate(); //로그아웃 시 loginUser 세션 지우기
         return "user/logout";
     }
 
@@ -87,7 +94,7 @@ public class UsersController {
         String picture = addFile(files);
 
         Users newUser = Users.builder()
-                .password(signInUserDto.getPassword())
+                .password(passwordEncoder.encode(signInUserDto.getPassword())) //BCrypt 방식으로 암호화
                 .email(signInUserDto.getEmail())
                 .name(signInUserDto.getName())
                 .picture(picture)

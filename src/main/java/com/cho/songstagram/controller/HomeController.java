@@ -25,21 +25,6 @@ public class HomeController {
 
     private final PostsService postsService;
 
-//    @GetMapping("/")
-//    public String home(@RequestParam(value = "page", defaultValue = "1") int page,
-//                       Model model){
-//        Pageable firstPage = PageRequest.of(0,5, Sort.by("createdDate").descending());
-//        Page<Posts> postPage = postsService.findAll(firstPage);
-//        List<Posts> posts = postPage.getContent();
-//        List<PostDto> postDtoList = new ArrayList<>();
-//        for (Posts post : posts) {
-//            postDtoList.add(postsService.convertToDto(post));
-//        }
-//
-//        model.addAttribute("postsList",postDtoList);
-//        return "index";
-//    }
-
     @GetMapping("/")
     public String home(@RequestParam(value = "page", defaultValue = "1") int page,
                        Model model){
