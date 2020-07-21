@@ -1,6 +1,7 @@
 package com.cho.songstagram.controller;
 
 import com.cho.songstagram.domain.Posts;
+import com.cho.songstagram.dto.PageDto;
 import com.cho.songstagram.dto.PostDto;
 import com.cho.songstagram.service.PostsService;
 import lombok.RequiredArgsConstructor;
@@ -12,6 +13,8 @@ import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestPart;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,17 +25,30 @@ public class HomeController {
 
     private final PostsService postsService;
 
-    @GetMapping("/")
-    public String home(Model model){
-        Pageable firstPage = PageRequest.of(0,5, Sort.by("createdDate").descending());
-        Page<Posts> page = postsService.findAll(firstPage);
-        List<Posts> posts = page.getContent();
-        List<PostDto> postDtoList = new ArrayList<>();
-        for (Posts post : posts) {
-            postDtoList.add(postsService.convertToDto(post));
-        }
+//    @GetMapping("/")
+//    public String home(@RequestParam(value = "page", defaultValue = "1") int page,
+//                       Model model){
+//        Pageable firstPage = PageRequest.of(0,5, Sort.by("createdDate").descending());
+//        Page<Posts> postPage = postsService.findAll(firstPage);
+//        List<Posts> posts = postPage.getContent();
+//        List<PostDto> postDtoList = new ArrayList<>();
+//        for (Posts post : posts) {
+//            postDtoList.add(postsService.convertToDto(post));
+//        }
+//
+//        model.addAttribute("postsList",postDtoList);
+//        return "index";
+//    }
 
-        model.addAttribute("postsList",postDtoList);
+    @GetMapping("/")
+    public String home(@RequestParam(value = "page", defaultValue = "1") int page,
+                       Model model){
+        List<PostDto> postsList = postsService.getPostList(page);
+        PageDto pageDto = new PageDto(page,5,Math.toIntExact(postsService.getPostsCount()),5);
+
+        model.addAttribute("postsList",postsList);
+        model.addAttribute("pageDto",pageDto);
+
         return "index";
     }
 }

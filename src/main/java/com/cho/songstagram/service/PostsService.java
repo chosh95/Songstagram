@@ -6,12 +6,14 @@ import com.cho.songstagram.dto.PostDto;
 import com.cho.songstagram.repository.PostsRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -37,8 +39,12 @@ public class PostsService {
         return postsRepository.findById(id);
     }
 
-    public  Page<Posts> findAll(Pageable pageable){
+    public Page<Posts> findAll(Pageable pageable){
         return postsRepository.findAll(pageable);
+    }
+
+    public Long getPostsCount(){
+        return postsRepository.count();
     }
 
     public PostDto convertToDto(Posts posts){
@@ -55,4 +61,15 @@ public class PostsService {
                 .likeIdList(likesService.findLikeIdList(posts))
                 .build();
     }
+
+    public List<PostDto> getPostList(int page) {
+        Page<Posts> posts = postsRepository.findAll(PageRequest.of(page - 1, 5, Sort.by("createdDate").descending()));
+        List<Posts> postsEntities = posts.getContent();
+        List<PostDto> dtoList = new ArrayList<>();
+        for (Posts postsEntity : postsEntities) {
+            dtoList.add(this.convertToDto(postsEntity));
+        }
+        return dtoList;
+    }
+
 }
