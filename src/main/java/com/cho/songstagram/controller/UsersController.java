@@ -4,6 +4,7 @@ import com.cho.songstagram.domain.Posts;
 import com.cho.songstagram.domain.Users;
 import com.cho.songstagram.dto.*;
 import com.cho.songstagram.service.PostsService;
+import com.cho.songstagram.service.S3Service;
 import com.cho.songstagram.service.UsersService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -30,6 +31,7 @@ public class UsersController {
     private final PostsService postsService;
     private final UsersService usersService;
     private final PasswordEncoder passwordEncoder;
+    private final S3Service s3Service;
 
     @GetMapping("/user/login")
     public String loginUserGet(@ModelAttribute("loginUserDto") LoginUserDto loginUserDto){
@@ -91,7 +93,7 @@ public class UsersController {
             return "user/signIn";
         }
 
-        String picture = addFile(files);
+        String picture = s3Service.userUpload(files);
 
         Users newUser = Users.builder()
                 .password(passwordEncoder.encode(signInUserDto.getPassword())) //BCrypt 방식으로 암호화
@@ -101,7 +103,6 @@ public class UsersController {
                 .build();
 
         usersService.save(newUser);
-
         return "redirect:/user/login";
     }
 
@@ -144,7 +145,7 @@ public class UsersController {
             return "user/update";
         }
         removeFile(users.getPicture());
-        String picture = addFile(files);
+        String picture = s3Service.userUpload(files);
         users.updatePicture(picture);
         users.updateName(updateUserDto.getName());
         usersService.save(users);

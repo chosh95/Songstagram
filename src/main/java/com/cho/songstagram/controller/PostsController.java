@@ -1,13 +1,13 @@
 package com.cho.songstagram.controller;
 
 import com.cho.songstagram.domain.Comments;
-import com.cho.songstagram.domain.Likes;
 import com.cho.songstagram.domain.Posts;
 import com.cho.songstagram.domain.Users;
 import com.cho.songstagram.dto.CommentDto;
 import com.cho.songstagram.dto.PostDto;
 import com.cho.songstagram.service.CommentsService;
 import com.cho.songstagram.service.PostsService;
+import com.cho.songstagram.service.S3Service;
 import com.cho.songstagram.service.UsersService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -20,7 +20,6 @@ import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.io.File;
 import java.io.IOException;
-import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
@@ -32,6 +31,7 @@ public class PostsController {
     private final UsersService usersService;
     private final PostsService postsService;
     private final CommentsService commentsService;
+    private final S3Service s3Service;
 
     @GetMapping("/post/write")
     public String write(@ModelAttribute("postDto") PostDto postDto){
@@ -51,7 +51,7 @@ public class PostsController {
             return "post/write";
         }
 
-        String picture = addFile(files);
+        String picture = s3Service.postUpload(files);
 
         Users loginUser = (Users)session.getAttribute("loginUser");
         Users user = usersService.findByEmail(loginUser.getEmail())
@@ -118,26 +118,9 @@ public class PostsController {
     public String delete(@PathVariable("post_id") Long postId){
         Posts posts = postsService.findById(postId)
                 .orElse(new Posts());
-        removeFile(posts.getPicture());
+//        removeFile(posts.getPicture());
         postsService.delete(posts);
         return "post/delete";
     }
 
-    public String addFile(MultipartFile files) throws IOException {
-        if(files.isEmpty()) return null;
-        UUID uuid = UUID.randomUUID();
-        String newName = uuid.toString() + "_" + files.getOriginalFilename();
-        String baseDir = "C:\\git\\Songstagram\\uploads\\post\\";
-//        String baseDir ="\\var\\app\\current\\uploads\\post\\";
-        files.transferTo(new File(baseDir + newName));
-        return newName;
-    }
-
-    public void removeFile(String path){
-        String originalPath = "C:\\git\\Songstagram\\uploads\\post\\" + path;
-//        String originalPath ="\\var\\app\\current\\uploads\\post\\" + path;
-        File file = new File(originalPath);
-        if(file.delete())
-            System.out.println("delete Success");
-    }
 }

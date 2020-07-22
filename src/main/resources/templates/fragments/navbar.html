@@ -27,7 +27,7 @@
         <ul class="nav navbar-nav ml-auto">
             <li class="nav-item" th:if="${session.loginUser!=null}" >
                 <a th:href="@{'/user/profile/' + ${session.loginUser.getId()}}">
-                    <img src="#" th:src="@{'/uploads/profile/' + ${session.loginUser.getPicture()}}" alt="프로필이미지" style="height: 40px; width: 40px; margin-left: 100px;" class="rounded-circle mr-3">
+                    <img src="#" th:src="${session.loginUser.getPicture()}" alt="프로필이미지" style="height: 40px; width: 40px; margin-left: 100px;" class="rounded-circle mr-3">
                 </a>
             </li>
             <li class="nav-item" th:if="${session.loginUser==null}" style="margin-left: 100px;" >

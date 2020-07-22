@@ -14,7 +14,7 @@
                     <div class="card-body d-flex flex-row">
                         <!-- Avatar -->
                         <a th:href="@{'/user/profile/' + ${post.getUserId()}}">
-                            <img src="#" th:src="@{'/uploads/profile/' + ${post.getUserPicture()}}" class="rounded-circle mr-3" height="50px" width="50px" alt="avatar">
+                            <img src="#" th:src="${post.getUserPicture()}" class="rounded-circle mr-3" height="50px" width="50px" alt="avatar">
                         </a>
                         <!-- Content -->
                         <div>
@@ -29,7 +29,7 @@
 
                     <!-- Card Media -->
                     <div class="pmd-card-media">
-                        <img th:src="@{'/uploads/post/' + ${post.getPicture()}}" src="#" width="1184" height="666" class="img-fluid" alt="main image">
+                        <img th:src="${post.getPicture()}" src="#" width="1184" height="666" class="img-fluid" alt="main image">
                     </div>
 
                     <!-- Card Body -->

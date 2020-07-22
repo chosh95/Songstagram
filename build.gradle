@@ -44,6 +44,7 @@ dependencies {
     compile('org.springframework.boot:spring-boot-starter-jdbc')
     compile('org.springframework.boot:spring-boot-starter-validation')
     compile group: 'org.springframework.security', name: 'spring-security-crypto', version: '5.3.3.RELEASE'
+    compile group: 'org.springframework.cloud', name: 'spring-cloud-aws-context', version: '2.2.2.RELEASE'
 }
 
 test {
