@@ -144,7 +144,8 @@ public class UsersController {
         if(result.hasErrors()){
             return "user/update";
         }
-        removeFile(users.getPicture());
+        if(!users.getPicture().equals("https://elasticbeanstalk-us-east-2-089357406904.s3.us-east-2.amazonaws.com/upload/profile/profile.png"))
+            s3Service.deleteUser(users.getPicture());
         String picture = s3Service.userUpload(files);
         users.updatePicture(picture);
         users.updateName(updateUserDto.getName());
@@ -164,8 +165,9 @@ public class UsersController {
     public String deleteUser(@PathVariable("userId") Long userId,
                              @Valid @ModelAttribute("deleteUserDto")DeleteUserDto deleteUserDto,
                              BindingResult result, Model model, HttpSession session){
+        
         Users users = usersService.findById(userId).orElse(new Users());
-        if(!users.matchPassword(deleteUserDto.getPassword())){
+        if(!passwordEncoder.matches(deleteUserDto.getPassword(),users.getPassword())){
             model.addAttribute("pwMsg","비밀번호가 틀렸습니다.");
             model.addAttribute("userId",userId);
             return "user/delete";
@@ -174,21 +176,18 @@ public class UsersController {
             model.addAttribute("userId",userId);
             return "user/delete";
         }
-        if(!users.getPicture().equals("profile.png"))
-            removeFile(users.getPicture());
+        
+        //user 프로필 사진 삭제
+        if(!users.getPicture().equals("https://elasticbeanstalk-us-east-2-089357406904.s3.us-east-2.amazonaws.com/upload/profile/profile.png"))
+            s3Service.deleteUser(users.getPicture());
+        //user가 작성한 post 사진들 삭제
+        for (Posts posts : users.getPostsList()) {
+            s3Service.deletePost(posts.getPicture());
+        }
+        
         usersService.delete(users);
         session.invalidate();
         return "redirect:/";
-    }
-
-    public String addFile(MultipartFile files) throws IOException {
-        if(files.isEmpty()) return "profile.png";
-        UUID uuid = UUID.randomUUID();
-        String newName = uuid.toString() + "_" + files.getOriginalFilename();
-        String baseDir = "C:\\git\\Songstagram\\uploads\\profile\\";
-//        String baseDir ="\\var\\app\\current\\uploads\\profile\\";
-        files.transferTo(new File(baseDir + newName));
-        return newName;
     }
 
     private static class ListComparator implements Comparator {
@@ -198,12 +197,5 @@ public class UsersController {
             LocalDateTime b = ((Posts)o2).getCreatedDate();
             return b.compareTo(a);
         }
-    }
-
-    public void removeFile(String path){
-        String originalPath = "C:\\git\\Songstagram\\uploads\\profile\\" + path;
-//        String originalPath = "\\var\\app\\current\\uploads\\profile\\" + path;
-        File file = new File(originalPath);
-        boolean tmp = file.delete();
     }
 }

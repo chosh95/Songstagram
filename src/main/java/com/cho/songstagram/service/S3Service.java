@@ -6,6 +6,7 @@ import com.amazonaws.auth.BasicAWSCredentials;
 import com.amazonaws.services.s3.AmazonS3;
 import com.amazonaws.services.s3.AmazonS3ClientBuilder;
 import com.amazonaws.services.s3.model.CannedAccessControlList;
+import com.amazonaws.services.s3.model.DeleteObjectRequest;
 import com.amazonaws.services.s3.model.PutObjectRequest;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -44,23 +45,32 @@ public class S3Service {
     }
 
     public String postUpload(MultipartFile file) throws IOException {
-        UUID uuid = UUID.randomUUID();
-        String fileName = uuid.toString() + "_" + file.getOriginalFilename();
-
-        s3Client.putObject(new PutObjectRequest(bucket, fileName, file.getInputStream(), null)
+        String fileName = UUID.randomUUID().toString();
+        s3Client.putObject(new PutObjectRequest(bucket+"/upload/post", fileName, file.getInputStream(), null)
                 .withCannedAcl(CannedAccessControlList.PublicRead));
-        return s3Client.getUrl(bucket, fileName).toString();
+        return s3Client.getUrl(bucket+"/upload/post", fileName).toString();
     }
 
     public String userUpload(MultipartFile file) throws IOException {
         if(file.isEmpty()) return "https://elasticbeanstalk-us-east-2-089357406904.s3.us-east-2.amazonaws.com/upload/profile/profile.png";
-        UUID uuid = UUID.randomUUID();
-        String fileName = uuid.toString() + "_" + file.getOriginalFilename();
-
-        s3Client.putObject(new PutObjectRequest(bucket, fileName, file.getInputStream(), null)
+        String fileName = UUID.randomUUID().toString();
+        s3Client.putObject(new PutObjectRequest(bucket+"/upload/profile", fileName, file.getInputStream(), null)
                 .withCannedAcl(CannedAccessControlList.PublicRead));
-        return s3Client.getUrl(bucket, fileName).toString();
+        return s3Client.getUrl(bucket+"/upload/profile", fileName).toString();
     }
 
+
+    //delete 기능은 aws s3에 대한 접근 권한 문제로, 가능은 하지만 보안 문제상 기능하지 않도록 한다.
+    public void deletePost(String fileUrl){
+        int i = fileUrl.indexOf("/upload/post");
+        String fileName = fileUrl.substring(i + 13);
+        s3Client.deleteObject(new DeleteObjectRequest(bucket+"/upload/post",fileName));
+    }
+
+    public void deleteUser(String fileUrl){
+        int i = fileUrl.indexOf("/upload/profile");
+        String fileName = fileUrl.substring(i + 16);
+        s3Client.deleteObject(new DeleteObjectRequest(bucket+"/upload/profile",fileName));
+    }
 }
 

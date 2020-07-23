@@ -118,7 +118,7 @@ public class PostsController {
     public String delete(@PathVariable("post_id") Long postId){
         Posts posts = postsService.findById(postId)
                 .orElse(new Posts());
-//        removeFile(posts.getPicture());
+        s3Service.deletePost(posts.getPicture());
         postsService.delete(posts);
         return "post/delete";
     }
