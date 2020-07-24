@@ -39,10 +39,6 @@ public class PostsService {
         return postsRepository.findById(id);
     }
 
-    public Page<Posts> findAll(Pageable pageable){
-        return postsRepository.findAll(pageable);
-    }
-
     public Long getPostsCount(){
         return postsRepository.count();
     }
@@ -62,12 +58,22 @@ public class PostsService {
                 .build();
     }
 
-    public List<PostDto> getPostList(int page) {
-        Page<Posts> posts = postsRepository.findAll(PageRequest.of(page - 1, 5, Sort.by("createdDate").descending()));
-        List<Posts> postsEntities = posts.getContent();
+    public List<PostDto> getPostList(int page, int contentPageCnt) {
+        Page<Posts> posts = postsRepository.findAll(PageRequest.of(page - 1, contentPageCnt, Sort.by("createdDate").descending()));
+        List<Posts> postsList = posts.getContent();
         List<PostDto> dtoList = new ArrayList<>();
-        for (Posts postsEntity : postsEntities) {
-            dtoList.add(this.convertToDto(postsEntity));
+        for (Posts post : postsList) {
+            dtoList.add(this.convertToDto(post));
+        }
+        return dtoList;
+    }
+
+    public List<PostDto> getUserPostList(Users users, int page, int contentPageCnt){
+        Page<Posts> posts = postsRepository.findAllByUsers(users, PageRequest.of(page-1,contentPageCnt,Sort.by("createdDate").descending()));
+        List<Posts> postsList = posts.getContent();
+        List<PostDto> dtoList = new ArrayList<>();
+        for (Posts post : postsList) {
+            dtoList.add(this.convertToDto(post));
         }
         return dtoList;
     }

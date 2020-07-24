@@ -7,6 +7,7 @@ import com.cho.songstagram.service.PostsService;
 import com.cho.songstagram.service.S3Service;
 import com.cho.songstagram.service.UsersService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -107,21 +108,20 @@ public class UsersController {
     }
 
     @GetMapping("/user/profile/{userId}")
-    public String profileUserGet(@PathVariable("userId") Long userId, Model model){
+    public String profileUserGet(@RequestParam(value = "page",defaultValue = "1") int page,
+                                 @PathVariable("userId") Long userId, Model model){
+
         Users users = usersService.findById(userId)
                 .orElse(new Users());
-        List<Posts> postsList = users.getPostsList();
-        postsList.sort(new ListComparator());
+        List<PostDto> postDtoList = postsService.getUserPostList(users, page, 5);
+        model.addAttribute("postDtoList",postDtoList);
 
-        List<PostDto> postDtoList = new ArrayList<>();
-        for (Posts posts : postsList) {
-            postDtoList.add(postsService.convertToDto(posts));
-        }
+        ProfileUserDto userDto = new ProfileUserDto(users.getId(),users.getName(),users.getPicture());
+        model.addAttribute("userDto",userDto);
 
-        model.addAttribute("postsList",postDtoList);
-        model.addAttribute("userId",users.getId());
-        model.addAttribute("userName",users.getName());
-        model.addAttribute("userPicture",users.getPicture());
+        PageDto pageDto = new PageDto(page,5,users.getPostsList().size(),5);
+        model.addAttribute("pageDto",pageDto);
+
         return "user/profile";
     }
 

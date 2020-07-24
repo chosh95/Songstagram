@@ -10,25 +10,25 @@
             <div class="card-body d-flex flex-row">
                 <!-- Avatar -->
                 <a th:href="@{'/user/profile/' + ${userId}}">
-                    <img src="#" th:src="${userPicture}" class="rounded-circle mr-3" height="50px" width="50px" alt="avatar">
+                    <img src="#" th:src="${userDto.getUserPicture()}" class="rounded-circle mr-3" height="50px" width="50px" alt="avatar">
                 </a>
                 <div>
                     <a th:href="@{'/user/profile/' + ${userId}}">
-                        <h4 class="card-title font-weight-bold mb-2" th:text="${userName}">User Name</h4>
+                        <h4 class="card-title font-weight-bold mb-2" th:text="${userDto.getUserName()}">User Name</h4>
                     </a>
                 </div>
             </div>
             <div class="card-body text-right">
                     <span th:if="${userId}==${session.loginUser.getId()}">
-                        <a th:href="@{'/user/update/' + ${userId}}"><button class="btn btn-secondary">회원정보수정</button> </a>
-                        <a th:href="@{'/user/delete/' + ${userId}}"><button class="btn btn-warning">회원탈퇴</button> </a>
+                        <a th:href="@{'/user/update/' + ${userDto.getUserId()}}"><button class="btn btn-secondary">회원정보수정</button> </a>
+                        <a th:href="@{'/user/delete/' + ${userDto.getUserId()}}"><button class="btn btn-warning">회원탈퇴</button> </a>
                         <a th:href="@{/user/logout}"><button class="btn btn-secondary">로그아웃</button></a>
                     </span>
             </div>
         </div>
         <div class="row">
             <div class="col">
-                <div class="card pmd-card col-sm-4 mx-auto" style="margin-bottom: 30px;"  th:each="post : ${postsList}" >
+                <div class="card pmd-card col-sm-4 mx-auto" style="margin-bottom: 30px;"  th:each="post : ${postDtoList}" >
                     <!-- Card Media -->
                     <div class="pmd-card-media" style="margin-top: 20px;">
                         <img th:src="${post.getPicture()}" src="#" width="1184" height="666" class="img-fluid" alt="main image">
@@ -43,6 +43,42 @@
                     </div>
                 </div>
             </div>
+        </div>
+        <div>
+            <ul class="pagination justify-content-center">
+                <span th:if="${pageDto.getPrevPage() <= 0}">
+                    <li class="page-item disabled">
+                        <a href="#" class="page-link">이전</a>
+                    </li>
+                </span>
+                <span th:unless="${pageDto.getPrevPage() <= 0}">
+                    <li class="page-item">
+                        <a th:href="@{'/user/profile/' + ${userDto.getUserId()} + '?page=' + ${pageDto.getPrevPage()}}" class="page-link">이전</a>
+                    </li>
+                </span>
+                <span th:each="page : ${pageDto.getNumList()}">
+                    <span th:if="${page==pageDto.getCurrentPage()}">
+                        <li class="page-item active">
+                            <a th:href="@{'/user/profile/' + ${userDto.getUserId()} + '?page=' + ${page}}" th:text="${page}" class="page-link"></a>
+                        </li>
+                    </span>
+                    <span th:unless="${page==pageDto.getCurrentPage()}">
+                        <li class="page-item">
+                            <a th:href="@{'/user/profile/' + ${userDto.getUserId()} + '?page=' + ${page}}" th:text="${page}" class="page-link"></a>
+                        </li>
+                    </span>
+                </span>
+                <span th:if="${pageDto.getMax() >= pageDto.getPageCnt()}">
+                    <li class="page-item disabled">
+                        <a href="#" class="page-link">다음</a>
+                    </li>
+                </span>
+                <span th:unless="${pageDto.getMax() >= pageDto.getPageCnt()}" >
+                    <li class="page-item">
+                        <a th:href="@{'/user/profile/' + ${userDto.getUserId()} + '?page=' + ${pageDto.getNextPage()}}" class="page-link">다음</a>
+                    </li>
+                </span>
+            </ul>
         </div>
     </div>
 </th:block>

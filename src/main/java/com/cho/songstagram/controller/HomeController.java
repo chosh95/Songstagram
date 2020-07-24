@@ -28,7 +28,7 @@ public class HomeController {
     @GetMapping("/")
     public String home(@RequestParam(value = "page", defaultValue = "1") int page,
                        Model model){
-        List<PostDto> postsList = postsService.getPostList(page);
+        List<PostDto> postsList = postsService.getPostList(page, 5);
         PageDto pageDto = new PageDto(page,5,Math.toIntExact(postsService.getPostsCount()),5);
 
         model.addAttribute("postsList",postsList);

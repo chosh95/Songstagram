@@ -66,12 +66,12 @@
                         </li>
                     </span>
                 </span>
-                <span th:if="${pageDto.getMax() >= pageDto.pageCnt}">
+                <span th:if="${pageDto.getMax() >= pageDto.getPageCnt()}">
                     <li class="page-item disabled">
                         <a href="#" class="page-link">다음</a>
                     </li>
                 </span>
-                <span th:unless="${pageDto.getMax() >= pageDto.pageCnt}" >
+                <span th:unless="${pageDto.getMax() >= pageDto.getPageCnt()}" >
                     <li class="page-item">
                         <a th:href="@{'/?page=' + ${pageDto.getNextPage()}}" class="page-link">다음</a>
                     </li>
