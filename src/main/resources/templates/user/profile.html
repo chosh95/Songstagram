@@ -19,11 +19,18 @@
                 </div>
             </div>
             <div class="card-body text-right">
-                    <span th:if="${userId}==${session.loginUser.getId()}">
+                <ul th:if="${userId}==${session.loginUser.getId()}">
+                    <li>
                         <a th:href="@{'/user/update/' + ${userDto.getUserId()}}"><button class="btn btn-secondary">회원정보수정</button> </a>
+                    </li>
+                    <li>
                         <a th:href="@{'/user/delete/' + ${userDto.getUserId()}}"><button class="btn btn-warning">회원탈퇴</button> </a>
+                    </li>
+                    <li>
                         <a th:href="@{/user/logout}"><button class="btn btn-secondary">로그아웃</button></a>
-                    </span>
+                    </li>
+                </ul>
+
             </div>
         </div>
         <div class="row">
