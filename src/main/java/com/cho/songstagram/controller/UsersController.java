@@ -8,7 +8,6 @@ import com.cho.songstagram.service.PostsService;
 import com.cho.songstagram.service.S3Service;
 import com.cho.songstagram.service.UsersService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -18,13 +17,8 @@ import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
-import java.io.File;
 import java.io.IOException;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
-import java.util.UUID;
 
 @Controller
 @RequiredArgsConstructor
@@ -109,10 +103,10 @@ public class UsersController {
         return "redirect:/user/login";
     }
 
-    @GetMapping("/user/profile/{userId}&{loginUserId}")
+    @GetMapping("/user/profile/{userId}")
     public String profileUserGet(@RequestParam(value = "page",defaultValue = "1") int page,
                                  @PathVariable("userId") Long userId,
-                                 @PathVariable("loginUserId") Long loginUserId, Model model){
+                                 HttpSession session, Model model){
 
         Users users = usersService.findById(userId)
                 .orElse(new Users());
@@ -125,7 +119,7 @@ public class UsersController {
         PageDto pageDto = new PageDto(page,5,users.getPostsList().size(),5);
         model.addAttribute("pageDto",pageDto);
 
-        Users loginUser = usersService.findById(loginUserId).orElse(new Users());
+        Users loginUser = (Users) session.getAttribute("loginUser");
         boolean follow = followService.isFollowing(loginUser,users);
         model.addAttribute("follow",follow);
 
@@ -200,14 +194,5 @@ public class UsersController {
         usersService.delete(users);
         session.invalidate();
         return "redirect:/";
-    }
-
-    private static class ListComparator implements Comparator {
-        @Override
-        public int compare(Object o1, Object o2) {
-            LocalDateTime a = ((Posts)o1).getCreatedDate();
-            LocalDateTime b = ((Posts)o2).getCreatedDate();
-            return b.compareTo(a);
-        }
     }
 }

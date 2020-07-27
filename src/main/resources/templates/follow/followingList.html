@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="layout/default">
+
+<th:block layout:fragment="content">
+    <!-- Begin Page Content -->
+    <div class="container-fluid" style="margin-top: 100px">
+        <!-- Content Here!! -->
+        <div class="card pmd-card col-sm-4 mx-auto" style="margin-bottom: 30px;">
+            <div class="card-header bg-white">
+                <h4>팔로워 목록</h4>
+            </div>
+            <div class="card-body" th:each="dto : ${followDto}" >
+                <a th:href="@{'/user/profile/' + ${dto.getUserId()}}">
+                    <img th:src="${dto.getPicture()}" alt="프로필이미지" src="#" class="rounded-circle mr-3" height="50px" width="50px">
+                    <span th:text="${dto.getUserName()}"></span>
+                </a>
+                <div class="text-right" th:if="${dto.getUserId()}!=${session.loginUser.getId()}">
+                    <span th:if="${dto.isFollow()}==true">
+                        <a th:href="@{'/unfollow/' + ${dto.getUserId()} + '&' + ${userId}}"><button class="btn btn-default btn-sm">언팔로우</button></a>
+                    </span>
+                    <span th:if="${dto.isFollow()}==false">
+                        <a th:href="@{'/follow/' + ${dto.getUserId()} + '&' + ${userId}}"><button class="btn btn-default btn-sm">팔로우</button></a>
+                    </span>
+                </div>
+            </div>
+            <div class="card-footer bg-white text-right">
+                <a th:href="@{'/user/profile/' + ${userId}}"><button class="btn btn-secondary">이전</button></a>
+            </div>
+        </div>
+    </div>
+</th:block>
+</html>

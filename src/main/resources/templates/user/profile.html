@@ -9,44 +9,45 @@
     <div class="container-fluid" style="margin-top: 100px">
         <div class="card pmd-card col-sm-4 mx-auto" style="margin-bottom: 30px;" >
             <div class="card-body d-flex flex-row">
-                <!-- Avatar -->
-                <a th:href="@{'/user/profile/' + ${userId} + '&' + ${session.loginUser.getId()}}">
+                <!-- 프로필 사진 & 이름 -->
+                <a th:href="@{'/user/profile/' + ${userId}}">
                     <img src="#" th:src="${userDto.getUserPicture()}" class="rounded-circle mr-3" height="50px" width="50px" alt="avatar">
                 </a>
                 <div>
-                    <a th:href="@{'/user/profile/' + ${userId} + '&' + ${session.loginUser.getId()}}">
+                    <a th:href="@{'/user/profile/' + ${userId}}">
                         <h4 class="card-title font-weight-bold mb-2" th:text="${userDto.getUserName()}">User Name</h4>
                     </a>
                 </div>
+                <!-- 팔로우 & 언팔로우 버튼  -->
+                <div th:if="${userId}!=${session.loginUser.getId()}" class="text-right">
+                    <span th:if="${follow}==false">
+                        <a th:href="@{'/follow/' + ${userId} + '&' + ${session.loginUser.getId()}}"><button class="btn btn-default">팔로우</button></a>
+                    </span>
+                        <span th:if="${follow}==true">
+                        <a th:href="@{'/unfollow/' + ${userId} + '&' + ${session.loginUser.getId()}}"><button class="btn btn-default">언팔로우</button></a>
+                    </span>
+                </div>
             </div>
-            <div>
+            <div class="card-body">
                 <table class="table">
                     <thead>
                         <tr>
                             <th>게시물</th>
-                            <th>팔로워</th>
-                            <th>팔로잉</th>
+                            <th><a th:href="@{'/followerList/' + ${userId}}">팔로워</a></th>
+                            <th><a th:href="@{'/followingList/' + ${userId}}">팔로잉</a></th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
                             <td th:text="${postDtoList.size()}"></td>
-                            <td th:text="${follower}"></td>
-                            <td th:text="${following}"></td>
+                            <td><a th:href="@{'/followerList/' + ${userId}}" th:text="${follower}"></a></td>
+                            <td><a th:href="@{'/followingList/' + ${userId}}" th:text="${following}"></a></td>
                         </tr>
                     </tbody>
                 </table>
             </div>
-            <div th:if="${userId}!=${session.loginUser.getId()}">
-                <span th:if="${follow}==false">
-                    <a th:href="@{'/follow/' + ${userId} + '&' + ${session.loginUser.getId()}}"><button class="btn btn-default">팔로우</button></a>
-                </span>
-                <span th:if="${follow}==true">
-                    <a th:href="@{'/unfollow/' + ${userId} + '&' + ${session.loginUser.getId()}}"><button class="btn btn-default">언팔로우</button></a>
-                </span>
-            </div>
-            <div class="text-center">
-                <div th:if="${userId}==${session.loginUser.getId()}">
+            <div th:if="${userId}==${session.loginUser.getId()}">
+                <div class="text-center">
                     <a th:href="@{'/user/update/' + ${userDto.getUserId()}}"><button class="btn btn-default btn-sm">회원정보수정</button> </a>
                     <a th:href="@{'/user/delete/' + ${userDto.getUserId()}}"><button class="btn btn-default btn-sm">회원탈퇴</button> </a>
                     <a th:href="@{/user/logout}"><button class="btn btn-default btn-sm">로그아웃</button></a>

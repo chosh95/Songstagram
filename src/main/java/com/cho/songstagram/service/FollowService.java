@@ -2,11 +2,13 @@ package com.cho.songstagram.service;
 
 import com.cho.songstagram.domain.Follow;
 import com.cho.songstagram.domain.Users;
+import com.cho.songstagram.dto.FollowListDto;
 import com.cho.songstagram.repository.FollowRepository;
-import com.cho.songstagram.repository.UsersRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -32,6 +34,13 @@ public class FollowService {
         followRepository.delete(follow);
     }
 
+    public List<Users> getFollower(Long userId){
+        return followRepository.getFollower(userId);
+    }
+
+    public List<Users> getFollowing(Long userId){
+        return followRepository.getFollowing(userId);
+    }
     public Long countFollower(Users users){
         return followRepository.countFollower(users.getId());
     }
@@ -43,5 +52,14 @@ public class FollowService {
     public boolean isFollowing(Users from, Users to){
         Follow follow = followRepository.findByFromAndTo(from, to);
         return follow != null;
+    }
+
+    public FollowListDto convertDto(Users from, Users to){
+        return FollowListDto.builder()
+                .picture(to.getPicture())
+                .userId(to.getId())
+                .userName(to.getName())
+                .isFollow(this.isFollowing(from,to))
+                .build();
     }
 }

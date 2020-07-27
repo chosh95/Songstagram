@@ -12,13 +12,13 @@
                 <div class="card pmd-card col-sm-4 mx-auto" style="margin-bottom: 30px;"  th:each="post : ${postsList}" >
                     <div class="card-body d-flex flex-row">
                         <!-- Avatar -->
-                        <a th:href="@{'/user/profile/' + ${post.getUserId()} + '&' + ${session.loginUser.getId()}}">
+                        <a th:href="@{'/user/profile/' + ${post.getUserId()}}">
                             <img src="#" th:src="${post.getUserPicture()}" class="rounded-circle mr-3" height="50px" width="50px" alt="avatar">
                         </a>
                         <!-- Content -->
                         <div>
                             <!-- Title -->
-                            <a th:href="@{'/user/profile/' + ${post.getUserId()} + '&' + ${session.loginUser.getId()}}">
+                            <a th:href="@{'/user/profile/' + ${post.getUserId()}}">
                                 <h4 class="card-title font-weight-bold mb-2" th:text="${post.getUserName()}">User Name</h4>
                             </a>
                             <!-- Subtitle -->

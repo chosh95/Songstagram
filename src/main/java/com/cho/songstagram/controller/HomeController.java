@@ -18,19 +18,14 @@ public class HomeController {
     private final PostsService postsService;
 
     @GetMapping("/")
-    public String home(){
-        return "index";
-    }
-
-    @GetMapping("/surf")
-    public String surf(@RequestParam(value = "page", defaultValue = "1") int page,
+    public String home(@RequestParam(value = "page", defaultValue = "1") int page,
                        Model model){
         List<PostDto> postsList = postsService.getPostList(page, 5);
         PageDto pageDto = new PageDto(page,5,Math.toIntExact(postsService.getPostsCount()),5);
 
         model.addAttribute("postsList",postsList);
         model.addAttribute("pageDto",pageDto);
-
-        return "surf";
+        return "index";
     }
+
 }
