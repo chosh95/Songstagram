@@ -36,6 +36,12 @@ public class Users {
     @OneToMany(mappedBy = "users", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Likes> likesList;
 
+    @OneToMany(mappedBy = "from", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Follow> following;
+
+    @OneToMany(mappedBy = "to", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Follow> follower;
+
     @Builder
     public Users(String name, String email, String password, String picture){
         this.name = name;
@@ -44,10 +50,6 @@ public class Users {
         this.password = password;
         postsList = null;
         comemntsList = null;
-    }
-
-    public boolean matchPassword(String password){
-        return this.password.equals(password);
     }
 
     public void updatePicture(String picture){

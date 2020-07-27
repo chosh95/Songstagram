@@ -3,6 +3,7 @@ package com.cho.songstagram.controller;
 import com.cho.songstagram.domain.Posts;
 import com.cho.songstagram.domain.Users;
 import com.cho.songstagram.dto.*;
+import com.cho.songstagram.service.FollowService;
 import com.cho.songstagram.service.PostsService;
 import com.cho.songstagram.service.S3Service;
 import com.cho.songstagram.service.UsersService;
@@ -33,6 +34,7 @@ public class UsersController {
     private final UsersService usersService;
     private final PasswordEncoder passwordEncoder;
     private final S3Service s3Service;
+    private final FollowService followService;
 
     @GetMapping("/user/login")
     public String loginUserGet(@ModelAttribute("loginUserDto") LoginUserDto loginUserDto){
@@ -107,9 +109,10 @@ public class UsersController {
         return "redirect:/user/login";
     }
 
-    @GetMapping("/user/profile/{userId}")
+    @GetMapping("/user/profile/{userId}&{loginUserId}")
     public String profileUserGet(@RequestParam(value = "page",defaultValue = "1") int page,
-                                 @PathVariable("userId") Long userId, Model model){
+                                 @PathVariable("userId") Long userId,
+                                 @PathVariable("loginUserId") Long loginUserId, Model model){
 
         Users users = usersService.findById(userId)
                 .orElse(new Users());
@@ -121,6 +124,15 @@ public class UsersController {
 
         PageDto pageDto = new PageDto(page,5,users.getPostsList().size(),5);
         model.addAttribute("pageDto",pageDto);
+
+        Users loginUser = usersService.findById(loginUserId).orElse(new Users());
+        boolean follow = followService.isFollowing(loginUser,users);
+        model.addAttribute("follow",follow);
+
+        Long followerCnt = followService.countFollower(users);
+        Long followingCnt = followService.countFollowing(users);
+        model.addAttribute("follower",followerCnt);
+        model.addAttribute("following",followingCnt);
 
         return "user/profile";
     }

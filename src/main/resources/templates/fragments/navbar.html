@@ -2,7 +2,13 @@
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 
 <th:block th:fragment="navbarFragment">
-
+    <style>
+        .my-center{
+            position:absolute;
+            left:50%;
+            transform: translateX(-50%);
+        }
+    </style>
     <!-- Navbar -->
     <nav class="navbar navbar-expand-md navbar-light bg-light fixed-top shadow-lg">
         <ul class="nav navbar-nav mr-auto">
@@ -13,10 +19,15 @@
                 </a>
             </li>
         </ul>
-        <ul class="nav navbar-nav mx-auto">
+        <ul class="nav navbar-nav my-center">
+            <li class="nav-item">
+                <a class="nav-link" th:href="@{/surf}">
+                    <img th:src="@{/icon/lookup.png}" width="30" height="30" class="d-inline-block align-top" alt="lookup" src="#">
+                </a>
+            </li>
             <li class="nav-item">
                 <a class="nav-link" th:href="@{/post/write}">
-                    <img th:src="@{/icon/write.png}" width="30" height="30" class="d-inline-block align-top">
+                    <img th:src="@{/icon/write.png}" width="30" height="30" class="d-inline-block align-top" alt="write" src="#">
                 </a>
             </li>
         </ul>
@@ -26,7 +37,7 @@
 <!--        <div class="collapse navbar-collapse" id="navMenu">-->
         <ul class="nav navbar-nav ml-auto">
             <li class="nav-item" th:if="${session.loginUser!=null}" >
-                <a th:href="@{'/user/profile/' + ${session.loginUser.getId()}}">
+                <a th:href="@{'/user/profile/' + ${session.loginUser.getId()} + '&' + ${session.loginUser.getId()}}">
                     <img src="#" th:src="${session.loginUser.getPicture()}" alt="프로필이미지" style="height: 40px; width: 40px;" class="rounded-circle mr-3">
                 </a>
             </li>
