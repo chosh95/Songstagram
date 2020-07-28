@@ -50,6 +50,9 @@ public class Users {
         this.password = password;
         postsList = null;
         comemntsList = null;
+        likesList = null;
+        follower = null;
+        following = null;
     }
 
     public void updatePicture(String picture){

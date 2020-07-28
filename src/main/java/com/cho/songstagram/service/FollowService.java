@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -16,6 +17,7 @@ import java.util.List;
 public class FollowService {
 
     private final FollowRepository followRepository;
+    private final UsersService usersService;
 
     @Transactional
     public void save(Users from, Users to){
@@ -41,6 +43,7 @@ public class FollowService {
     public List<Users> getFollowing(Long userId){
         return followRepository.getFollowing(userId);
     }
+
     public Long countFollower(Users users){
         return followRepository.countFollower(users.getId());
     }

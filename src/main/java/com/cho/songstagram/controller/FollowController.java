@@ -10,6 +10,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.List;
@@ -23,20 +24,28 @@ public class FollowController {
 
     @GetMapping("/follow/{userId}&{loginUserId}")
     public String follow(@PathVariable("userId") Long userId,
-                         @PathVariable("loginUserId") Long loginUserId){
+                         @PathVariable("loginUserId") Long loginUserId,
+                         HttpServletRequest request){
         Users from = usersService.findById(loginUserId).orElse(new Users());
         Users to = usersService.findById(userId).orElse(new Users());
         followService.save(from,to);
-        return "redirect:/user/profile/{userId}";
+
+//      이전 페이지로 복귀
+        String referer = request.getHeader("Referer");
+        return "redirect:" + referer;
     }
 
     @GetMapping("/unfollow/{userId}&{loginUserId}")
     public String unfollow(@PathVariable("userId") Long userId,
-                           @PathVariable("loginUserId") Long loginUserId){
+                           @PathVariable("loginUserId") Long loginUserId,
+                           HttpServletRequest request){
         Users from = usersService.findById(loginUserId).orElse(new Users());
         Users to = usersService.findById(userId).orElse(new Users());
         followService.delete(from,to);
-        return "redirect:/user/profile/{userId}";
+
+//      이전 페이지로 복귀
+        String referer = request.getHeader("Referer");
+        return "redirect:" + referer;
     }
 
     @GetMapping("/followerList/{userId}")

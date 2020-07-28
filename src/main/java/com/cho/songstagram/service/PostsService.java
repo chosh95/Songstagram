@@ -78,4 +78,13 @@ public class PostsService {
         return dtoList;
     }
 
+    public List<PostDto> getUserLikeListPage(Long userId, int page, int contentPageCnt){
+        Page<Posts> posts = postsRepository.getLikeListPageable(userId,PageRequest.of(page-1,contentPageCnt,Sort.by("posts.createdDate").descending()));
+        List<Posts> content = posts.getContent();
+        List<PostDto> dtoList = new ArrayList<>();
+        for (Posts posts1 : content) {
+            dtoList.add(this.convertToDto(posts1));
+        }
+        return dtoList;
+    }
 }

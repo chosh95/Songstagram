@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="layout/default">
+
+<th:block layout:fragment="content">
+
+    <!-- Begin Page Content -->
+    <div class="container-fluid" style="margin-top: 100px">
+        <div class="row">
+            <div class="col">
+                <div class="card pmd-card col-sm-4 mx-auto" style="margin-bottom: 30px;"  th:each="post : ${postDtoList}" >
+                    <div class="card-body d-flex flex-row">
+                        <!-- Avatar -->
+                        <a th:href="@{'/user/profile/' + ${post.getUserId()}}">
+                            <img src="#" th:src="${post.getUserPicture()}" class="rounded-circle mr-3" height="50px" width="50px" alt="avatar">
+                        </a>
+                        <!-- Content -->
+                        <div>
+                            <!-- Title -->
+                            <a th:href="@{'/user/profile/' + ${post.getUserId()}}">
+                                <h4 class="card-title font-weight-bold mb-2" th:text="${post.getUserName()}">User Name</h4>
+                            </a>
+                            <!-- Subtitle -->
+                            <p class="card-text"><i class="far fa-clock pr-2"></i><span th:text="${post.getCreatedDate()}"></span></p>
+                        </div>
+                    </div>
+
+                    <!-- Card Media -->
+                    <div class="pmd-card-media">
+                        <img th:src="${post.getPicture()}" src="#" width="1184" height="666" class="img-fluid" alt="main image">
+                    </div>
+
+                    <!-- Card Body -->
+                    <div class="card-body">
+                        <h4 class="card-title" th:text="${post.getSinger()} + ' - ' + ${post.getSongName()}">Title goes here</h4>
+                    </div>
+                    <div class="text-right">
+                        <a th:href="@{'/post/read/' + ${post.getPostId()}}"><button class="btn btn-primary">더보기</button> </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div>
+            <ul class="pagination justify-content-center">
+                <span th:if="${pageDto.getPrevPage() <= 0}">
+                    <li class="page-item disabled">
+                        <a href="#" class="page-link">이전</a>
+                    </li>
+                </span>
+                <span th:unless="${pageDto.getPrevPage() <= 0}">
+                    <li class="page-item">
+                        <a th:href="@{'/post/likeList/' + ${session.loginUser.getId()} + '?page=' + ${pageDto.getPrevPage()}}" class="page-link">이전</a>
+                    </li>
+                </span>
+                <span th:each="num : ${pageDto.getNumList()}">
+                    <span th:if="${num==pageDto.getCurrentPage()}">
+                        <li class="page-item active">
+                            <a th:href="@{'/post/likeList/' + ${session.loginUser.getId()} + '?page=' + ${num}}" th:text="${num}" class="page-link"></a>
+                        </li>
+                    </span>
+                    <span th:unless="${num==pageDto.getCurrentPage()}">
+                        <li class="page-item">
+                            <a th:href="@{'/post/likeList/' + ${session.loginUser.getId()} + '?page=' + ${num}}" th:text="${num}" class="page-link"></a>
+                        </li>
+                    </span>
+                </span>
+                <span th:if="${pageDto.getMax() >= pageDto.getPageCnt()}">
+                    <li class="page-item disabled">
+                        <a href="#" class="page-link">다음</a>
+                    </li>
+                </span>
+                <span th:unless="${pageDto.getMax() >= pageDto.getPageCnt()}" >
+                    <li class="page-item">
+                        <a th:href="@{'/post/likeList/' + ${session.loginUser.getId()} + '?page=' + ${pageDto.getNextPage()}}" class="page-link">다음</a>
+                    </li>
+                </span>
+            </ul>
+        </div>
+    </div>
+</th:block>
+</html>

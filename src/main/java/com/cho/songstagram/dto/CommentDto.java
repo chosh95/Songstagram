@@ -15,13 +15,15 @@ public class CommentDto {
     private Long userId;
     private String userName;
     private String userPicture;
+    private String createdDate;
 
     @Builder
-    public CommentDto(String comment, Long commentId, Long userId, String userName, String userPicture) {
+    public CommentDto(String comment, Long commentId, Long userId, String userName, String userPicture, String createdDate) {
         this.comment = comment;
         this.commentId = commentId;
         this.userId = userId;
         this.userName = userName;
         this.userPicture = userPicture;
+        this.createdDate = createdDate;
     }
 }

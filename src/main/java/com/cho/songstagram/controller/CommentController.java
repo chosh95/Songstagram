@@ -20,17 +20,17 @@ public class CommentController {
 
     private final CommentsService commentsService;
 
-    @PostMapping("/comment/write/{post_id}&{user_id}")
-    public String commentWrite(@PathVariable("post_id") Long postId,
-                               @PathVariable("user_id") Long userId,
+    @PostMapping("/comment/write/{postId}&{userId}")
+    public String commentWrite(@PathVariable("postId") Long postId,
+                               @PathVariable("userId") Long userId,
                                @ModelAttribute("commentDto")CommentDto commentDto){
         commentsService.save(postId,userId,commentDto);
         return "redirect:/post/read/{post_id}";
     }
 
-    @GetMapping("/comment/delete/{comment_id}&{post_id}")
-    public String commentDelete(@PathVariable("comment_id") Long commentId,
-                                @PathVariable("post_id") Long postId){
+    @GetMapping("/comment/delete/{commentId}&{postId}")
+    public String commentDelete(@PathVariable("commentId") Long commentId,
+                                @PathVariable("postId") Long postId){
         commentsService.delete(commentId);
         return "redirect:/post/read/{post_id}";
     }

@@ -46,7 +46,7 @@
                     </tbody>
                 </table>
             </div>
-            <div th:if="${userId}==${session.loginUser.getId()}">
+            <div th:if="${userId}==${session.loginUser.getId()}" style="margin-bottom: 30px;">
                 <div class="text-center">
                     <a th:href="@{'/user/update/' + ${userDto.getUserId()}}"><button class="btn btn-default btn-sm">회원정보수정</button> </a>
                     <a th:href="@{'/user/delete/' + ${userDto.getUserId()}}"><button class="btn btn-default btn-sm">회원탈퇴</button> </a>

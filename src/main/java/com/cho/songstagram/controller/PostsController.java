@@ -1,9 +1,11 @@
 package com.cho.songstagram.controller;
 
 import com.cho.songstagram.domain.Comments;
+import com.cho.songstagram.domain.Likes;
 import com.cho.songstagram.domain.Posts;
 import com.cho.songstagram.domain.Users;
 import com.cho.songstagram.dto.CommentDto;
+import com.cho.songstagram.dto.PageDto;
 import com.cho.songstagram.dto.PostDto;
 import com.cho.songstagram.service.CommentsService;
 import com.cho.songstagram.service.PostsService;
@@ -67,8 +69,8 @@ public class PostsController {
         return "redirect:/";
     }
 
-    @GetMapping("/post/read/{post_id}")
-    public String readPost(@PathVariable("post_id") Long postId, @ModelAttribute("commentDto") CommentDto commentDto, Model model){
+    @GetMapping("/post/read/{postId}")
+    public String readPost(@PathVariable("postId") Long postId, @ModelAttribute("commentDto") CommentDto commentDto, Model model){
         Posts posts = postsService.findById(postId)
                 .orElse(new Posts());
         PostDto postDto = postsService.convertToDto(posts);
@@ -84,8 +86,8 @@ public class PostsController {
         return "post/read";
     }
 
-    @GetMapping("/post/update/{post_id}")
-    public String update(@PathVariable("post_id") Long postId, @ModelAttribute("postDto") PostDto postDto, Model model){
+    @GetMapping("/post/update/{postId}")
+    public String update(@PathVariable("postId") Long postId, @ModelAttribute("postDto") PostDto postDto, Model model){
         Posts posts = postsService.findById(postId)
                 .orElse(new Posts());
         postDto.setContent(posts.getContent());
@@ -96,8 +98,8 @@ public class PostsController {
         return "post/update";
     }
 
-    @PostMapping("/post/update/{post_id}")
-    public String updatePost(@PathVariable("post_id") Long postId,
+    @PostMapping("/post/update/{postId}")
+    public String updatePost(@PathVariable("postId") Long postId,
                              @Valid @ModelAttribute("postDto") PostDto postDto, BindingResult result, Model model){
 
         if(result.hasErrors()) {
@@ -112,8 +114,22 @@ public class PostsController {
         return "redirect:/post/read/{post_id}";
     }
 
-    @GetMapping("/post/delete/{post_id}")
-    public String delete(@PathVariable("post_id") Long postId){
+    @GetMapping("/post/likeList/{userId}")
+    public String likeList(@RequestParam(value = "page", defaultValue = "1") int page,
+                            @PathVariable("userId") Long userId, Model model){
+        List<PostDto> postDtoList = postsService.getUserLikeListPage(userId, page, 5);
+        Users users = usersService.findById(userId).orElse(new Users());
+        PageDto pageDto = new PageDto(page,5,users.getLikesList().size(),5);
+
+        model.addAttribute("postDtoList",postDtoList);
+        model.addAttribute("pageDto",pageDto);
+
+        return "post/likeList";
+    }
+
+
+    @GetMapping("/post/delete/{postId}")
+    public String delete(@PathVariable("postId") Long postId){
         Posts posts = postsService.findById(postId)
                 .orElse(new Posts());
         s3Service.deletePost(posts.getPicture());

@@ -9,22 +9,21 @@
         <div class="col">
             <div class="card pmd-card col-sm-6 mx-auto" style="margin-bottom: 30px;">
                 <div class="card-body d-flex flex-row">
-                    <!-- Avatar -->
+                    <!-- 유저 이미지-->
                     <a th:href="@{'/user/profile/' + ${post.getUserId()}}">
                         <img src="#" th:src="${post.getUserPicture()}" class="rounded-circle mr-3" height="50px" width="50px" alt="avatar">
                     </a>
-                    <!-- Content -->
                     <div>
-                        <!-- Title -->
+                        <!-- 유저 이름-->
                         <a th:href="@{'/user/profile/' + ${post.getUserId()}}">
                             <h4 class="card-title font-weight-bold mb-2" th:text="${post.getUserName()}">User Name</h4>
                         </a>
-                        <!-- Subtitle -->
+                        <!-- 게시글 생성일 -->
                         <p class="card-text"><i class="far fa-clock pr-2"></i><span th:text="${post.getCreatedDate()}"></span></p>
                     </div>
                 </div>
 
-                <!-- Card Media -->
+                <!-- 글 이미지 & 내용 -->
                 <div class="pmd-card-media">
                     <img th:src="${post.getPicture()}" src="#" width="1184" height="666" class="img-fluid" alt="main image">
                     <span th:if="${post.getLikeIdList().contains(session.loginUser.getId())}">
@@ -45,8 +44,9 @@
                     </div>
                 </div>
 
+                <!-- 댓글 목록 보여주기 -->
                 <div class="card-footer">
-                    <div th:each="comment:${commentsList}">
+                    <div th:each="comment:${commentsList}" style="margin-bottom: 10px">
                         <div>
                             <a th:href="@{'/user/profile/' + ${comment.getUserId()}}">
                                 <img th:src="${comment.getUserPicture()}" src="#" class="rounded-circle mr-3" height="20px" width="20px" alt="프로필이미지"/>
@@ -60,6 +60,8 @@
                             </div>
                         </div>
                     </div>
+
+                    <!-- 댓글 작성란 -->
                     <form th:object="${commentDto}" action="#" th:action="@{'/comment/write/' + ${post.getPostId()} + '&' + ${session.loginUser.getId()}}" method="post" class="form-group">
                         <div class="form-group">
                             <label>댓글 작성</label>

@@ -9,7 +9,7 @@
         <!-- Content Here!! -->
         <div class="card pmd-card col-sm-4 mx-auto" style="margin-bottom: 30px;">
             <div class="card-header bg-white">
-                <h4>팔로워 목록</h4>
+                <h4>팔로잉 목록</h4>
             </div>
             <div class="card-body" th:each="dto : ${followDto}" >
                 <a th:href="@{'/user/profile/' + ${dto.getUserId()}}">
