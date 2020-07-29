@@ -14,15 +14,23 @@
 
 
 
+------
+
+
+
 ### 사용 기술
 
-#### front : HTML & Bootstrap 4
+front : HTML & Bootstrap 4
 
-#### back : Spring boot & Spring Data JPA
+back : Spring boot & Spring Data JPA
 
-#### 웹 배포 : AWS Elastic BeansTalk & S3 버킷
+웹 배포 : AWS Elastic BeansTalk & S3 버킷
 
-#### DB : H2 In memory database
+DB : H2 In memory database
+
+
+
+------
 
 
 
@@ -32,7 +40,11 @@
 
 
 
+------
 
 
 
+### Class Diagram
+
+![Class Diagram](http://github.com/chosh95/Songstagram/blob/master/ClassDiagram/ClassDiagram.jpg)
 
