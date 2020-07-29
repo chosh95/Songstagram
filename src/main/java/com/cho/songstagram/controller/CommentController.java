@@ -25,13 +25,13 @@ public class CommentController {
                                @PathVariable("userId") Long userId,
                                @ModelAttribute("commentDto")CommentDto commentDto){
         commentsService.save(postId,userId,commentDto);
-        return "redirect:/post/read/{post_id}";
+        return "redirect:/post/read/{postId}";
     }
 
     @GetMapping("/comment/delete/{commentId}&{postId}")
     public String commentDelete(@PathVariable("commentId") Long commentId,
                                 @PathVariable("postId") Long postId){
         commentsService.delete(commentId);
-        return "redirect:/post/read/{post_id}";
+        return "redirect:/post/read/{postId}";
     }
 }

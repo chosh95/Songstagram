@@ -18,14 +18,16 @@
                         <h4 class="card-title font-weight-bold mb-2" th:text="${userDto.getUserName()}">User Name</h4>
                     </a>
                 </div>
-                <!-- 팔로우 & 언팔로우 버튼  -->
-                <div th:if="${userId}!=${session.loginUser.getId()}" class="text-right">
-                    <span th:if="${follow}==false">
-                        <a th:href="@{'/follow/' + ${userId} + '&' + ${session.loginUser.getId()}}"><button class="btn btn-default">팔로우</button></a>
-                    </span>
-                        <span th:if="${follow}==true">
-                        <a th:href="@{'/unfollow/' + ${userId} + '&' + ${session.loginUser.getId()}}"><button class="btn btn-default">언팔로우</button></a>
-                    </span>
+            </div>
+            <!-- 팔로우 & 언팔로우 버튼  -->
+            <div class="text-right">
+                <div th:if="${userId}!=${session.loginUser.getId()}">
+                        <span th:if="${follow}==false">
+                            <a th:href="@{'/follow/' + ${userId} + '&' + ${session.loginUser.getId()}}"><button class="btn btn-outline-primary">팔로우</button></a>
+                        </span>
+                    <span th:if="${follow}==true">
+                            <a th:href="@{'/unfollow/' + ${userId} + '&' + ${session.loginUser.getId()}}"><button class="btn btn-outline-danger">언팔로우</button></a>
+                        </span>
                 </div>
             </div>
             <div class="card-body">

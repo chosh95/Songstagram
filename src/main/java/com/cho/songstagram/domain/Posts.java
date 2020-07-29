@@ -20,6 +20,8 @@ public class Posts extends BaseTimeEntity{
 
     private String singer;
     private String songName;
+
+    @Column(length = 500)
     private String content;
     private String picture;
 

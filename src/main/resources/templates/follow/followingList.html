@@ -18,10 +18,10 @@
                 </a>
                 <div class="text-right" th:if="${dto.getUserId()}!=${session.loginUser.getId()}">
                     <span th:if="${dto.isFollow()}==true">
-                        <a th:href="@{'/unfollow/' + ${dto.getUserId()} + '&' + ${userId}}"><button class="btn btn-default btn-sm">언팔로우</button></a>
+                        <a th:href="@{'/unfollow/' + ${dto.getUserId()} + '&' + ${userId}}"><button class="btn btn-outline-danger btn-sm">언팔로우</button></a>
                     </span>
                     <span th:if="${dto.isFollow()}==false">
-                        <a th:href="@{'/follow/' + ${dto.getUserId()} + '&' + ${userId}}"><button class="btn btn-default btn-sm">팔로우</button></a>
+                        <a th:href="@{'/follow/' + ${dto.getUserId()} + '&' + ${userId}}"><button class="btn btn-outline-primary btn-sm">팔로우</button></a>
                     </span>
                 </div>
             </div>

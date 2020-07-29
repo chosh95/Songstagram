@@ -24,6 +24,7 @@ public class PostsService {
 
     private final PostsRepository postsRepository;
     private final LikesService likesService;
+    private final FollowService followService;
 
     @Transactional
     public void save(Posts posts){
@@ -58,6 +59,7 @@ public class PostsService {
                 .build();
     }
 
+    //index 페이지용 모든 게시글 목록
     public List<PostDto> getPostList(int page, int contentPageCnt) {
         Page<Posts> posts = postsRepository.findAll(PageRequest.of(page - 1, contentPageCnt, Sort.by("createdDate").descending()));
         List<Posts> postsList = posts.getContent();
@@ -68,6 +70,7 @@ public class PostsService {
         return dtoList;
     }
 
+    //유저가 작성한 게시글 목록
     public List<PostDto> getUserPostList(Users users, int page, int contentPageCnt){
         Page<Posts> posts = postsRepository.findAllByUsers(users, PageRequest.of(page-1,contentPageCnt,Sort.by("createdDate").descending()));
         List<Posts> postsList = posts.getContent();
@@ -78,6 +81,7 @@ public class PostsService {
         return dtoList;
     }
 
+    //유저가 좋아요 누른 게시글 목록
     public List<PostDto> getUserLikeListPage(Long userId, int page, int contentPageCnt){
         Page<Posts> posts = postsRepository.getLikeListPageable(userId,PageRequest.of(page-1,contentPageCnt,Sort.by("posts.createdDate").descending()));
         List<Posts> content = posts.getContent();
@@ -86,5 +90,22 @@ public class PostsService {
             dtoList.add(this.convertToDto(posts1));
         }
         return dtoList;
+    }
+
+    //팔로우 한 사람들의 게시글 목록
+    public List<PostDto> getFollowListPage(Long userId, int page, int contentPageCnt){
+        List<Users> users = followService.getFollowing(userId);
+        Page<Posts> posts = postsRepository.getPostsByUsers(users, PageRequest.of(page - 1, contentPageCnt, Sort.by("createdDate").descending()));
+        List<Posts> content = posts.getContent();
+        List<PostDto> dtoList = new ArrayList<>();
+        for (Posts posts1 : content) {
+            dtoList.add(this.convertToDto(posts1));
+        }
+        return dtoList;
+    }
+
+    public Long getFollowPostCount(Long userId){
+        List<Users> users = followService.getFollowing(userId);
+        return postsRepository.getPostsByUsers(users);
     }
 }

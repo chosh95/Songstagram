@@ -32,7 +32,7 @@
                             </div>
                             <div class="form-group">
                                 <label>글</label>
-                                <input th:field="*{content}" type="text" class="form-control"/>
+                                <textarea th:field="*{content}" rows="5" class="form-control"/>
                                 <span th:if="${#fields.hasErrors('content')}" th:errors="*{content}" style="color: #ff0000">emailError</span>
                             </div>
                             <div class="form-group text-right">
