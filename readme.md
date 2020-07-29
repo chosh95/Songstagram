@@ -1,6 +1,6 @@
 # Songstagram
 
-[프로젝트 링크]: http://songstagram-env.eba-rhjikqps.us-east-2.elasticbeanstalk.com/	"Songstagram"
+[Songstagram 링크 ](http://songstagram-env.eba-rhjikqps.us-east-2.elasticbeanstalk.com/)
 
 
 
@@ -34,9 +34,9 @@ DB : H2 In memory database
 
 
 
-### 개발 기간
+### Class Diagram
 
-2020.07.06 ~ 
+![Class Diagram](https://github.com/chosh95/Songstagram/blob/master/ClassDiagram/ClassDiagram.jpg?raw=true)
 
 
 
@@ -44,7 +44,41 @@ DB : H2 In memory database
 
 
 
-### Class Diagram
+### 사용 예시
 
-![Class Diagram](https://github.com/chosh95/Songstagram/blob/master/ClassDiagram/ClassDiagram.jpg?raw=true)
+
+
+index 페이지 화면 : 최신 게시글을 확인할 수 있다.
+
+
+
+<img src="https://github.com/chosh95/Songstagram/blob/master/Image/index.png?raw=true" alt="index" style="zoom:50%;" />
+
+
+
+개인 프로필 화면 : 게시글, 팔로워, 팔로잉 수와 목록, 그리고 개인이 작성한 글 목록을 확인할 수 있다.
+
+
+
+<img src="https://github.com/chosh95/Songstagram/blob/master/Image/profile.png?raw=true" style="zoom:50%;" />
+
+
+
+게시글 상세 페이지 : 곡명, 글, 좋아요 수와 댓글 등을 확인할 수 있다.
+
+<img src="https://github.com/chosh95/Songstagram/blob/master/Image/postRead.png?raw=true" style="zoom:50%;" />
+
+
+
+팔로잉 목록 : 팔로잉한 사람의 목록을 확인할 수 있다.
+
+<img src="https://github.com/chosh95/Songstagram/blob/master/Image/following.png?raw=true" style="zoom:50%;" />
+
+------
+
+
+
+### 개발 기간
+
+2020.07.06 ~ 
 
