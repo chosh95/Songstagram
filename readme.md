@@ -44,11 +44,38 @@ DB : H2 In memory database
 
 
 
+### 구현 기능
+
+* User 관련
+  * 회원 가입
+  * 로그인
+  * 회원 탈퇴
+  * 회원 정보 수정
+  * 프로필 사진 설정
+  * 프로필 확인 (상단 우측의 프로필 사진 선택)
+* Post 관련
+  * 게시글 작성 : 사진, 가수, 곡 제목, 글을 자유롭게 적을 수 있다. (상단 글 쓰기 아이콘)
+  * 게시글 수정 : 가수, 곡 제목, 글을 수정할 수 있다.
+* Follow 관련 
+  * 다른 사용자를 팔로우 & 언팔로우 할 수 있다. 
+  * 프로필 화면에서 팔로워와 팔로잉 목록을 확인할 수 있다.
+  * 팔로잉한 사람의 게시글을 확인할 수 있다. (상단 글 목록 아이콘)
+* Like 관련
+  * 마음에 드는 게시글에 좋아요를 누르거나 취소할 수 있다.
+  * 좋아요 누른 게시글 목록을 확인할 수 있다. (상단 하트 아이콘)
+* Comment 관련
+  * 게시글에 댓글을 적을 수 있다.
+  * 본인이 작성한 댓글을 삭제할 수 있다.
+
+------
+
+
+
 ### 사용 예시
 
 
 
-##### *index 페이지 화면 : 최신 게시글을 확인할 수 있다.
+##### index 페이지 화면 : 최신 게시글을 확인할 수 있다.
 
 <img src="https://github.com/chosh95/Songstagram/blob/master/Image/index.png?raw=true" alt="index" style="zoom:50%;" />
 
@@ -58,17 +85,23 @@ DB : H2 In memory database
 
 <img src="https://github.com/chosh95/Songstagram/blob/master/Image/profile.png?raw=true" style="zoom:50%;" />
 
+##### 게시글 확인 : 게시글을 자세히 볼 수 있다. 곡명, 글, 사진, 댓글, 좋아요 등을 확인할 수 있다.
+
+![](https://github.com/chosh95/Songstagram/blob/master/Image/read.png?raw=true)
 
 
-##### 게시글 상세 페이지 : 곡명, 글, 좋아요 수와 댓글 등을 확인할 수 있다.
-
-<img src="https://github.com/chosh95/Songstagram/blob/master/Image/postRead.png?raw=true" style="zoom:50%;" />
 
 
 
-##### 팔로잉 목록 : 팔로잉한 사람의 목록을 확인할 수 있다.
+##### 팔로우 목록 확인 : 내가 팔로우 한 사람의 게시글을 확인할 수 있다.
 
-<img src="https://github.com/chosh95/Songstagram/blob/master/Image/following.png?raw=true" style="zoom:50%;" />
+![](https://github.com/chosh95/Songstagram/blob/master/Image/follow.png?raw=true)
+
+
+
+##### 좋아요 목록 : 좋아요한 게시글의 목록을 확인할 수 있다.
+
+![](https://github.com/chosh95/Songstagram/blob/master/Image/like.png?raw=true)
 
 ------
 
@@ -77,4 +110,6 @@ DB : H2 In memory database
 ### 개발 기간
 
 2020.07.06 ~ 
+
+꾸준히 발전시키는 중
 
