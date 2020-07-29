@@ -127,7 +127,6 @@ public class PostsController {
         return "post/likeList";
     }
 
-
     @GetMapping("/post/delete/{postId}")
     public String delete(@PathVariable("postId") Long postId){
         Posts posts = postsService.findById(postId)
