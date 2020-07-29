@@ -46,5 +46,5 @@ DB : H2 In memory database
 
 ### Class Diagram
 
-![Class Diagram](http://github.com/chosh95/Songstagram/blob/master/ClassDiagram/ClassDiagram.jpg)
+![Class Diagram](https://github.com/chosh95/Songstagram/blob/master/ClassDiagram/ClassDiagram.jpg?raw=true)
 
