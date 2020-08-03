@@ -24,9 +24,9 @@ front : HTML & Bootstrap 4
 
 back : Spring boot & Spring Data JPA
 
-DB : H2 In memory database
+DB : RDS MySQL
 
-웹 배포 : AWS Elastic BeansTalk & S3 버킷
+웹 배포 : AWS Elastic BeansTalk & S3 버킷 & RDS 
 
 
 
