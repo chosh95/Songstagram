@@ -28,8 +28,4 @@ public class HomeController {
         return "index";
     }
 
-    @GetMapping("/notDelete")
-    public String notDelete(){
-        return "notDelete";
-    }
 }

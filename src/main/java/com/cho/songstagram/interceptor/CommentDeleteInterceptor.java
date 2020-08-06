@@ -4,7 +4,6 @@ import com.cho.songstagram.domain.Comments;
 import com.cho.songstagram.domain.Users;
 import com.cho.songstagram.service.CommentsService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.servlet.HandlerMapping;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
@@ -14,7 +13,7 @@ import javax.servlet.http.HttpSession;
 import java.util.Map;
 
 @RequiredArgsConstructor
-public class DeleteInterceptor extends HandlerInterceptorAdapter {
+public class CommentDeleteInterceptor extends HandlerInterceptorAdapter {
 
     private final CommentsService commentsService;
 
@@ -26,7 +25,7 @@ public class DeleteInterceptor extends HandlerInterceptorAdapter {
         String commentId = (String) attribute.get("commentId");
         Comments comments = commentsService.findById(Long.parseLong(commentId)).orElse(new Comments());
         if(!comments.getUsers().getId().equals(loginUser.getId())) {
-            response.sendRedirect("/notDelete");
+            response.sendRedirect("/comment/notDelete");
             return false;
         }
         return true;

@@ -34,4 +34,9 @@ public class CommentController {
         commentsService.delete(commentId);
         return "redirect:/post/read/{postId}";
     }
+
+    @GetMapping("/comment/notDelete")
+    public String notDelete(){
+        return "comment/notDelete";
+    }
 }

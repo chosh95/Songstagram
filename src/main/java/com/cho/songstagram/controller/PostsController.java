@@ -148,4 +148,9 @@ public class PostsController {
         return "post/delete";
     }
 
+    @GetMapping("/post/notUpdate")
+    public String notUpdate(){
+        return "post/notUpdate";
+    }
+
 }

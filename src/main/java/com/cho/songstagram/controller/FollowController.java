@@ -28,7 +28,7 @@ public class FollowController {
                          HttpServletRequest request){
         Users from = usersService.findById(loginUserId).orElse(new Users());
         Users to = usersService.findById(userId).orElse(new Users());
-        followService.save(from,to);
+        followService.save(from,to); //로그인 유저가 선택한 유저를 팔로우
 
 //      이전 페이지로 복귀
         String referer = request.getHeader("Referer");
@@ -74,5 +74,10 @@ public class FollowController {
         model.addAttribute("followDto",followDto);
         model.addAttribute("userId",userId); //다시 프로필로 되돌아오기 위한 userId
         return "follow/followingList";
+    }
+
+    @GetMapping("/already")
+    public String already(){
+        return "follow/already";
     }
 }

@@ -195,4 +195,9 @@ public class UsersController {
         session.invalidate();
         return "redirect:/";
     }
+
+    @GetMapping("/user/notUpdate")
+    public String notUpdate(){
+        return "user/notUpdate";
+    }
 }
