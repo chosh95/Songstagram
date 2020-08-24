@@ -10,7 +10,7 @@
 
 음악 취향이 비슷한 사람을 팔로우 하고 좋아요를 누르세요.
 
-[Songstagram 배포 링크](http://www.songstagram.ml/) 에서 이용 가능합니다. 
+[Songstagram 배포 링크](https://www.songstagram.ml/) 에서 이용 가능합니다. 
 
 ------
 
@@ -26,7 +26,11 @@ DB : AWS RDS MySQL
 
 웹 배포 : AWS Elastic BeansTalk & S3 버킷 
 
-DNS 서버 적용 (2020. 08. 19 update)  : [Songstagram 배포 링크](http://www.songstagram.ml/)
+DNS 서버 적용 (2020. 08. 19 update)  : songstagram.ml로 적용
+
+HTTPS 적용 (2020. 08. 24 update) : [https://www.songstagram.ml](https://www.songstagram.ml/) 에서 이용 가능
+
+
 
 ------
 
