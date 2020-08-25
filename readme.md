@@ -18,9 +18,9 @@
 
 ### 사용 기술
 
-front-end : HTML & Bootstrap 4
+Front-end : HTML & Bootstrap 4
 
-back-end : Spring boot & Spring Data JPA
+Back-end : Spring boot & Spring Data JPA
 
 DB : AWS RDS MySQL
 

@@ -26,6 +26,7 @@ public class HomeConfig implements WebMvcConfigurer {
     UsersService usersService;
     @Autowired
     FollowService followService;
+    
     @Bean
     public PasswordEncoder passwordEncoder(){
         return new BCryptPasswordEncoder();
