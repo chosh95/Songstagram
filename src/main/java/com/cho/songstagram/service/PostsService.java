@@ -108,4 +108,9 @@ public class PostsService {
         List<Users> users = followService.getFollowing(userId);
         return postsRepository.getPostsByUsers(users);
     }
+
+    // 유저가 작성한 총 게시글 수 구하는 함수
+    public Long getPostsCntByUser(Users users){
+        return postsRepository.getPostsCntByUser(users);
+    }
 }

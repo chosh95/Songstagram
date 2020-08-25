@@ -41,7 +41,7 @@
                     </thead>
                     <tbody>
                         <tr>
-                            <td th:text="${postDtoList.size()}"></td>
+                            <td th:text="${postsCnt}"></td>
                             <td><a th:href="@{'/followerList/' + ${userId}}" th:text="${follower}"></a></td>
                             <td><a th:href="@{'/followingList/' + ${userId}}" th:text="${following}"></a></td>
                         </tr>

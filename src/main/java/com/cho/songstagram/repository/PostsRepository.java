@@ -25,4 +25,7 @@ public interface PostsRepository extends JpaRepository<Posts, Long> {
 
     @Query(value = "SELECT count(p) FROM Posts p WHERE p.users in ?1")
     Long getPostsByUsers(List<Users> users);
+
+    @Query(value = "SELECT count(p) FROM Posts p WHERE p.users = ?1")
+    Long getPostsCntByUser(Users users);
 }

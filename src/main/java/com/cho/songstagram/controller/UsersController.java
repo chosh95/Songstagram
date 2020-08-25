@@ -110,6 +110,9 @@ public class UsersController {
 
         Users users = usersService.findById(userId)
                 .orElse(new Users());
+        Long postByUserCnt = postsService.getPostsCntByUser(users);
+        model.addAttribute("postsCnt", postByUserCnt);
+
         List<PostDto> postDtoList = postsService.getUserPostList(users, page, 5);
         model.addAttribute("postDtoList",postDtoList);
 
