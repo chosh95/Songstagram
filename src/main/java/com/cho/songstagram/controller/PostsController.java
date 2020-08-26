@@ -83,6 +83,9 @@ public class PostsController {
         }
         model.addAttribute("commentsList", commentDtoList);
 
+        String youtubeLink = "https://www.youtube.com/results?search_query=";
+        youtubeLink += postDto.getSinger() + "+" + postDto.getSongName();
+        model.addAttribute("youtubeLink",youtubeLink);
         return "post/read";
     }
 

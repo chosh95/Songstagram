@@ -36,6 +36,12 @@
                     </span><br>
                     <h2 class="card-title" th:text="${post.getSinger()} + ' - ' + ${post.getSongName()}">Title goes here</h2>
                     <p class="card-text" th:text="${post.getContent()}"></p>
+
+                    <span class="text-left">
+                        <a th:href="${youtubeLink}" th:target="_blank">
+                            <img th:src="@{/icon/youtube.png}" alt="유튜브 링크" width="40" height="40">
+                        </a>
+                    </span>
                     <div class="text-right" style="margin-bottom: 30px">
                         <span th:if="${session.loginUser.getId()}==${post.getUserId()}">
                             <a th:href="@{'/post/update/'+${post.getPostId()}}"><button class="btn btn-secondary">수정하기</button></a>
