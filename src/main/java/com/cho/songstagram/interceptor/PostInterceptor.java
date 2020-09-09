@@ -22,8 +22,8 @@ public class PostInterceptor extends HandlerInterceptorAdapter {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         HttpSession session = request.getSession();
         Users loginUser = (Users)session.getAttribute("loginUser");
-        Map attribute = (Map) request.getAttribute(HandlerMapping.URI_TEMPLATE_VARIABLES_ATTRIBUTE);
-        String postId = (String) attribute.get("postId");
+        Map<String,String> attribute = (Map<String,String>) request.getAttribute(HandlerMapping.URI_TEMPLATE_VARIABLES_ATTRIBUTE);
+        String postId = attribute.get("postId");
         Posts posts = postsService.findById(Long.parseLong(postId)).orElse(new Posts());
         if(!posts.getUsers().getId().equals(loginUser.getId())) {
             response.sendRedirect("/post/notUpdate");

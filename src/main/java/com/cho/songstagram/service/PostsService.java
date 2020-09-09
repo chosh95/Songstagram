@@ -44,6 +44,16 @@ public class PostsService {
         return postsRepository.count();
     }
 
+    public Posts makePost(PostDto postDto, Users user, String picture){
+        return Posts.builder() // 게시글 생성
+                .singer(postDto.getSinger())
+                .songName(postDto.getSongName())
+                .content(postDto.getContent())
+                .picture(picture)
+                .users(user)
+                .build();
+    }
+
     public PostDto convertToDto(Posts posts){
         return PostDto.builder()
                 .postId(posts.getId())

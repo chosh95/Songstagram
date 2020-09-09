@@ -21,8 +21,8 @@ public class CommentDeleteInterceptor extends HandlerInterceptorAdapter {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         HttpSession session = request.getSession();
         Users loginUser = (Users)session.getAttribute("loginUser");
-        Map attribute = (Map) request.getAttribute(HandlerMapping.URI_TEMPLATE_VARIABLES_ATTRIBUTE);
-        String commentId = (String) attribute.get("commentId");
+        Map<String,String> attribute = (Map<String, String>) request.getAttribute(HandlerMapping.URI_TEMPLATE_VARIABLES_ATTRIBUTE);
+        String commentId = attribute.get("commentId");
         Comments comments = commentsService.findById(Long.parseLong(commentId)).orElse(new Comments());
         if(!comments.getUsers().getId().equals(loginUser.getId())) {
             response.sendRedirect("/comment/notDelete");

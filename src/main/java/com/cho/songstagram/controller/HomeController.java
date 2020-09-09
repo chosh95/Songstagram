@@ -20,7 +20,10 @@ public class HomeController {
     @GetMapping("/")
     public String home(@RequestParam(value = "page", defaultValue = "1") int page,
                        Model model){
-        List<PostDto> postsList = postsService.getPostList(page, 5);
+        // 개시글을 한 페이지에 5개씩 보여줄 때 해당 페이지에 맞는 게시글들 가져오기
+        List<PostDto> postsList = postsService.getPostList(page, 5); 
+        
+        // 게시글을 한 페이지에 5개씩, 하단에 5개의 페이지씩 페이지네이션하는 dto.
         PageDto pageDto = new PageDto(page,5,Math.toIntExact(postsService.getPostsCount()),5);
 
         model.addAttribute("postsList",postsList);

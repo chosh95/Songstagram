@@ -1,13 +1,8 @@
 package com.cho.songstagram.config;
 
-import com.cho.songstagram.domain.Follow;
 import com.cho.songstagram.interceptor.*;
-import com.cho.songstagram.service.CommentsService;
-import com.cho.songstagram.service.FollowService;
-import com.cho.songstagram.service.PostsService;
-import com.cho.songstagram.service.UsersService;
-import org.hibernate.engine.jdbc.connections.internal.UserSuppliedConnectionProviderImpl;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.cho.songstagram.service.*;
+import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -16,17 +11,16 @@ import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
+@RequiredArgsConstructor
 public class HomeConfig implements WebMvcConfigurer {
 
-    @Autowired
-    CommentsService commentsService;
-    @Autowired
-    PostsService postsService;
-    @Autowired
-    UsersService usersService;
-    @Autowired
-    FollowService followService;
-    
+    private final CommentsService commentsService;
+    private final PostsService postsService;
+    private final UsersService usersService;
+    private final FollowService followService;
+    private final LikesService likesService;
+
+    //인코더 빈 객체 등록
     @Bean
     public PasswordEncoder passwordEncoder(){
         return new BCryptPasswordEncoder();
@@ -34,7 +28,7 @@ public class HomeConfig implements WebMvcConfigurer {
     
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        //로그인 인터셉터
+        //로그인 인터셉터 : 로그인 안 했을 시 로그인 하도록 유도
         registry.addInterceptor(new HomeInterceptor())
                 .addPathPatterns("/**")
                 .excludePathPatterns("/")
@@ -43,19 +37,23 @@ public class HomeConfig implements WebMvcConfigurer {
                 .excludePathPatterns("/user/login")
                 .excludePathPatterns("/user/doLogin")
                 .excludePathPatterns("/user/signIn");
-        //댓글 삭제 인터셉터
+        //댓글 삭제 인터셉터 : 로그인 한 사람과 댓글 단 사람이 다른 경우 방지
         registry.addInterceptor(new CommentDeleteInterceptor(commentsService))
                 .addPathPatterns("/comment/delete/**");
-        //게시글 수정 & 삭제 인터셉터
+        //게시글 수정 & 삭제 인터셉터 : 로그인 한 사람과 게시글 작성자가 다른 경우 방지
         registry.addInterceptor(new PostInterceptor(postsService))
                 .addPathPatterns("/post/delete/**")
                 .addPathPatterns("/post/update/**");
-        //회원 수정 & 삭제 인터셉터
+        //회원 수정 & 삭제 인터셉터 : 로그인 한 사람과 수정하려는 회원이 다른 경우 방지
         registry.addInterceptor(new UserInterceptor(usersService))
                 .addPathPatterns("/user/update/**")
                 .addPathPatterns("/user/delete/**");
+        // 팔로우 인터셉터 : 이미 팔로우 한 경우 다시 팔로우 하는 걸 방지
         registry.addInterceptor(new FollowInterceptor(followService,usersService))
                 .addPathPatterns("/follow/**");
+        // 좋아요 인터셉터 : 이미 좋아요 한 경우 다시 좋아요 하는 걸 방지
+        registry.addInterceptor(new LikesInterceptor(likesService,usersService,postsService))
+                .addPathPatterns("/likes/save/**");
     }
 
 }

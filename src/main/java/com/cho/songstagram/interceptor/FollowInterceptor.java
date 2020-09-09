@@ -23,11 +23,13 @@ public class FollowInterceptor extends HandlerInterceptorAdapter {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         HttpSession session = request.getSession();
         Users loginUser = (Users)session.getAttribute("loginUser");
-        Map attribute = (Map) request.getAttribute(HandlerMapping.URI_TEMPLATE_VARIABLES_ATTRIBUTE);
-        String userId = (String) attribute.get("userId");
+        Map<String,String> attribute = (Map<String,String>) request.getAttribute(HandlerMapping.URI_TEMPLATE_VARIABLES_ATTRIBUTE);
+
+        String userId = attribute.get("userId");
         Users users = usersService.findById(Long.parseLong(userId)).orElse(new Users());
+
         if(followService.isFollowing(loginUser,users)) {
-            response.sendRedirect("/already");
+            response.sendRedirect("/follow/already");
             return false;
         }
         return true;

@@ -7,6 +7,7 @@ import com.cho.songstagram.domain.Users;
 import com.cho.songstagram.dto.CommentDto;
 import com.cho.songstagram.dto.PageDto;
 import com.cho.songstagram.dto.PostDto;
+import com.cho.songstagram.repository.PostsRepository;
 import com.cho.songstagram.service.CommentsService;
 import com.cho.songstagram.service.PostsService;
 import com.cho.songstagram.service.S3Service;
@@ -33,39 +34,32 @@ public class PostsController {
     private final CommentsService commentsService;
     private final S3Service s3Service;
 
+    //게시글 작성 페이지 맵핑
     @GetMapping("/post/write")
     public String write(@ModelAttribute("postDto") PostDto postDto) {
         return "post/write";
     }
 
+    //게시글 작성 처리 컨트롤러
     @PostMapping("/post/write")
     public String writePost(@Valid @ModelAttribute("postDto") PostDto postDto, BindingResult result,
                             @RequestParam("files") MultipartFile files,
                             HttpSession session, Model model) throws IOException {
 
-        if (files.isEmpty()) {
-            model.addAttribute("emptyFileMsg", "사진을 입력해주세요.");
+        if (files.isEmpty()) { // 사진 파일 추가 안했을 시 추가하도록 유도
+            model.addAttribute("emptyFileMsg", "사진을 추가해주세요.");
             return "post/write";
         }
-        if (result.hasErrors()) {
+        if (result.hasErrors()) { // 가수, 곡, 내용에 오류가 있을 시 다시 작성
             return "post/write";
         }
 
-        String picture = s3Service.postUpload(files);
+        String picture = s3Service.postUpload(files); // S3 버킷에 파일 업로드
+        Users loginUser = (Users) session.getAttribute("loginUser"); // loginUser 세션에서 가져오기
+        loginUser = usersService.findById(loginUser.getId()).orElse(new Users()); // 영속성 컨텍스트 업데이트
+        Posts posts = postsService.makePost(postDto,loginUser,picture); // Posts 객체 생성
+        postsService.save(posts); // db에 저장
 
-        Users loginUser = (Users) session.getAttribute("loginUser");
-        Users user = usersService.findByEmail(loginUser.getEmail())
-                .orElse(new Users());
-
-        Posts post = Posts.builder()
-                .singer(postDto.getSinger())
-                .songName(postDto.getSongName())
-                .content(postDto.getContent())
-                .picture(picture)
-                .users(user)
-                .build();
-
-        postsService.save(post);
         return "redirect:/";
     }
 

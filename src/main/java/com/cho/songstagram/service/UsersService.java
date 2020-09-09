@@ -25,6 +25,7 @@ public class UsersService {
     public void delete(Users users){
         usersRepository.delete(users);
     }
+
     public Optional<Users> findByEmail(String email){
         return usersRepository.findByEmail(email);
     }
