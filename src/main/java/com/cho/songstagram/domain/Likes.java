@@ -19,11 +19,11 @@ public class Likes {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "posts_id")
-    private Posts posts;
+    private Posts posts; // 좋아요 누른 게시글
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "users_id")
-    private Users users;
+    private Users users; // 좋아요 누른 사용자
 
     @Builder
     public Likes(Posts posts, Users users){

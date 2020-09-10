@@ -18,22 +18,22 @@ public class Posts extends BaseTimeEntity{
     @Column(name = "posts_id")
     private Long id;
 
-    private String singer;
-    private String songName;
+    private String singer; //가수
+    private String songName; //곡 제목
 
     @Column(length = 500)
-    private String content;
-    private String picture;
+    private String content; // 글 내용
+    private String picture; // 사진 파일명
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "users_id")
-    private Users users;
+    private Users users; // 작성자
 
     @OneToMany(mappedBy = "posts", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Comments> commentsList;
+    private List<Comments> commentsList; // 게시글에 달린 댓글 목록
 
     @OneToMany(mappedBy = "posts", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Likes> likesList;
+    private List<Likes> likesList; // 게시글에 누른 좋아요 목록
 
     @Builder
     public Posts(String singer, String songName, String content, String picture, Users users){
@@ -44,9 +44,10 @@ public class Posts extends BaseTimeEntity{
         this.users = users;
         likesList = null;
         commentsList = null;
-        this.users.getPostsList().add(this);
+        this.users.getPostsList().add(this); // 작성자의 작성 게시글 목록에 이 글 추가.
     }
 
+    // 게시글 수정 기능시 사용
     public void update(String singer, String songName, String content){
         this.singer = singer;
         this.songName = songName;

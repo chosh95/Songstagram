@@ -26,7 +26,7 @@ public class UserInterceptor extends HandlerInterceptorAdapter {
         Users users = usersService.findById(Long.parseLong(userId)).orElse(new Users());
 
         if(!users.getId().equals(loginUser.getId())) {
-            response.sendRedirect("/user/notUpdate");
+            response.sendRedirect("/user/noAuthority");
             return false;
         }
         return true;

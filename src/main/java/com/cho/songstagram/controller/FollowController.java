@@ -24,7 +24,7 @@ public class FollowController {
 
     // 팔로우 컨트롤러
     @GetMapping("/follow/{userId}&{loginUserId}")
-    public String follow(@PathVariable("userId") Long userId,
+    public String followGet(@PathVariable("userId") Long userId,
                          @PathVariable("loginUserId") Long loginUserId,
                          HttpServletRequest request){
         Users from = usersService.findById(loginUserId).orElse(new Users());
@@ -38,7 +38,7 @@ public class FollowController {
 
     // 언팔로우 컨트롤러
     @GetMapping("/unfollow/{userId}&{loginUserId}")
-    public String unfollow(@PathVariable("userId") Long userId,
+    public String unfollowGet(@PathVariable("userId") Long userId,
                            @PathVariable("loginUserId") Long loginUserId,
                            HttpServletRequest request){
         Users from = usersService.findById(loginUserId).orElse(new Users());
@@ -52,7 +52,7 @@ public class FollowController {
 
     // 팔로워 목록 확인 컨트롤러
     @GetMapping("/followerList/{userId}")
-    public String followerList(@PathVariable("userId") Long userId,
+    public String followerListGet(@PathVariable("userId") Long userId,
                                HttpSession session, Model model) {
         Users loginUser = (Users) session.getAttribute("loginUser");
         List<Users> follower = followService.getFollower(userId); // 선택한 유저의 팔로워 목록
@@ -68,7 +68,7 @@ public class FollowController {
 
     // 팔로잉 목록 확인 컨트롤러
     @GetMapping("/followingList/{userId}")
-    public String followingList(@PathVariable("userId") Long userId,
+    public String followingListGet(@PathVariable("userId") Long userId,
                                 HttpSession session, Model model) {
         Users loginUser = (Users) session.getAttribute("loginUser");
         List<Users> follower = followService.getFollowing(userId); // 선택한 유저의 팔로잉 목록
@@ -84,7 +84,7 @@ public class FollowController {
 
     // 이미 팔로잉 중인 사용자 팔로우 시 보여주는 페이지 맵핑
     @GetMapping("/follow/already")
-    public String already(){
+    public String alreadyGet(){
         return "follow/already";
     }
 }

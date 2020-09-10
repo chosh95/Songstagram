@@ -25,7 +25,7 @@ public class CommentDeleteInterceptor extends HandlerInterceptorAdapter {
         String commentId = attribute.get("commentId");
         Comments comments = commentsService.findById(Long.parseLong(commentId)).orElse(new Comments());
         if(!comments.getUsers().getId().equals(loginUser.getId())) {
-            response.sendRedirect("/comment/notDelete");
+            response.sendRedirect("/comment/noAuthority");
             return false;
         }
         return true;

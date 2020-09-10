@@ -22,7 +22,7 @@ public class CommentController {
 
     // 댓글 등록 컨트롤러
     @PostMapping("/comment/write/{postId}&{userId}")
-    public String commentWrite(@PathVariable("postId") Long postId,
+    public String commentWritePost(@PathVariable("postId") Long postId,
                                @PathVariable("userId") Long userId,
                                @ModelAttribute("commentDto")CommentDto commentDto){
         commentsService.save(postId,userId,commentDto);
@@ -31,15 +31,15 @@ public class CommentController {
 
     // 댓글 삭제 컨트롤러
     @GetMapping("/comment/delete/{commentId}&{postId}")
-    public String commentDelete(@PathVariable("commentId") Long commentId,
+    public String commentDeleteGet(@PathVariable("commentId") Long commentId,
                                 @PathVariable("postId") Long postId){
         commentsService.delete(commentId);
         return "redirect:/post/read/{postId}";
     }
 
     // 댓글 삭제 실패 컨트롤러 : 댓글 작성자와 사용자가 다른 경우
-    @GetMapping("/comment/notDelete")
-    public String notDelete(){
-        return "comment/notDelete";
+    @GetMapping("/comment/noAuthority")
+    public String notDeleteGet(){
+        return "comment/noAuthority";
     }
 }

@@ -1,13 +1,11 @@
 package com.cho.songstagram.controller;
 
 import com.cho.songstagram.domain.Comments;
-import com.cho.songstagram.domain.Likes;
 import com.cho.songstagram.domain.Posts;
 import com.cho.songstagram.domain.Users;
 import com.cho.songstagram.dto.CommentDto;
 import com.cho.songstagram.dto.PageDto;
 import com.cho.songstagram.dto.PostDto;
-import com.cho.songstagram.repository.PostsRepository;
 import com.cho.songstagram.service.CommentsService;
 import com.cho.songstagram.service.PostsService;
 import com.cho.songstagram.service.S3Service;
@@ -36,7 +34,7 @@ public class PostsController {
 
     //게시글 작성 페이지 맵핑
     @GetMapping("/post/write")
-    public String write(@ModelAttribute("postDto") PostDto postDto) {
+    public String writeGet(@ModelAttribute("postDto") PostDto postDto) {
         return "post/write";
     }
 
@@ -56,39 +54,37 @@ public class PostsController {
 
         String picture = s3Service.postUpload(files); // S3 버킷에 파일 업로드
         Users loginUser = (Users) session.getAttribute("loginUser"); // loginUser 세션에서 가져오기
-        loginUser = usersService.findById(loginUser.getId()).orElse(new Users()); // 영속성 컨텍스트 업데이트
-        Posts posts = postsService.makePost(postDto,loginUser,picture); // Posts 객체 생성
+        Users users = usersService.findById(loginUser.getId()).orElse(new Users()); // 영속성 컨텍스트에서 유저 초기화
+        Posts posts = postsService.makePost(postDto,users,picture); // Posts 객체 생성
         postsService.save(posts); // db에 저장
 
         return "redirect:/";
     }
 
     @GetMapping("/post/read/{postId}")
-    public String readPost(@PathVariable("postId") Long postId, @ModelAttribute("commentDto") CommentDto commentDto, Model model) {
-        Posts posts = postsService.findById(postId)
-                .orElse(new Posts());
-        PostDto postDto = postsService.convertToDto(posts);
-        model.addAttribute("post", postDto);
+    public String readGet(@PathVariable("postId") Long postId, @ModelAttribute("commentDto") CommentDto commentDto, Model model) {
+        Posts posts = postsService.findById(postId).orElse(new Posts()); // postId로 게시글 찾기
+        PostDto postDto = postsService.convertToDto(posts); // dto로 전환
+        model.addAttribute("post", postDto); //model에 dto 추가
 
-        List<Comments> commentsList = commentsService.findCommentsByPosts(posts);
-        List<CommentDto> commentDtoList = new ArrayList<>();
+        List<Comments> commentsList = commentsService.findCommentsByPosts(posts); // 게시글의 댓글 가져오기
+        List<CommentDto> commentDtoList = new ArrayList<>(); 
         for (Comments comments : commentsList) {
-            commentDtoList.add(commentsService.convertToDto(comments));
+            commentDtoList.add(commentsService.convertToDto(comments)); // dto 전환
         }
         model.addAttribute("commentsList", commentDtoList);
 
-        String youtubeLink = "https://www.youtube.com/results?search_query=";
-        youtubeLink += postDto.getSinger() + "+" + postDto.getSongName();
+        String youtubeLink = "https://www.youtube.com/results?search_query="; // 유튜브 링크 생성
+        youtubeLink += postDto.getSinger() + "+" + postDto.getSongName(); // 가수명과 곡 제목으로 링크 완성
         model.addAttribute("youtubeLink",youtubeLink);
         return "post/read";
     }
 
     @GetMapping("/post/update/{postId}")
-    public String update(@PathVariable("postId") Long postId, @ModelAttribute("postDto") PostDto postDto, Model model) {
-        Posts posts = postsService.findById(postId)
-                .orElse(new Posts());
-        postDto.setContent(posts.getContent());
-        postDto.setPicture(posts.getPicture());
+    public String updateGet(@PathVariable("postId") Long postId, @ModelAttribute("postDto") PostDto postDto, Model model) {
+        Posts posts = postsService.findById(postId).orElse(new Posts()); // 게시글 id로 찾아오기
+        postDto.setContent(posts.getContent()); // dto에 post 정보 넣기
+        postDto.setPicture(posts.getPicture()); 
         postDto.setSinger(posts.getSinger());
         postDto.setSongName(posts.getSongName());
         model.addAttribute("postId", postId);
@@ -100,24 +96,23 @@ public class PostsController {
                              @Valid @ModelAttribute("postDto") PostDto postDto, BindingResult result, Model model) {
 
         if (result.hasErrors()) {
-            model.addAttribute("postId", postId);
+            model.addAttribute("postId", postId); //에러있을시 다시 update화면으로
             return "post/update";
         }
 
-        Posts posts = postsService.findById(postId)
-                .orElse(new Posts());
-        posts.update(postDto.getSinger(), postDto.getSongName(), postDto.getContent());
-        postsService.save(posts);
+        Posts posts = postsService.findById(postId).orElse(new Posts()); // 게시글 찾아와서
+        posts.update(postDto.getSinger(), postDto.getSongName(), postDto.getContent()); // update 한 후
+        postsService.save(posts); // 트랜잭션 처리
         return "redirect:/post/read/{postId}";
     }
 
-    //   좋아요 누른 목록 보여주는 controller
+    // 좋아요 누른 목록 보여주는 controller
     @GetMapping("/post/likeList/{userId}")
-    public String likeList(@RequestParam(value = "page", defaultValue = "1") int page,
+    public String likeListGet(@RequestParam(value = "page", defaultValue = "1") int page,
                            @PathVariable("userId") Long userId, Model model) {
-        List<PostDto> postDtoList = postsService.getUserLikeListPage(userId, page, 5);
-        Users users = usersService.findById(userId).orElse(new Users());
-        PageDto pageDto = new PageDto(page, 5, users.getLikesList().size(), 5);
+        List<PostDto> postDtoList = postsService.getUserLikeListPage(userId, page, 5); // 유저가 좋아요 한 게시글 postDto로 전환 후 가져오기
+        Users users = usersService.findById(userId).orElse(new Users()); // 유저 정보 찾기
+        PageDto pageDto = new PageDto(page, 5, users.getLikesList().size(), 5); // 페이지네이션
 
         model.addAttribute("postDtoList", postDtoList);
         model.addAttribute("pageDto", pageDto);
@@ -125,29 +120,31 @@ public class PostsController {
         return "post/likeList";
     }
 
+    // 팔로우 한 사람의 게시글 목록
     @GetMapping("/post/followList/{userId}")
-    public String followList(@RequestParam(value = "page", defaultValue = "1") int page,
+    public String followListGet(@RequestParam(value = "page", defaultValue = "1") int page,
                              @PathVariable("userId") Long userId, Model model){
-        List<PostDto> postDtoList = postsService.getFollowListPage(userId, page, 5);
-        PageDto pageDto = new PageDto(page,5, Math.toIntExact(postsService.getFollowPostCount(userId)), 5);
+        List<PostDto> postDtoList = postsService.getFollowListPage(userId, page, 5); //유저가 팔로우 한 사람의 게시글 페이지에 맞게 5개 가져오기
+        PageDto pageDto = new PageDto(page,5, Math.toIntExact(postsService.getFollowPostCount(userId)), 5); //페이지네이션
 
         model.addAttribute("postDtoList",postDtoList);
         model.addAttribute("pageDto",pageDto);
         return "post/followList";
     }
 
+    // 게시글 삭제 기능
     @GetMapping("/post/delete/{postId}")
-    public String delete(@PathVariable("postId") Long postId){
-        Posts posts = postsService.findById(postId)
-                .orElse(new Posts());
-        s3Service.deletePost(posts.getPicture());
-        postsService.delete(posts);
+    public String deleteGet(@PathVariable("postId") Long postId){
+        Posts posts = postsService.findById(postId).orElse(new Posts()); // 게시글 찾기
+        s3Service.deletePost(posts.getPicture()); // S3 버킷에 올린 사진 삭제
+        postsService.delete(posts); // 게시글 db에서 삭제
         return "post/delete";
     }
 
-    @GetMapping("/post/notUpdate")
-    public String notUpdate(){
-        return "post/notUpdate";
-    }
+    // 권한 없이 접근 했을시
+    @GetMapping("/post/noAuthority")
+    public String noAuthorityGet(){
+        return "post/noAuthority";
+    } // 작성자가 아닐시 수정 & 삭제 불가능
 
 }

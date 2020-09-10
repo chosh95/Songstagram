@@ -26,7 +26,7 @@ public class PostInterceptor extends HandlerInterceptorAdapter {
         String postId = attribute.get("postId");
         Posts posts = postsService.findById(Long.parseLong(postId)).orElse(new Posts());
         if(!posts.getUsers().getId().equals(loginUser.getId())) {
-            response.sendRedirect("/post/notUpdate");
+            response.sendRedirect("/post/noAuthority");
             return false;
         }
         return true;

@@ -5,6 +5,7 @@ import com.cho.songstagram.domain.Users;
 import com.cho.songstagram.dto.PostDto;
 import com.cho.songstagram.repository.PostsRepository;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.Hibernate;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -44,30 +45,6 @@ public class PostsService {
         return postsRepository.count();
     }
 
-    public Posts makePost(PostDto postDto, Users user, String picture){
-        return Posts.builder() // 게시글 생성
-                .singer(postDto.getSinger())
-                .songName(postDto.getSongName())
-                .content(postDto.getContent())
-                .picture(picture)
-                .users(user)
-                .build();
-    }
-
-    public PostDto convertToDto(Posts posts){
-        return PostDto.builder()
-                .postId(posts.getId())
-                .singer(posts.getSinger())
-                .songName(posts.getSongName())
-                .content(posts.getContent())
-                .picture(posts.getPicture())
-                .createdDate(posts.getCreatedDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")))
-                .userId(posts.getUsers().getId())
-                .userName(posts.getUsers().getName())
-                .userPicture(posts.getUsers().getPicture())
-                .likeIdList(likesService.findLikeIdList(posts))
-                .build();
-    }
 
     //index 페이지용 모든 게시글 목록
     public List<PostDto> getPostList(int page, int contentPageCnt) {
@@ -122,5 +99,30 @@ public class PostsService {
     // 유저가 작성한 총 게시글 수 구하는 함수
     public Long getPostsCntByUser(Users users){
         return postsRepository.getPostsCntByUser(users);
+    }
+
+    public Posts makePost(PostDto postDto, Users user, String picture){
+        return Posts.builder() // 게시글 생성
+                .singer(postDto.getSinger())
+                .songName(postDto.getSongName())
+                .content(postDto.getContent())
+                .picture(picture)
+                .users(user)
+                .build();
+    }
+
+    public PostDto convertToDto(Posts posts){
+        return PostDto.builder()
+                .postId(posts.getId())
+                .singer(posts.getSinger())
+                .songName(posts.getSongName())
+                .content(posts.getContent())
+                .picture(posts.getPicture())
+                .createdDate(posts.getCreatedDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm")))
+                .userId(posts.getUsers().getId())
+                .userName(posts.getUsers().getName())
+                .userPicture(posts.getUsers().getPicture())
+                .likeIdList(likesService.findLikeIdList(posts))
+                .build();
     }
 }
