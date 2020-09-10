@@ -28,10 +28,11 @@ public class LikesInterceptor extends HandlerInterceptorAdapter {
 
         String userId = attribute.get("userId");
         Users users = usersService.findById(Long.parseLong(userId)).orElse(new Users());
+        
         String postId = attribute.get("postId");
         Posts posts = postsService.findById(Long.parseLong(postId)).orElse(new Posts());
 
-        if(likesService.findByPostsAndUsers(posts, users).isPresent()){
+        if(likesService.findByPostsAndUsers(posts, users).isPresent()){ // 유저가 이미 좋아요 누른 게시글이면 차단
             response.sendRedirect("/likes/already");
             return false;
         }

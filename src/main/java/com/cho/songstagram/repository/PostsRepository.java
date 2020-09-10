@@ -13,19 +13,19 @@ import java.util.List;
 @Repository
 public interface PostsRepository extends JpaRepository<Posts, Long> {
 
-    Page<Posts> findAllByUsers(Users users, Pageable pageable);
+    Page<Posts> findAllByUsers(Users users, Pageable pageable); // User가 작성한 게시글 목록 pageable로 페이징 후 반환
 
     @Query(value = "SELECT l.posts FROM Likes l WHERE l.users.id = ?1",
         countQuery = "SELECT count(l.posts) FROM Likes l WHERE l.users.id = ?1")
-    Page<Posts> getLikeListPageable(Long userId,Pageable pageable);
+    Page<Posts> getLikeListPageable(Long userId, Pageable pageable); // user가 좋아요 누른 게시글 목록 페이징 후 반환
 
     @Query(value = "SELECT p FROM Posts p WHERE p.users in ?1",
         countQuery = "SELECT count(p) FROM Posts p WHERE p.users in ?1")
-    Page<Posts> getPostsByUsers(List<Users> users, Pageable pageable);
+    Page<Posts> getPostsByUsers(List<Users> users, Pageable pageable); // user 목록에 있는 user가 작성한 게시글 목록 페이징 후 반환
 
     @Query(value = "SELECT count(p) FROM Posts p WHERE p.users in ?1")
-    Long getPostsByUsers(List<Users> users);
+    Long getPostsByUsers(List<Users> users); // user 목록에 있는 user가 작성한 모든 게시글의 수 반환
 
     @Query(value = "SELECT count(p) FROM Posts p WHERE p.users = ?1")
-    Long getPostsCntByUser(Users users);
+    Long getPostsCntByUser(Users users); // user가 작성한 게시글 목록 반환
 }

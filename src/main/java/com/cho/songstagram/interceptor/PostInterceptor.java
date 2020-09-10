@@ -21,14 +21,17 @@ public class PostInterceptor extends HandlerInterceptorAdapter {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         HttpSession session = request.getSession();
-        Users loginUser = (Users)session.getAttribute("loginUser");
-        Map<String,String> attribute = (Map<String,String>) request.getAttribute(HandlerMapping.URI_TEMPLATE_VARIABLES_ATTRIBUTE);
-        String postId = attribute.get("postId");
-        Posts posts = postsService.findById(Long.parseLong(postId)).orElse(new Posts());
-        if(!posts.getUsers().getId().equals(loginUser.getId())) {
+        Users loginUser = (Users)session.getAttribute("loginUser"); // 세션에서 로그인 유저 가져오기
+
+        Map<String,String> attribute = (Map<String,String>) request.getAttribute(HandlerMapping.URI_TEMPLATE_VARIABLES_ATTRIBUTE); // Model 에서 값 가져오기
+        String postId = attribute.get("postId"); 
+        Posts posts = postsService.findById(Long.parseLong(postId)).orElse(new Posts()); // 작성글 가져오기
+
+        if(!posts.getUsers().getId().equals(loginUser.getId())) { // 게시글 작성자가 로그인한 유저가 아니면 차단
             response.sendRedirect("/post/noAuthority");
             return false;
         }
+
         return true;
     }
 }

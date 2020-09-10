@@ -1,5 +1,6 @@
 package com.cho.songstagram.dto;
 
+import com.cho.songstagram.domain.Users;
 import lombok.Builder;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
@@ -24,10 +25,10 @@ public class PostDto {
     private Long userId;
     private String userName;
     private String userPicture;
-    private List<Long> likeIdList;
+    private List<Long> likeUserIdList;
 
     @Builder
-    public PostDto(Long postId, String singer, String songName, String content, String picture, String createdDate, Long userId, String userName, String userPicture, List<Long> likeIdList) {
+    public PostDto(Long postId, String singer, String songName, String content, String picture, String createdDate, Long userId, String userName, String userPicture, List<Long> likeUserIdList) {
         this.postId = postId;
         this.singer = singer;
         this.songName = songName;
@@ -37,6 +38,6 @@ public class PostDto {
         this.userId = userId;
         this.userName = userName;
         this.userPicture = userPicture;
-        this.likeIdList = likeIdList;
+        this.likeUserIdList = likeUserIdList;
     }
 }

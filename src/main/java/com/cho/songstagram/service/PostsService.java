@@ -101,6 +101,7 @@ public class PostsService {
         return postsRepository.getPostsCntByUser(users);
     }
 
+    // Posts 객체 생성해서 반환
     public Posts makePost(PostDto postDto, Users user, String picture){
         return Posts.builder() // 게시글 생성
                 .singer(postDto.getSinger())
@@ -122,7 +123,7 @@ public class PostsService {
                 .userId(posts.getUsers().getId())
                 .userName(posts.getUsers().getName())
                 .userPicture(posts.getUsers().getPicture())
-                .likeIdList(likesService.findLikeIdList(posts))
+                .likeUserIdList(likesService.findLikeUserIdList(posts))
                 .build();
     }
 }

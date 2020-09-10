@@ -20,12 +20,13 @@ public class UserInterceptor extends HandlerInterceptorAdapter {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         HttpSession session = request.getSession();
-        Users loginUser = (Users)session.getAttribute("loginUser");
-        Map<String,String> attribute = (Map<String,String>) request.getAttribute(HandlerMapping.URI_TEMPLATE_VARIABLES_ATTRIBUTE);
-        String userId = attribute.get("userId");
-        Users users = usersService.findById(Long.parseLong(userId)).orElse(new Users());
+        Users loginUser = (Users)session.getAttribute("loginUser"); // 세션에서 로그인 유저 가져오기
 
-        if(!users.getId().equals(loginUser.getId())) {
+        Map<String,String> attribute = (Map<String,String>) request.getAttribute(HandlerMapping.URI_TEMPLATE_VARIABLES_ATTRIBUTE); // Model에서 값 가져오기
+        String userId = attribute.get("userId");
+        Users users = usersService.findById(Long.parseLong(userId)).orElse(new Users()); // 유저 정보 가져오기
+
+        if(!users.getId().equals(loginUser.getId())) { // 로그인 유저와 수정/삭제하려는 유저가 다르면 차단
             response.sendRedirect("/user/noAuthority");
             return false;
         }

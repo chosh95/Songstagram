@@ -13,7 +13,7 @@ import java.util.Optional;
 @Repository
 public interface LikesRepository extends JpaRepository<Likes, Long> {
 
-    Optional<Likes> findByPostsAndUsers(Posts posts, Users users);
+    Optional<Likes> findByPostsAndUsers(Posts posts, Users users); // 게시글과 작성자로 좋아요 반환
 
-    List<Likes> findByPosts(Posts posts);
+    List<Likes> findByPosts(Posts posts); // 게시글에 누른 좋아요 목록 반환
 }

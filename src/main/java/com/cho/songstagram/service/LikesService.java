@@ -27,16 +27,18 @@ public class LikesService {
     @Transactional
     public void delete(Likes likes) {likesRepository.delete(likes);}
 
+    // 게시글과 유저 정보로 좋아요 눌렀는지 확인
     public Optional<Likes> findByPostsAndUsers(Posts posts, Users users){
         return likesRepository.findByPostsAndUsers(posts, users);
     }
 
-    public List<Long> findLikeIdList(Posts posts){
+    // 게시글에 좋아요 누른 user id 목록 반환
+    public List<Long> findLikeUserIdList(Posts posts){
         List<Likes> byPosts = likesRepository.findByPosts(posts);
-        List<Long> likesIdList = new ArrayList<>();
+        List<Long> likesUserIdList = new ArrayList<>();
         for (Likes likes : byPosts) {
-            likesIdList.add(likes.getUsers().getId());
+            likesUserIdList.add(likes.getUsers().getId());
         }
-        return likesIdList;
+        return likesUserIdList;
     }
 }

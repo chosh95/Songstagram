@@ -26,13 +26,13 @@
                 <!-- 글 이미지 & 내용 -->
                 <div class="pmd-card-media">
                     <img th:src="${post.getPicture()}" src="#" width="1184" height="666" class="img-fluid" alt="main image">
-                    <span th:if="${post.getLikeIdList().contains(session.loginUser.getId())}">
+                    <span th:if="${post.getLikeUserIdList().contains(session.loginUser.getId())}">
                         <a th:href="@{'/likes/delete/'+${post.getPostId()} + '&' + ${session.loginUser.getId()}}"><img th:src="@{/icon/redHeart.png}" src="#" style="height: 20px; width: 20px;"> </a>
-                        <span th:text="${post.getLikeIdList().size()}"></span>
+                        <a th:href="@{'/likes/userList/'+${post.getPostId()} + '&' + ${session.loginUser.getId()}}"><span th:text="${post.getLikeUserIdList().size()}"></span></a>
                     </span>
-                    <span th:unless="${post.getLikeIdList().contains(session.loginUser.getId())}">
+                    <span th:unless="${post.getLikeUserIdList().contains(session.loginUser.getId())}">
                         <a th:href="@{'/likes/save/'+${post.getPostId()} + '&' + ${session.loginUser.getId()}}"><img th:src="@{/icon/emptyHeart.png}" src="#" style="height: 20px; width: 20px;"></a>
-                        <span th:text="${post.getLikeIdList().size()}"></span>
+                        <a th:href="@{'/likes/userList/'+${post.getPostId()} + '&' + ${session.loginUser.getId()}}"><span th:text="${post.getLikeUserIdList().size()}"></span></a>
                     </span><br>
                     <h2 class="card-title" th:text="${post.getSinger()} + ' - ' + ${post.getSongName()}">Title goes here</h2>
                     <p class="card-text" th:text="${post.getContent()}"></p>
