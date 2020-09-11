@@ -18,22 +18,20 @@ public class UsersService {
 
     @Transactional
     public void save(Users user){
-        usersRepository.save(user);
+        usersRepository.save(user); //db에 user 저장
     }
 
     @Transactional
     public void delete(Users users){
-        usersRepository.delete(users);
+        usersRepository.delete(users); //db에서 user 삭제
     }
 
     public Optional<Users> findByEmail(String email){
-        return usersRepository.findByEmail(email);
+        return usersRepository.findByEmail(email); // 이메일 중복 여부 확인
     }
 
-    public Optional<Users> findById(Long id){ return usersRepository.findById(id);}
-
-    public List<Users> getAllUsers(){
-        List<Users> usersList = usersRepository.findAll();
-        return usersList;
+    public Optional<Users> findById(Long id){
+        return usersRepository.findById(id); // id로 User 찾기
     }
+
 }

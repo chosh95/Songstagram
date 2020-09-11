@@ -112,6 +112,7 @@ public class PostsService {
                 .build();
     }
 
+    //게시글 dto로 전환
     public PostDto convertToDto(Posts posts){
         return PostDto.builder()
                 .postId(posts.getId())

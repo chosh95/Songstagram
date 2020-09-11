@@ -13,15 +13,20 @@ import java.util.List;
 public class PostDto {
 
     private Long postId;
+
     @NotBlank(message = "가수명을 입력해주세요")
     private String singer;
+
     @NotBlank(message = "곡명을 입력해주세요")
     private String songName;
+
     @NotBlank(message = "내용을 입력해주세요")
     private String content;
+
     private String picture;
 
     private String createdDate;
+
     private Long userId;
     private String userName;
     private String userPicture;

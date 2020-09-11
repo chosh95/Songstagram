@@ -62,28 +62,30 @@ public class PostsController {
     }
 
     @GetMapping("/post/read/{postId}")
-    public String readGet(@PathVariable("postId") Long postId, @ModelAttribute("commentDto") CommentDto commentDto, Model model) {
+    public String readGet(@PathVariable("postId") Long postId,
+                          @ModelAttribute("commentDto") CommentDto commentDto,
+                          Model model) {
         Posts posts = postsService.findById(postId).orElse(new Posts()); // postId로 게시글 찾기
-        PostDto postDto = postsService.convertToDto(posts); // dto로 전환
+        PostDto postDto = postsService.convertToDto(posts); // 게시글 보여줄 dto로 전환
         model.addAttribute("post", postDto); //model에 dto 추가
 
         List<Comments> commentsList = commentsService.findCommentsByPosts(posts); // 게시글의 댓글 가져오기
-        List<CommentDto> commentDtoList = new ArrayList<>(); 
-        for (Comments comments : commentsList) {
+        List<CommentDto> commentDtoList = new ArrayList<>(); //dto로 전환해서 반환할 list
+        for (Comments comments : commentsList) 
             commentDtoList.add(commentsService.convertToDto(comments)); // dto 전환
-        }
-        model.addAttribute("commentsList", commentDtoList);
+        model.addAttribute("commentsList", commentDtoList); // model에 댓글 dto 추가
 
         String youtubeLink = "https://www.youtube.com/results?search_query="; // 유튜브 링크 생성
         youtubeLink += postDto.getSinger() + "+" + postDto.getSongName(); // 가수명과 곡 제목으로 링크 완성
-        model.addAttribute("youtubeLink",youtubeLink);
+        model.addAttribute("youtubeLink",youtubeLink); 
+
         return "post/read";
     }
 
     @GetMapping("/post/update/{postId}")
     public String updateGet(@PathVariable("postId") Long postId, @ModelAttribute("postDto") PostDto postDto, Model model) {
         Posts posts = postsService.findById(postId).orElse(new Posts()); // 게시글 id로 찾아오기
-        postDto.setContent(posts.getContent()); // dto에 post 정보 넣기
+        postDto.setContent(posts.getContent()); // dto에 post 정보 넣어서 기존 정보 제공
         postDto.setPicture(posts.getPicture()); 
         postDto.setSinger(posts.getSinger());
         postDto.setSongName(posts.getSongName());
@@ -96,13 +98,13 @@ public class PostsController {
                              @Valid @ModelAttribute("postDto") PostDto postDto, BindingResult result, Model model) {
 
         if (result.hasErrors()) {
-            model.addAttribute("postId", postId); //에러있을시 다시 update화면으로
+            model.addAttribute("postId", postId); //에러 있을시 다시 update 화면으로
             return "post/update";
         }
 
         Posts posts = postsService.findById(postId).orElse(new Posts()); // 게시글 찾아와서
         posts.update(postDto.getSinger(), postDto.getSongName(), postDto.getContent()); // update 한 후
-        postsService.save(posts); // 트랜잭션 처리
+        postsService.save(posts); // db에 저장
         return "redirect:/post/read/{postId}";
     }
 
@@ -111,10 +113,10 @@ public class PostsController {
     public String likeListGet(@RequestParam(value = "page", defaultValue = "1") int page,
                            @PathVariable("userId") Long userId, Model model) {
         List<PostDto> postDtoList = postsService.getUserLikeListPage(userId, page, 5); // 유저가 좋아요 한 게시글 postDto로 전환 후 가져오기
-        Users users = usersService.findById(userId).orElse(new Users()); // 유저 정보 찾기
-        PageDto pageDto = new PageDto(page, 5, users.getLikesList().size(), 5); // 페이지네이션
-
         model.addAttribute("postDtoList", postDtoList);
+
+        Users users = usersService.findById(userId).orElse(new Users()); // 유저가 누른 좋아요 size 구하기 위해 user 가져옴
+        PageDto pageDto = new PageDto(page, 5, users.getLikesList().size(), 5); // 페이지네이션
         model.addAttribute("pageDto", pageDto);
 
         return "post/likeList";
@@ -125,10 +127,11 @@ public class PostsController {
     public String followListGet(@RequestParam(value = "page", defaultValue = "1") int page,
                              @PathVariable("userId") Long userId, Model model){
         List<PostDto> postDtoList = postsService.getFollowListPage(userId, page, 5); //유저가 팔로우 한 사람의 게시글 페이지에 맞게 5개 가져오기
-        PageDto pageDto = new PageDto(page,5, Math.toIntExact(postsService.getFollowPostCount(userId)), 5); //페이지네이션
-
         model.addAttribute("postDtoList",postDtoList);
+
+        PageDto pageDto = new PageDto(page,5, Math.toIntExact(postsService.getFollowPostCount(userId)), 5); //페이지네이션
         model.addAttribute("pageDto",pageDto);
+
         return "post/followList";
     }
 
