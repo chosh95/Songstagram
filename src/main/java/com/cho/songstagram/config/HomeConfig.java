@@ -20,7 +20,7 @@ public class HomeConfig implements WebMvcConfigurer {
     private final UsersService usersService;
     private final FollowService followService;
     private final LikesService likesService;
-    private final IpBanRepository ipBanRepository;
+    private final IpBanService ipBanService;
 
     //인코더 빈 객체 등록
     @Bean
@@ -57,7 +57,7 @@ public class HomeConfig implements WebMvcConfigurer {
         registry.addInterceptor(new LikesInterceptor(likesService,usersService,postsService))
                 .addPathPatterns("/likes/save/**");
         // 글 작성 인터셉터 : 특정 ip로 작성한 글 차단
-        registry.addInterceptor(new PostWriteInterceptor(ipBanRepository))
+        registry.addInterceptor(new PostWriteInterceptor(ipBanService))
                 .addPathPatterns("/post/write/**");
     }
 

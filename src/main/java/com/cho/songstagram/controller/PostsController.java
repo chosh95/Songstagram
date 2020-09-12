@@ -7,13 +7,8 @@ import com.cho.songstagram.domain.Users;
 import com.cho.songstagram.dto.CommentDto;
 import com.cho.songstagram.dto.PageDto;
 import com.cho.songstagram.dto.PostDto;
-import com.cho.songstagram.repository.IpBanRepository;
-import com.cho.songstagram.service.CommentsService;
-import com.cho.songstagram.service.PostsService;
-import com.cho.songstagram.service.S3Service;
-import com.cho.songstagram.service.UsersService;
+import com.cho.songstagram.service.*;
 import lombok.RequiredArgsConstructor;
-import org.joda.time.TimeOfDay;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -24,7 +19,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.io.IOException;
-import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,6 +30,7 @@ public class PostsController {
     private final PostsService postsService;
     private final CommentsService commentsService;
     private final S3Service s3Service;
+    private final IpBanService ipBanService;
 
     //게시글 작성 페이지 맵핑
     @GetMapping("/post/write")
@@ -47,6 +42,7 @@ public class PostsController {
     @PostMapping("/post/write")
     public String writePost(@Valid @ModelAttribute("postDto") PostDto postDto, BindingResult result,
                             @RequestParam("files") MultipartFile files,
+                            HttpServletRequest request,
                             HttpSession session, Model model) throws IOException {
 
         if (files.isEmpty()) { // 사진 파일 추가 안했을 시 추가하도록 유도
@@ -58,6 +54,12 @@ public class PostsController {
         }
 
         Users loginUser = (Users) session.getAttribute("loginUser"); // loginUser 세션에서 가져오기
+        Long postsCntByUserToday = postsService.getPostsCntByUserToday(loginUser.getId()); // 작성자가 오늘 작성한 글의 수를 구한다.
+        if(postsCntByUserToday >= 4){ // 하루에 4번 이상 글을 작성했을 시
+            ipBanService.banIp(request); // 해당 request로 들어온 ip를 차단한다.
+            return "redirect:/post/writePostLimit"; // 글은 작성되지 않고 redirect된다.
+        }
+
         String picture = s3Service.postUpload(files); // S3 버킷에 파일 업로드
         Users users = usersService.findById(loginUser.getId()).orElse(new Users()); // 영속성 컨텍스트에서 유저 초기화
         Posts posts = postsService.makePost(postDto,users,picture); // Posts 객체 생성
@@ -155,4 +157,9 @@ public class PostsController {
         return "post/noAuthority";
     } // 작성자가 아닐시 수정 & 삭제 불가능
 
+    //ip 차단되었음을 알리는 페이지
+    @GetMapping("/post/writePostLimit")
+    public String writePostLimitGet(){
+        return "post/writePostLimit.html";
+    }
 }

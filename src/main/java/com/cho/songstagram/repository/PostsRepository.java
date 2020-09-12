@@ -8,6 +8,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Repository
@@ -28,4 +29,7 @@ public interface PostsRepository extends JpaRepository<Posts, Long> {
 
     @Query(value = "SELECT count(p) FROM Posts p WHERE p.users = ?1")
     Long getPostsCntByUser(Users users); // user가 작성한 게시글 목록 반환
+
+    @Query(value = "SELECT count(p) FROM Posts p WHERE p.users = ?1 and p.createDate = ?2")
+    Long getPostsCntByUserToday(Users users, LocalDate today);
 }

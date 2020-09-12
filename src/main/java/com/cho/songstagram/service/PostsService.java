@@ -5,14 +5,13 @@ import com.cho.songstagram.domain.Users;
 import com.cho.songstagram.dto.PostDto;
 import com.cho.songstagram.repository.PostsRepository;
 import lombok.RequiredArgsConstructor;
-import org.hibernate.Hibernate;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
@@ -26,6 +25,7 @@ public class PostsService {
     private final PostsRepository postsRepository;
     private final LikesService likesService;
     private final FollowService followService;
+    private final UsersService usersService;
 
     @Transactional
     public void save(Posts posts){
@@ -91,6 +91,14 @@ public class PostsService {
         return dtoList;
     }
 
+    public Long getPostsCntByUserToday(Long userId){
+        Users users = usersService.findById(userId).orElse(new Users());
+        LocalDate today = LocalDate.now();
+        Long postsCntByUser = postsRepository.getPostsCntByUserToday(users,today);
+        return postsCntByUser;
+    }
+
+    // 유저가 팔로우하는 사람들의 모든 게시글 가져오기
     public Long getFollowPostCount(Long userId){
         List<Users> users = followService.getFollowing(userId);
         return postsRepository.getPostsByUsers(users);
