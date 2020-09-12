@@ -14,6 +14,7 @@ public class SignInUserDto {
 
     @NotBlank(message = "이메일을 입력해주세요.")
     @Email(message = "이메일 형식에 맞게 입력해주세요.")
+    @Size(min=10, message = "최소 10글자 이상 입력해주세요")
     private String email;
 
     @Size(min=3,max=15,message = "최소 3글자에서 최대 15글자까지 가능합니다.")

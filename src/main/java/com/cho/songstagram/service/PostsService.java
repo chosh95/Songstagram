@@ -127,4 +127,5 @@ public class PostsService {
                 .likeUserIdList(likesService.findLikeUserIdList(posts))
                 .build();
     }
+
 }

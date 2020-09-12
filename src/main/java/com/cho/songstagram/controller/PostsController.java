@@ -1,25 +1,30 @@
 package com.cho.songstagram.controller;
 
 import com.cho.songstagram.domain.Comments;
+import com.cho.songstagram.domain.IpBanList;
 import com.cho.songstagram.domain.Posts;
 import com.cho.songstagram.domain.Users;
 import com.cho.songstagram.dto.CommentDto;
 import com.cho.songstagram.dto.PageDto;
 import com.cho.songstagram.dto.PostDto;
+import com.cho.songstagram.repository.IpBanRepository;
 import com.cho.songstagram.service.CommentsService;
 import com.cho.songstagram.service.PostsService;
 import com.cho.songstagram.service.S3Service;
 import com.cho.songstagram.service.UsersService;
 import lombok.RequiredArgsConstructor;
+import org.joda.time.TimeOfDay;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -52,8 +57,8 @@ public class PostsController {
             return "post/write";
         }
 
-        String picture = s3Service.postUpload(files); // S3 버킷에 파일 업로드
         Users loginUser = (Users) session.getAttribute("loginUser"); // loginUser 세션에서 가져오기
+        String picture = s3Service.postUpload(files); // S3 버킷에 파일 업로드
         Users users = usersService.findById(loginUser.getId()).orElse(new Users()); // 영속성 컨텍스트에서 유저 초기화
         Posts posts = postsService.makePost(postDto,users,picture); // Posts 객체 생성
         postsService.save(posts); // db에 저장
