@@ -5,10 +5,8 @@ import com.cho.songstagram.repository.IpBanRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.client.HttpServerErrorException;
 
 import javax.servlet.http.HttpServletRequest;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -26,17 +24,17 @@ public class IpBanService {
     public void banIp(HttpServletRequest request) { // 해당 요청으로 들어온 ip를 차단하는 메서드
         String ipAddress = this.getIpAddress(request); // ip 주소를 찾아온다.
         if(ipBanRepository.findByIp(ipAddress)==null){ // 해당 ip를 차단한다.
-            IpBanList ipBanList = new IpBanList(ipAddress);
-            this.save(ipBanList);
+            IpBanList ipBanList = new IpBanList(ipAddress); // ip 개체 생성한다. 
+            this.save(ipBanList); // db에 저장
         }
     }
 
-    public boolean isIpBan(HttpServletRequest request){
-        String ipAddress = this.getIpAddress(request);
-        return ipBanRepository.findByIp(ipAddress)!=null ;
+    public boolean isIpBan(HttpServletRequest request){ // 이미 차단한 ip인지 판별하는 메서드
+        String ipAddress = this.getIpAddress(request); // ip 주소 가져오기
+        return ipBanRepository.findByIp(ipAddress)!=null ; // 이미 차단된 ip인지 아닌지 판별
     }
 
-    public String getIpAddress(HttpServletRequest request){
+    public String getIpAddress(HttpServletRequest request){ // request에서 client의 ip주소 찾아서 반환하는 메서드
         String ip = request.getHeader("X-Forwarded-For");
 
         if (ip == null) {

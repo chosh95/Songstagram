@@ -2,8 +2,6 @@ package com.cho.songstagram.domain;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
-import org.hibernate.validator.constraints.UniqueElements;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -19,7 +17,7 @@ public class IpBanList extends BaseTimeEntity{
     @Column(name="ip_id")
     private Long id;
 
-    private String ip;
+    private String ip; //차단할 IP
 
     public IpBanList(String ip){
         this.ip = ip;

@@ -1,7 +1,6 @@
 package com.cho.songstagram.controller;
 
 import com.cho.songstagram.domain.Comments;
-import com.cho.songstagram.domain.IpBanList;
 import com.cho.songstagram.domain.Posts;
 import com.cho.songstagram.domain.Users;
 import com.cho.songstagram.dto.CommentDto;
@@ -160,6 +159,6 @@ public class PostsController {
     //ip 차단되었음을 알리는 페이지
     @GetMapping("/post/writePostLimit")
     public String writePostLimitGet(){
-        return "post/writePostLimit.html";
+        return "post/writePostLimit";
     }
 }
