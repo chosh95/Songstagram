@@ -41,10 +41,10 @@ public class PostsService {
         return postsRepository.findById(id);
     }
 
+    // db에 저장된 모든 게시글의 수를 반환하는 메서드
     public Long getPostsCount(){
         return postsRepository.count();
     }
-
 
     //index 페이지용 모든 게시글 목록
     public List<PostDto> getPostList(int page, int contentPageCnt) {
@@ -91,11 +91,11 @@ public class PostsService {
         return dtoList;
     }
 
+    // 작성자가 오늘 작성한 글의 수
     public Long getPostsCntByUserToday(Long userId){
         Users users = usersService.findById(userId).orElse(new Users());
         LocalDate today = LocalDate.now();
-        Long postsCntByUser = postsRepository.getPostsCntByUserToday(users,today);
-        return postsCntByUser;
+        return postsRepository.getPostsCntByUserToday(users,today);
     }
 
     // 유저가 팔로우하는 사람들의 모든 게시글 가져오기
@@ -110,13 +110,14 @@ public class PostsService {
     }
 
     // Posts 객체 생성해서 반환
-    public Posts makePost(PostDto postDto, Users user, String picture){
+    public Posts makePost(PostDto postDto, Long userId, String picture){
+        Users users = usersService.findById(userId).orElse(new Users());
         return Posts.builder() // 게시글 생성
                 .singer(postDto.getSinger())
                 .songName(postDto.getSongName())
                 .content(postDto.getContent())
                 .picture(picture)
-                .users(user)
+                .users(users)
                 .build();
     }
 

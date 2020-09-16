@@ -18,6 +18,7 @@ public class UsersService {
 
     @Transactional
     public void save(Users user){
+        checkDuplicate(user.getEmail());
         usersRepository.save(user); //db에 user 저장
     }
 
@@ -34,4 +35,8 @@ public class UsersService {
         return usersRepository.findById(id); // id로 User 찾기
     }
 
+    private void checkDuplicate(String email){
+        Optional<Users> byEmail = findByEmail(email);
+        if(byEmail.isPresent()) throw new IllegalStateException("이미 존재하는 회원입니다.");
+    }
 }

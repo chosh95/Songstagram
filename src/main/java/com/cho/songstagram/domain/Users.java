@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -48,11 +49,11 @@ public class Users {
         this.email = email;
         this.picture = picture;
         this.password = password;
-        postsList = null;
-        comemntsList = null;
-        likesList = null;
-        follower = null;
-        following = null;
+        postsList = new ArrayList<Posts>();
+        comemntsList = new ArrayList<Comments>();
+        likesList = new ArrayList<Likes>();
+        follower = new ArrayList<Follow>();
+        following = new ArrayList<Follow>();
     }
 
     public void updatePicture(String picture){

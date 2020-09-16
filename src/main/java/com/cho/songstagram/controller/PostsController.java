@@ -8,6 +8,7 @@ import com.cho.songstagram.dto.PageDto;
 import com.cho.songstagram.dto.PostDto;
 import com.cho.songstagram.service.*;
 import lombok.RequiredArgsConstructor;
+import org.hibernate.Hibernate;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -60,8 +61,7 @@ public class PostsController {
         }
 
         String picture = s3Service.postUpload(files); // S3 버킷에 파일 업로드
-        Users users = usersService.findById(loginUser.getId()).orElse(new Users()); // 영속성 컨텍스트에서 유저 초기화
-        Posts posts = postsService.makePost(postDto,users,picture); // Posts 객체 생성
+        Posts posts = postsService.makePost(postDto,loginUser.getId(),picture); // Posts 객체 생성
         postsService.save(posts); // db에 저장
 
         return "redirect:/";
