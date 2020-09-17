@@ -21,6 +21,8 @@ public class LikesService {
 
     @Transactional
     public void save(Likes likes){
+        Optional<Likes> byPostsAndUsers = likesRepository.findByPostsAndUsers(likes.getPosts(), likes.getUsers());
+        if(byPostsAndUsers.isPresent()) throw new IllegalStateException("이미 좋아요를 눌렀습니다.");
         likesRepository.save(likes);
     }
 

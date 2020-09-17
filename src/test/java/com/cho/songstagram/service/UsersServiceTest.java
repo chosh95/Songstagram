@@ -18,17 +18,8 @@ class UsersServiceTest {
 
     @Test
     public void 회원_중복시_오류가_발생한다(){
-        Users user1 = Users.builder()
-                .email("abc@abc.com")
-                .password("1234")
-                .name("kim")
-                .build();
-
-        Users user2 = Users.builder()
-                .email("abc@abc.com")
-                .password("5678")
-                .name("lee")
-                .build();
+        Users user1 = makeUser();
+        Users user2 = makeUser();
 
         usersService.save(user1);
         IllegalStateException exception = assertThrows(
@@ -41,11 +32,7 @@ class UsersServiceTest {
 
     @Test
     public void 회원_삭제(){
-        Users user1 = Users.builder()
-                .email("abc@abc.com")
-                .password("1234")
-                .name("kim")
-                .build();
+        Users user1 = makeUser();
 
         usersService.save(user1);
         assertTrue(usersService.findByEmail("abc@abc.com").isPresent());
@@ -57,14 +44,27 @@ class UsersServiceTest {
 
     @Test
     public void 회원_아이디로_찾기(){
-        Users user1 = Users.builder()
-                .email("abc@abc.com")
-                .password("1234")
-                .name("kim")
-                .build();
+        Users user1 = makeUser();
 
         usersService.save(user1);
 
         assertEquals(user1,usersService.findById(user1.getId()).orElse(new Users()));
+    }
+
+    @Test
+    public void 회원_이메일로_찾기(){
+        Users user1 = makeUser();
+
+        usersService.save(user1);
+
+        assertEquals(user1,usersService.findByEmail(user1.getEmail()).orElse(new Users()));
+    }
+
+    public Users makeUser(){
+        return Users.builder()
+                .email("abc@abc.com")
+                .password("1234")
+                .name("kim")
+                .build();
     }
 }
