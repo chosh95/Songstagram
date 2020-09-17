@@ -1,6 +1,5 @@
 package com.cho.songstagram.repository;
 
-import com.cho.songstagram.domain.BaseTimeEntity;
 import com.cho.songstagram.domain.Posts;
 import com.cho.songstagram.domain.Users;
 import org.junit.jupiter.api.Test;
@@ -12,11 +11,9 @@ import org.springframework.data.domain.Sort;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @SpringBootTest
 @Transactional
