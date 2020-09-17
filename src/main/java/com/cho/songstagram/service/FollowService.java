@@ -20,13 +20,15 @@ public class FollowService {
     // 누가 누구 팔로우 했는지 follow 생성 후 db에 저장
     @Transactional
     public void save(Users from, Users to){
-        Follow follow = Follow.builder()
+        if(isFollowing(from,to)) // 이미 팔로잉 중인 경우 예외 발생
+            throw new IllegalStateException("이미 팔로잉 중입니다.");
+
+        Follow follow = Follow.builder() // 팔로우 객체를 생성한다.
                 .from(from)
                 .to(to)
                 .build();
-        from.getFollowing().add(follow);
-        to.getFollower().add(follow);
-        followRepository.save(follow);
+
+        followRepository.save(follow); // db에 저장
     }
 
     // 팔로우 정보 db에서 삭제

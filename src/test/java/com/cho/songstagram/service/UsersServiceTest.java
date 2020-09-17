@@ -26,7 +26,7 @@ class UsersServiceTest {
                 IllegalStateException.class,
                 () -> usersService.save(user2),
         "예외가 발생해야 하지만 발생하지 않았다.");
-
+        
         assertTrue(exception.getMessage().contains("이미 존재하는 회원입니다."));
     }
 

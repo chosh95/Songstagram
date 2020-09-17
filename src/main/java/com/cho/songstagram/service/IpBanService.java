@@ -17,6 +17,8 @@ public class IpBanService {
 
     @Transactional
     public IpBanList save(IpBanList ipBanList){
+        if(isIpBan(ipBanList.getIp()))
+            throw new IllegalStateException("이미 차단된 ip입니다.");
         return ipBanRepository.save(ipBanList);
     }
 
@@ -29,9 +31,8 @@ public class IpBanService {
         }
     }
 
-    public boolean isIpBan(HttpServletRequest request){ // 이미 차단한 ip인지 판별하는 메서드
-        String ipAddress = this.getIpAddress(request); // ip 주소 가져오기
-        return ipBanRepository.findByIp(ipAddress)!=null ; // 이미 차단된 ip인지 아닌지 판별
+    public boolean isIpBan(String ipAddress){
+        return ipBanRepository.findByIp(ipAddress)!=null; //차단된 ip인지 확인하고 반환한다.
     }
 
     public String getIpAddress(HttpServletRequest request){ // request에서 client의 ip주소 찾아서 반환하는 메서드

@@ -14,7 +14,8 @@ public class PostWriteInterceptor extends HandlerInterceptorAdapter {
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        if(ipBanService.isIpBan(request)){ // 해당 client IP가 이미 차단되었다면
+        String ipAddress = ipBanService.getIpAddress(request); // request에서 ip를 알아온다.
+        if(ipBanService.isIpBan(ipAddress)){ // 해당 client IP가 이미 차단되었다면
             response.sendRedirect("/post/writePostLimit"); // 차단되었음을 알려주는 페이지로 redirect
             return false; //차단한다.
         }
