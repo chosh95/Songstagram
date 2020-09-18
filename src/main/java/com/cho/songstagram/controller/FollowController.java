@@ -1,5 +1,6 @@
 package com.cho.songstagram.controller;
 
+import com.cho.songstagram.domain.Follow;
 import com.cho.songstagram.domain.Users;
 import com.cho.songstagram.dto.FollowListDto;
 import com.cho.songstagram.service.FollowService;

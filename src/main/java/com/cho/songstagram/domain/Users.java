@@ -38,7 +38,7 @@ public class Users {
     private List<Likes> likesList; // 좋아요 목록
 
     @OneToMany(mappedBy = "from", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Follow> following; // 팔로잉 중인 사람
+    private List<Follow> following; // 팔로잉 목록
 
     @OneToMany(mappedBy = "to", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Follow> follower; // 팔로워 목록
