@@ -23,11 +23,21 @@ public class LikesService {
     public void save(Likes likes){
         Optional<Likes> byPostsAndUsers = likesRepository.findByPostsAndUsers(likes.getPosts(), likes.getUsers());
         if(byPostsAndUsers.isPresent()) throw new IllegalStateException("이미 좋아요를 눌렀습니다.");
+
         likesRepository.save(likes);
+
+        likes.getUsers().getLikesList().add(likes);
+        likes.getPosts().getLikesList().add(likes);
     }
 
     @Transactional
-    public void delete(Likes likes) {likesRepository.delete(likes);}
+    public void delete(Likes likes) {
+
+        likes.getUsers().getLikesList().remove(likes);
+        likes.getPosts().getLikesList().remove(likes);
+
+        likesRepository.delete(likes);
+    }
 
     // 게시글과 유저 정보로 좋아요 눌렀는지 확인
     public Optional<Likes> findByPostsAndUsers(Posts posts, Users users){

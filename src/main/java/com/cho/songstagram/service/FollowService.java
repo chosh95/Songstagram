@@ -28,6 +28,9 @@ public class FollowService {
                 .to(to)
                 .build();
 
+        from.getFollowing().add(follow);
+        to.getFollower().add(follow);
+
         followRepository.save(follow); // db에 저장
     }
 
@@ -35,6 +38,10 @@ public class FollowService {
     @Transactional
     public void delete(Users from, Users to){
         Follow follow = followRepository.findByFromAndTo(from, to);
+        
+        follow.getTo().getFollower().remove(follow); // to의 팔로워에서 이 팔로우 정보를 삭제한다.
+        follow.getFrom().getFollowing().remove(follow); // from의 팔로잉에서도 마찬가지
+        
         followRepository.delete(follow);
     }
 

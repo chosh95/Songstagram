@@ -43,9 +43,8 @@ public class Posts extends BaseTimeEntity{
         this.content = content;
         this.picture = picture;
         this.users = users;
-        likesList = null;
-        commentsList = null;
-        this.users.getPostsList().add(this); // 작성자의 작성 게시글 목록에 이 글 추가.
+        likesList = new ArrayList<>();
+        commentsList = new ArrayList<>();
     }
 
     // 게시글 수정 기능시 사용

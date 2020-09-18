@@ -30,10 +30,12 @@ public class PostsService {
     @Transactional
     public void save(Posts posts){
         postsRepository.save(posts);
+        posts.getUsers().getPostsList().add(posts);
     }
 
     @Transactional
     public void delete(Posts posts){
+        posts.getUsers().getPostsList().remove(posts); //유저가 작성한 게시글 목록에서 이 글 삭제
         postsRepository.delete(posts);
     }
 

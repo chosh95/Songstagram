@@ -2,6 +2,7 @@ package com.cho.songstagram.service;
 
 import com.cho.songstagram.domain.Follow;
 import com.cho.songstagram.domain.Users;
+import com.cho.songstagram.makeComponent.MakeComponent;
 import com.cho.songstagram.repository.FollowRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,13 +15,10 @@ import static org.junit.jupiter.api.Assertions.*;
 @Transactional
 class FollowServiceTest {
 
-    @Autowired
-    FollowService followService;
-    @Autowired
-    FollowRepository followRepository;
-
-    @Autowired
-    UsersService usersService;
+    @Autowired FollowService followService;
+    @Autowired FollowRepository followRepository;
+    @Autowired UsersService usersService;
+    @Autowired MakeComponent makeComponent;
 
     @Test
     public void 팔로우_정보_저장(){

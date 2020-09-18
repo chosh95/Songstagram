@@ -49,11 +49,11 @@ public class Users {
         this.email = email;
         this.picture = picture;
         this.password = password;
-        postsList = new ArrayList<Posts>();
-        comemntsList = new ArrayList<Comments>();
-        likesList = new ArrayList<Likes>();
-        follower = new ArrayList<Follow>();
-        following = new ArrayList<Follow>();
+        postsList = new ArrayList<>();
+        comemntsList = new ArrayList<>();
+        likesList = new ArrayList<>();
+        follower = new ArrayList<>();
+        following = new ArrayList<>();
     }
 
     public void updatePicture(String picture){

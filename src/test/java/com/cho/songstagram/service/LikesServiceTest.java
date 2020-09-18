@@ -3,6 +3,9 @@ package com.cho.songstagram.service;
 import com.cho.songstagram.domain.Likes;
 import com.cho.songstagram.domain.Posts;
 import com.cho.songstagram.domain.Users;
+import com.cho.songstagram.makeComponent.MakeComponent;
+import com.cho.songstagram.repository.PostsRepository;
+import com.cho.songstagram.repository.UsersRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -21,9 +24,10 @@ class LikesServiceTest {
     @Autowired LikesService likesService;
     @Autowired PostsService postsService;
     @Autowired UsersService usersService;
+    @Autowired MakeComponent makeComponent;
 
     @Test
-    public void 좋아요_저장(){
+    public void 좋아요_저장() throws InterruptedException {
         Users users = makeUser("abc@abc.com");
         usersService.save(users);
 
@@ -69,6 +73,7 @@ class LikesServiceTest {
         likesService.save(likes);
 
         likesService.delete(likes);
+
         assertEquals(likesService.findByPostsAndUsers(posts,users), Optional.empty());
     }
 

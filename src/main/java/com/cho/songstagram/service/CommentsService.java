@@ -27,18 +27,27 @@ public class CommentsService {
     public void save(Long postId, Long userId, CommentDto commentDto) {
         Posts posts = postsService.findById(postId).orElse(new Posts());
         Users users = usersService.findById(userId).orElse(new Users());
+
         Comments comments = Comments.builder()
                 .content(commentDto.getComment())
                 .users(users)
                 .posts(posts)
                 .build();
+
         commentsRepository.save(comments);
+
+        posts.getCommentsList().add(comments);
+        users.getComemntsList().add(comments);
     }
 
     // 아이디에 해당하는 댓글 db에서 삭제
     @Transactional
     public void delete(Long commentId){
         Comments comments = commentsRepository.findById(commentId).orElse(new Comments());
+
+        comments.getPosts().getCommentsList().remove(comments);
+        comments.getUsers().getComemntsList().remove(comments);
+
         commentsRepository.delete(comments);
     }
 

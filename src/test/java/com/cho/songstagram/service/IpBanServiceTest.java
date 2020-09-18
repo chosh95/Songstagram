@@ -1,6 +1,7 @@
 package com.cho.songstagram.service;
 
 import com.cho.songstagram.domain.IpBanList;
+import com.cho.songstagram.makeComponent.MakeComponent;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -16,6 +17,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class IpBanServiceTest {
 
     @Autowired IpBanService ipBanService;
+    @Autowired MakeComponent makeComponent;
 
     @Test
     public void IP_저장(){

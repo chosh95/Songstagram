@@ -32,7 +32,5 @@ public class Comments extends BaseTimeEntity{
         this.content = content;
         this.posts = posts;
         this.users = users;
-        posts.getCommentsList().add(this);
-        users.getComemntsList().add(this);
     }
 }
