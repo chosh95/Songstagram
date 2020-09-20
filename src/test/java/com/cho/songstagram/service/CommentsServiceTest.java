@@ -8,13 +8,14 @@ import com.cho.songstagram.makeComponent.MakeComponent;
 import com.cho.songstagram.repository.CommentsRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @SpringBootTest
 @Transactional
@@ -28,7 +29,7 @@ class CommentsServiceTest {
 
     @Test
     public void 댓글_저장() {
-        Users users = makeComponent.makeUser();
+        Users users = makeComponent.makeUsers();
         usersService.save(users);
 
         Posts posts = makeComponent.makePosts(users);
@@ -49,7 +50,7 @@ class CommentsServiceTest {
 
     @Test
     public void 댓글_삭제(){
-        Users users = makeComponent.makeUser();
+        Users users = makeComponent.makeUsers();
         usersService.save(users);
 
         Posts posts = makeComponent.makePosts(users);

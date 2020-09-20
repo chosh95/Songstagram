@@ -2,6 +2,7 @@ package com.cho.songstagram.repository;
 
 import com.cho.songstagram.domain.Posts;
 import com.cho.songstagram.domain.Users;
+import com.cho.songstagram.makeComponent.MakeComponent;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -23,16 +24,18 @@ class PostsRepositoryTest {
     PostsRepository postsRepository;
     @Autowired
     UsersRepository usersRepository;
+    @Autowired
+    MakeComponent makeComponent;
 
     @Test
     public void 작성한_게시글_목록_페이징() throws InterruptedException {
-        Users users = makeUser();
+        Users users = makeComponent.makeUsers();
         usersRepository.save(users);
 
         List<Posts> postsList = new ArrayList<>();
         for(int i=0;i<10;i++){
             Thread.sleep(20); // 생성 시간 차이를 확실히 내기 위해 시간 지연
-            Posts posts = makePosts(users);
+            Posts posts = makeComponent.makePosts(users);
             postsList.add(posts);
             postsRepository.save(posts);
         }
@@ -51,21 +54,4 @@ class PostsRepositoryTest {
         }
     }
 
-    public Users makeUser(){
-        return Users.builder()
-                .email("abc@abc.com")
-                .password("1234")
-                .name("kim")
-                .build();
-    }
-
-    public Posts makePosts(Users users){
-        return Posts.builder()
-                .content("글내용")
-                .singer("가수")
-                .songName("곡제목")
-                .picture("사진 경로")
-                .users(users)
-                .build();
-    }
 }

@@ -6,9 +6,17 @@ import org.springframework.stereotype.Component;
 @Component
 public class MakeComponent {
 
-    public Users makeUser(){
+    public Users makeUsers(){
         return Users.builder()
                 .email("abc@abc.com")
+                .password("1234")
+                .name("kim")
+                .build();
+    }
+
+    public Users makeUsers(String email){
+        return Users.builder()
+                .email(email)
                 .password("1234")
                 .name("kim")
                 .build();

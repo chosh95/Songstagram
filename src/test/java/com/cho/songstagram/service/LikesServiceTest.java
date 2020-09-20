@@ -28,13 +28,13 @@ class LikesServiceTest {
 
     @Test
     public void 좋아요_저장() throws InterruptedException {
-        Users users = makeUser("abc@abc.com");
+        Users users = makeComponent.makeUsers("abc@abc.com");
         usersService.save(users);
 
-        Posts posts = makePosts(users);
+        Posts posts = makeComponent.makePosts(users);
         postsService.save(posts);
 
-        Likes likes = makeLikes(posts, users);
+        Likes likes = makeComponent.makeLikes(posts, users);
         likesService.save(likes);
 
         assertEquals(likes,likesService.findByPostsAndUsers(posts,users).orElse(new Likes()));
@@ -42,16 +42,16 @@ class LikesServiceTest {
 
     @Test
     public void 좋아요_중복체크(){
-        Users users = makeUser();
+        Users users = makeComponent.makeUsers();
         usersService.save(users);
 
-        Posts posts = makePosts(users);
+        Posts posts = makeComponent.makePosts(users);
         postsService.save(posts);
 
-        Likes likes = makeLikes(posts, users);
+        Likes likes = makeComponent.makeLikes(posts, users);
         likesService.save(likes);
 
-        Likes likes2 = makeLikes(posts, users);
+        Likes likes2 = makeComponent.makeLikes(posts, users);
 
         IllegalStateException exception = assertThrows(
                 IllegalStateException.class,
@@ -63,13 +63,13 @@ class LikesServiceTest {
 
     @Test
     public void 좋아요_삭제(){
-        Users users = makeUser();
+        Users users = makeComponent.makeUsers();
         usersService.save(users);
 
-        Posts posts = makePosts(users);
+        Posts posts = makeComponent.makePosts(users);
         postsService.save(posts);
 
-        Likes likes = makeLikes(posts, users);
+        Likes likes = makeComponent.makeLikes(posts, users);
         likesService.save(likes);
 
         likesService.delete(likes);
@@ -79,13 +79,13 @@ class LikesServiceTest {
 
     @Test
     public void 게시글과_회원_정보로_좋아요_찾기(){
-        Users users = makeUser();
+        Users users = makeComponent.makeUsers();
         usersService.save(users);
 
-        Posts posts = makePosts(users);
+        Posts posts = makeComponent.makePosts(users);
         postsService.save(posts);
 
-        Likes likes = makeLikes(posts, users);
+        Likes likes = makeComponent.makeLikes(posts, users);
         likesService.save(likes);
 
         assertEquals(likes,likesService.findByPostsAndUsers(posts,users).orElse(new Likes()));
@@ -93,18 +93,18 @@ class LikesServiceTest {
 
     @Test
     public void 게시글_좋아요_누른_회원_아이디_목록_확인(){
-        Users users = makeUser("abc@abc.com");
+        Users users = makeComponent.makeUsers("abc@abc.com");
         usersService.save(users);
 
-        Users users2 = makeUser("def@def.com");
+        Users users2 = makeComponent.makeUsers("def@def.com");
         usersService.save(users2);
 
-        Posts posts = makePosts(users);
+        Posts posts = makeComponent.makePosts(users);
         postsService.save(posts);
 
-        Likes likes = makeLikes(posts, users);
+        Likes likes = makeComponent.makeLikes(posts, users);
         likesService.save(likes);
-        Likes likes2 = makeLikes(posts, users2);
+        Likes likes2 = makeComponent.makeLikes(posts, users2);
         likesService.save(likes2);
 
         List<Long> idList = new ArrayList<>();
@@ -112,38 +112,5 @@ class LikesServiceTest {
         idList.add(users2.getId());
 
         assertEquals(idList,likesService.findLikeUserIdList(posts));
-    }
-
-    public Users makeUser(){
-        return Users.builder()
-                .email("abc@abc.com")
-                .password("1234")
-                .name("kim")
-                .build();
-    }
-
-    public Users makeUser(String email){
-        return Users.builder()
-                .email(email)
-                .password("1234")
-                .name("kim")
-                .build();
-    }
-
-    public Posts makePosts(Users users){
-        return Posts.builder()
-                .content("글내용")
-                .singer("가수")
-                .songName("곡제목")
-                .picture("사진 경로")
-                .users(users)
-                .build();
-    }
-
-    public Likes makeLikes(Posts posts, Users users){
-        return Likes.builder()
-                .posts(posts)
-                .users(users)
-                .build();
     }
 }

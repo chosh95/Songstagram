@@ -22,10 +22,10 @@ class FollowServiceTest {
 
     @Test
     public void 팔로우_정보_저장(){
-        Users userA = makeUsers("aaa@aaa.com");
+        Users userA = makeComponent.makeUsers("aaa@aaa.com");
         usersService.save(userA);
 
-        Users userB = makeUsers("bbb@bbb.com");
+        Users userB = makeComponent.makeUsers("bbb@bbb.com");
         usersService.save(userB);
 
         followService.save(userA,userB);
@@ -35,10 +35,10 @@ class FollowServiceTest {
 
     @Test
     public void 팔로우_중복_확인(){
-        Users userA = makeUsers("aaa@aaa.com");
+        Users userA = makeComponent.makeUsers("aaa@aaa.com");
         usersService.save(userA);
 
-        Users userB = makeUsers("bbb@bbb.com");
+        Users userB = makeComponent.makeUsers("bbb@bbb.com");
         usersService.save(userB);
 
         followService.save(userA,userB);
@@ -53,10 +53,10 @@ class FollowServiceTest {
 
     @Test
     public void 팔로우_삭제(){
-        Users userA = makeUsers("aaa@aaa.com");
+        Users userA = makeComponent.makeUsers("aaa@aaa.com");
         usersService.save(userA);
 
-        Users userB = makeUsers("bbb@bbb.com");
+        Users userB = makeComponent.makeUsers("bbb@bbb.com");
         usersService.save(userB);
 
         followService.save(userA,userB); // 팔로우 정보 저장하고
@@ -68,10 +68,10 @@ class FollowServiceTest {
 
     @Test
     public void 팔로우_여부_확인(){
-        Users userA = makeUsers("aaa@aaa.com");
+        Users userA = makeComponent.makeUsers("aaa@aaa.com");
         usersService.save(userA);
 
-        Users userB = makeUsers("bbb@bbb.com");
+        Users userB = makeComponent.makeUsers("bbb@bbb.com");
         usersService.save(userB);
 
         followService.save(userA,userB); //팔로우 정보 저장하면
@@ -80,20 +80,5 @@ class FollowServiceTest {
         followService.delete(userA,userB); // 팔로우 정보 삭제하면
         assertFalse(followService.isFollowing(userA,userB)); // 팔로잉 여부가 false가 돼야한다.
     }
-    
-    public Follow makeFollow(Users from, Users to){
-        return Follow.builder()
-                .from(from)
-                .to(to)
-                .build();
-    }
 
-    public Users makeUsers(String email){
-        return Users.builder()
-                .name("name")
-                .password("password")
-                .picture("picture")
-                .email(email)
-                .build();
-    }
 }

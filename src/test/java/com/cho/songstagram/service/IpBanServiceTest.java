@@ -17,7 +17,6 @@ import static org.junit.jupiter.api.Assertions.*;
 class IpBanServiceTest {
 
     @Autowired IpBanService ipBanService;
-    @Autowired MakeComponent makeComponent;
 
     @Test
     public void IP_저장(){
