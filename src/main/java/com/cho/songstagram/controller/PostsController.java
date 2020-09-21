@@ -8,7 +8,6 @@ import com.cho.songstagram.dto.PageDto;
 import com.cho.songstagram.dto.PostDto;
 import com.cho.songstagram.service.*;
 import lombok.RequiredArgsConstructor;
-import org.hibernate.Hibernate;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -76,7 +75,6 @@ public class PostsController {
         model.addAttribute("post", postDto); //model에 dto 추가
 
         List<Comments> commentsList = posts.getCommentsList(); // 게시글의 댓글 가져오기
-//        List<Comments> commentsList = commentsService.findCommentsByPosts(posts); // 게시글의 댓글 가져오기
         List<CommentDto> commentDtoList = new ArrayList<>(); //dto로 전환해서 반환할 list
         for (Comments comments : commentsList) 
             commentDtoList.add(commentsService.convertToDto(comments)); // dto 전환

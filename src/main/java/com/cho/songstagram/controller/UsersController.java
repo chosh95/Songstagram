@@ -116,7 +116,7 @@ public class UsersController {
                                  HttpSession session, Model model){
 
         Users users = usersService.findById(userId).orElse(new Users()); // 유저 정보 가져오기
-        Long postByUserCnt = postsService.getPostsCntByUser(users); // 유저가 작성한 게시글 수 
+        int postByUserCnt = users.getPostsList().size(); // 유저가 작성한 게시글 수
         model.addAttribute("postsCnt", postByUserCnt);
 
         List<PostDto> postDtoList = postsService.getUserPostList(users, page, 5); // 유저가 작성한 글 페이지에 맞게 5개 가져오기
@@ -132,8 +132,8 @@ public class UsersController {
         boolean follow = followService.isFollowing(loginUser,users); //로그인한 사람이 프로필 유저 팔로잉 중인지 여부
         model.addAttribute("follow",follow);
 
-        Long followerCnt = followService.countFollower(users); //유저 팔로워, 팔로잉 수 확인
-        Long followingCnt = followService.countFollowing(users);
+        int followerCnt = users.getFollower().size(); // 팔로워 수
+        int followingCnt = users.getFollowing().size(); // 팔로잉 수
         model.addAttribute("follower",followerCnt);
         model.addAttribute("following",followingCnt);
 

@@ -66,7 +66,7 @@ public class LikesController {
         List<FollowListDto> userDto = new ArrayList<>();
         for (Long likeUserId : likeUserIdList) {
             Users users = usersService.findById(likeUserId).orElse(new Users()); // 좋아요 누른 user id로 user 가져오기
-            userDto.add(followService.convertDto(loginUser, users)); // 좋아요 누른 user 정보들 dto로 전환
+            userDto.add(followService.convertDto(loginUser, users)); // 좋아요 누른 user 정보들 dto로 전환, 팔로우 여부까지 표시
         }
 
         model.addAttribute("userDto",userDto);
