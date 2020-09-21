@@ -1,12 +1,7 @@
 package com.cho.songstagram.controller;
 
-import com.cho.songstagram.domain.Comments;
-import com.cho.songstagram.domain.Posts;
-import com.cho.songstagram.domain.Users;
 import com.cho.songstagram.dto.CommentDto;
 import com.cho.songstagram.service.CommentsService;
-import com.cho.songstagram.service.PostsService;
-import com.cho.songstagram.service.UsersService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;

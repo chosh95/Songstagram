@@ -19,14 +19,11 @@ import static org.junit.jupiter.api.Assertions.*;
 @Transactional
 class LikesRepositoryTest {
 
-    @Autowired
-    LikesRepository likesRepository;
-    @Autowired
-    PostsRepository postsRepository;
-    @Autowired
-    UsersRepository usersRepository;
-    @Autowired
-    MakeComponent makeComponent;
+    @Autowired LikesRepository likesRepository;
+    @Autowired PostsRepository postsRepository;
+    @Autowired UsersRepository usersRepository;
+    @Autowired MakeComponent makeComponent;
+
     @Test
     public void 게시글과_작성자로_좋아요_찾기(){
         Users users = makeComponent.makeUsers();

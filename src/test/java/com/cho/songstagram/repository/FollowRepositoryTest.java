@@ -19,8 +19,7 @@ class FollowRepositoryTest {
 
     @Autowired FollowRepository followRepository;
     @Autowired UsersRepository usersRepository;
-    @Autowired
-    MakeComponent makeComponent;
+    @Autowired MakeComponent makeComponent;
 
     @Test
     public void 유저_정보로_팔로우_찾기(){

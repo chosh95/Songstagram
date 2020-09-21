@@ -12,8 +12,7 @@ import static org.junit.jupiter.api.Assertions.*;
 @Transactional
 class IpBanRepositoryTest {
 
-    @Autowired
-    IpBanRepository ipBanRepository;
+    @Autowired IpBanRepository ipBanRepository;
 
     @Test
     public void IP로_객체_찾기(){

@@ -14,8 +14,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class UsersRepositoryTest {
 
     @Autowired UsersRepository usersRepository;
-    @Autowired
-    MakeComponent makeComponent;
+    @Autowired MakeComponent makeComponent;
 
     @Test
     public void 회원_저장(){

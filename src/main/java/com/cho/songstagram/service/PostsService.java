@@ -89,7 +89,7 @@ public class PostsService {
 
     public List<PostDto> getFollowListPage(Long userId, int page, int contentPageCnt){
         List<Users> users = followService.getFollowing(userId);
-        Page<Posts> posts = postsRepository.getPostsByUsers(users, PageRequest.of(page - 1, contentPageCnt, Sort.by("createdDate").descending()));
+        Page<Posts> posts = postsRepository.getPostsCntByUsersList(users, PageRequest.of(page - 1, contentPageCnt, Sort.by("createdDate").descending()));
         List<Posts> content = posts.getContent();
         List<PostDto> dtoList = new ArrayList<>();
         for (Posts posts1 : content) {
@@ -108,7 +108,7 @@ public class PostsService {
 
     public Long getFollowPostCount(Long userId){
         List<Users> users = followService.getFollowing(userId);
-        return postsRepository.getPostsByUsers(users);
+        return postsRepository.getPostsCntByUsersList(users);
     }
     // 유저가 작성한 총 게시글 수 구하는 함수
 
