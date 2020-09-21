@@ -165,7 +165,7 @@ public class UsersController {
         String picture = s3Service.userUpload(files); // 새로운 이미지 S3에 업로드
         users.updatePicture(picture);
         users.updateName(updateUserDto.getName());
-        usersService.save(users); //유저 정보 업데이트하고 db에 저장
+        usersService.update(users); //유저 정보 db에 저장
         
         session.setAttribute("loginUser",users); //새로운 유저 정보로 세션 덮어쓰기
 

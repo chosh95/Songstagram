@@ -109,7 +109,7 @@ public class PostsController {
 
         Posts posts = postsService.findById(postId).orElse(new Posts()); // 게시글 찾아와서
         posts.update(postDto.getSinger(), postDto.getSongName(), postDto.getContent()); // update 한 후
-        postsService.save(posts); // db에 저장
+        postsService.update(posts); // db에 저장
         return "redirect:/post/read/{postId}";
     }
 

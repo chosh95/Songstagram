@@ -23,6 +23,11 @@ public class UsersService {
     }
 
     @Transactional
+    public void update(Users users){
+        usersRepository.save(users);
+    }
+
+    @Transactional
     public void delete(Users users){
         usersRepository.delete(users); //db에서 user 삭제
     }
