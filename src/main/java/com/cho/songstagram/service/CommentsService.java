@@ -60,6 +60,11 @@ public class CommentsService {
     public List<Comments> findCommentsByPosts(Posts posts){
         return commentsRepository.findCommentsByPosts(posts);
     }
+    
+    //해당 게시글에 있는 댓글 목록 가져오기 : user 정보까지 한번에
+    public List<Comments> findCommentsAndUsersByPosts(Posts posts){
+        return commentsRepository.findCommentsAndUsersByPosts(posts);
+    }
 
     //댓글 dto로 전환 후 반환
     public CommentDto convertToDto(Comments comments){

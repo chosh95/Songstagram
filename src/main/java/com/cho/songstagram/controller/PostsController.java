@@ -76,8 +76,9 @@ public class PostsController {
         model.addAttribute("post", postDto); //model에 dto 추가
 
 
-        List<Comments> commentsList = posts.getCommentsList(); // 게시글의 댓글 가져오기
+//        List<Comments> commentsList = posts.getCommentsList(); // 게시글의 댓글 가져오기, 멤버 변수 사용
 //        List<Comments> commentsList = commentsService.findCommentsByPosts(posts); // 게시글의 댓글 가져오기, 쿼리문 사용
+        List<Comments> commentsList = commentsService.findCommentsAndUsersByPosts(posts);
 
         List<CommentDto> commentDtoList = new ArrayList<>(); //dto로 전환해서 반환할 list
         for (Comments comments : commentsList) 
