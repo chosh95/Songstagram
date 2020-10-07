@@ -66,6 +66,7 @@ public class PostsController {
         return "redirect:/";
     }
 
+    // 게시글 확인하는 컨트롤러
     @GetMapping("/post/read/{postId}")
     public String readGet(@PathVariable("postId") Long postId,
                           @ModelAttribute("commentDto") CommentDto commentDto,
@@ -74,7 +75,10 @@ public class PostsController {
         PostDto postDto = postsService.convertToDto(posts); // 게시글 보여줄 dto로 전환
         model.addAttribute("post", postDto); //model에 dto 추가
 
+
         List<Comments> commentsList = posts.getCommentsList(); // 게시글의 댓글 가져오기
+//        List<Comments> commentsList = commentsService.findCommentsByPosts(posts); // 게시글의 댓글 가져오기, 쿼리문 사용
+
         List<CommentDto> commentDtoList = new ArrayList<>(); //dto로 전환해서 반환할 list
         for (Comments comments : commentsList) 
             commentDtoList.add(commentsService.convertToDto(comments)); // dto 전환
@@ -82,11 +86,11 @@ public class PostsController {
 
         String youtubeLink = "https://www.youtube.com/results?search_query="; // 유튜브 링크 생성
         youtubeLink += postDto.getSinger() + "+" + postDto.getSongName(); // 가수명과 곡 제목으로 링크 완성
-        model.addAttribute("youtubeLink",youtubeLink); 
-
+        model.addAttribute("youtubeLink",youtubeLink);
         return "post/read";
     }
 
+    // 게시글 업데이트 화면으로 연결하는 컨트롤러
     @GetMapping("/post/update/{postId}")
     public String updateGet(@PathVariable("postId") Long postId, @ModelAttribute("postDto") PostDto postDto, Model model) {
         Posts posts = postsService.findById(postId).orElse(new Posts()); // 게시글 id로 찾아오기
@@ -98,6 +102,7 @@ public class PostsController {
         return "post/update";
     }
 
+    // 게시글 업데이트 처리 컨트롤러
     @PostMapping("/post/update/{postId}")
     public String updatePost(@PathVariable("postId") Long postId,
                              @Valid @ModelAttribute("postDto") PostDto postDto, BindingResult result, Model model) {
