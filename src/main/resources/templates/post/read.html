@@ -26,10 +26,12 @@
                 <!-- 글 이미지 & 내용 -->
                 <div class="pmd-card-media">
                     <img th:src="${post.getPicture()}" src="#" width="1184" height="666" class="img-fluid" alt="main image">
+                    <!-- 게시글 좋아요 목록에 유저가 있으면 빨간 하트가 보이고 누르면 좋아요 취소하기로 연결된다.                    -->
                     <span th:if="${post.getLikeUserIdList().contains(session.loginUser.getId())}">
                         <a th:href="@{'/likes/delete/'+${post.getPostId()} + '&' + ${session.loginUser.getId()}}"><img th:src="@{/icon/redHeart.png}" src="#" style="height: 20px; width: 20px;"> </a>
                         <a th:href="@{'/likes/userList/'+${post.getPostId()} + '&' + ${session.loginUser.getId()}}"><span th:text="${post.getLikeUserIdList().size()}"></span></a>
                     </span>
+                    <!-- 좋아요를 안 눌렀으면 비어있는 하트가 보이고 좋아요 누르기로 연결된다.                    -->
                     <span th:unless="${post.getLikeUserIdList().contains(session.loginUser.getId())}">
                         <a th:href="@{'/likes/save/'+${post.getPostId()} + '&' + ${session.loginUser.getId()}}"><img th:src="@{/icon/emptyHeart.png}" src="#" style="height: 20px; width: 20px;"></a>
                         <a th:href="@{'/likes/userList/'+${post.getPostId()} + '&' + ${session.loginUser.getId()}}"><span th:text="${post.getLikeUserIdList().size()}"></span></a>

@@ -44,6 +44,12 @@ public class PostsService {
         postsRepository.delete(posts);
     }
 
+    //페치 조인으로 게시글, 사용자, 좋아요까지 가져오기
+    public Posts findByPostId(Long postId){
+        return postsRepository.findByPostId(postId);
+    }
+
+    //data jpa 기본 메서드
     public Optional<Posts> findById(Long id){
         return postsRepository.findById(id);
     }
@@ -130,6 +136,7 @@ public class PostsService {
 
     //게시글 dto로 전환
     public PostDto convertToDto(Posts posts){
+
         return PostDto.builder()
                 .postId(posts.getId())
                 .singer(posts.getSinger())
@@ -143,4 +150,5 @@ public class PostsService {
                 .likeUserIdList(likesService.findLikeUserIdList(posts))
                 .build();
     }
+
 }

@@ -66,19 +66,21 @@ public class PostsController {
         return "redirect:/";
     }
 
+    // post, user, likelist -> (3번), comment, user -> ( 1 + N)번 걸리던 쿼리를 fetch join을 활용해 2번으로 줄였다.
     // 게시글 확인하는 컨트롤러
     @GetMapping("/post/read/{postId}")
     public String readGet(@PathVariable("postId") Long postId,
                           @ModelAttribute("commentDto") CommentDto commentDto,
                           Model model) {
-        Posts posts = postsService.findById(postId).orElse(new Posts()); // postId로 게시글 찾기
+//        Posts posts = postsService.findById(postId).orElse(new Posts()); // postId로 게시글 찾기
+        Posts posts = postsService.findByPostId(postId); // fetch join으로 작성자와 좋아요 목록까지 가져오기
         PostDto postDto = postsService.convertToDto(posts); // 게시글 보여줄 dto로 전환
         model.addAttribute("post", postDto); //model에 dto 추가
 
 
 //        List<Comments> commentsList = posts.getCommentsList(); // 게시글의 댓글 가져오기, 멤버 변수 사용
 //        List<Comments> commentsList = commentsService.findCommentsByPosts(posts); // 게시글의 댓글 가져오기, 쿼리문 사용
-        List<Comments> commentsList = commentsService.findCommentsAndUsersByPosts(posts);
+        List<Comments> commentsList = commentsService.findCommentsAndUsersByPosts(posts); // 댓글 목록과 사용자 정보 한번에 가져오기
 
         List<CommentDto> commentDtoList = new ArrayList<>(); //dto로 전환해서 반환할 list
         for (Comments comments : commentsList) 

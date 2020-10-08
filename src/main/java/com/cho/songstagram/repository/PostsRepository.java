@@ -14,6 +14,11 @@ import java.util.List;
 @Repository
 public interface PostsRepository extends JpaRepository<Posts, Long> {
 
+    // fetch join으로 게시글과 작성자, 좋아요 목록까지 한 번에 가져온다.
+    // 좋아요 목록은 empty가 될 수 있기 때문에 left join을 해야한다.
+    @Query("select p From Posts p join fetch p.users left join fetch p.likesList where p.id = ?1")
+    Posts findByPostId(Long PostId);
+
     Page<Posts> findAllByUsers(Users users, Pageable pageable); // User가 작성한 게시글 목록 pageable로 페이징 후 반환
 
     @Query(value = "SELECT l.posts FROM Likes l WHERE l.users.id = ?1",
