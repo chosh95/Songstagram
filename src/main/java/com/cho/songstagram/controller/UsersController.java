@@ -8,6 +8,7 @@ import com.cho.songstagram.service.PostsService;
 import com.cho.songstagram.service.S3Service;
 import com.cho.songstagram.service.UsersService;
 import lombok.RequiredArgsConstructor;
+import org.aspectj.lang.annotation.Before;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -115,7 +116,8 @@ public class UsersController {
                                  @PathVariable("userId") Long userId,
                                  HttpSession session, Model model){
 
-        Users users = usersService.findById(userId).orElse(new Users()); // 유저 정보 가져오기
+//        Users users = usersService.findById(userId).orElse(new Users()); // 유저 정보 가져오기
+        Users users = usersService.findByIdFetch(userId).orElse(new Users()); //  fetch를 통해 작성글 목록, 팔로워, 팔로잉 정보 한 번에 가져오기
         int postByUserCnt = users.getPostsList().size(); // 유저가 작성한 게시글 수
         model.addAttribute("postsCnt", postByUserCnt);
 

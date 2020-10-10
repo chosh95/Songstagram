@@ -40,6 +40,10 @@ public class UsersService {
         return usersRepository.findById(id); // id로 User 찾기
     }
 
+    public Optional<Users> findByIdFetch(Long id){
+        return usersRepository.findWithPostsById(id);
+    }
+
     private void checkDuplicate(String email){
         Optional<Users> byEmail = findByEmail(email);
         if(byEmail.isPresent()) throw new IllegalStateException("이미 존재하는 회원입니다.");
