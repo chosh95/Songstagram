@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -46,12 +47,12 @@ public class FollowService {
     }
 
     // 팔로워 목록 반환
-    public List<Users> getFollower(Long userId){
+    public Set<Users> getFollower(Long userId){
         return followRepository.getFollower(userId);
     }
 
     // 팔로잉 목록 반환
-    public List<Users> getFollowing(Long userId){
+    public Set<Users> getFollowing(Long userId){
         return followRepository.getFollowing(userId);
     }
 

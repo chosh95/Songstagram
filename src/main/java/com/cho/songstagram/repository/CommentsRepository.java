@@ -7,6 +7,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
+import java.util.Set;
 
 @Repository
 public interface CommentsRepository extends JpaRepository<Comments, Long> {
@@ -15,5 +16,5 @@ public interface CommentsRepository extends JpaRepository<Comments, Long> {
 
     // fetch join을 활용해 댓글을 작성한 user 정보까지 쿼리 한 번으로 해결한다.
     @Query("select c from Comments c join fetch c.users where c.posts = ?1")
-    List<Comments> findCommentsAndUsersByPosts(Posts posts);
+    Set<Comments> findCommentsAndUsersByPosts(Posts posts);
 }

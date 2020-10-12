@@ -10,6 +10,7 @@ import org.springframework.stereotype.Repository;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Set;
 
 @Repository
 public interface PostsRepository extends JpaRepository<Posts, Long> {
@@ -27,10 +28,10 @@ public interface PostsRepository extends JpaRepository<Posts, Long> {
 
     @Query(value = "SELECT p FROM Posts p WHERE p.users in ?1",
         countQuery = "SELECT count(p) FROM Posts p WHERE p.users in ?1")
-    Page<Posts> getPostsCntByUsersList(List<Users> users, Pageable pageable); // user 목록에 있는 user가 작성한 게시글 목록 페이징 후 반환
+    Page<Posts> getPostsCntByUsersList(Set<Users> users, Pageable pageable); // user 목록에 있는 user가 작성한 게시글 목록 페이징 후 반환
 
     @Query(value = "SELECT count(p) FROM Posts p WHERE p.users in ?1")
-    Long getPostsCntByUsersList(List<Users> users); // user 목록에 있는 user가 작성한 모든 게시글의 수 반환
+    Long getPostsCntByUsersList(Set<Users> users); // user 목록에 있는 user가 작성한 모든 게시글의 수 반환
 
     @Query(value = "SELECT count(p) FROM Posts p WHERE p.users = ?1")
     Long getPostsCntByUser(Users users); // user가 작성한 게시글 목록 반환

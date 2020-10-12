@@ -14,7 +14,9 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -88,7 +90,7 @@ class PostsRepositoryTest {
         Posts post2 = makeComponent.makePosts(users2);
         postsRepository.save(post2);
 
-        List<Users> userList = new ArrayList<>();
+        Set<Users> userList = new HashSet<>();
         userList.add(users);
         userList.add(users2);
 
@@ -112,7 +114,7 @@ class PostsRepositoryTest {
         Posts post3 = makeComponent.makePosts(users2);
         postsRepository.save(post3);
 
-        List<Users> usersList = new ArrayList<>();
+        Set<Users> usersList = new HashSet<>();
         usersList.add(users);
         usersList.add(users2);
 

@@ -9,7 +9,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -51,7 +53,7 @@ class FollowRepositoryTest {
         Follow follow2 = makeComponent.makeFollow(userB, userC);
         followRepository.save(follow2);
 
-        List<Users> followIdList = new ArrayList<>();
+        Set<Users> followIdList = new HashSet<>();
         followIdList.add(userA);
         followIdList.add(userB);
 
@@ -74,7 +76,7 @@ class FollowRepositoryTest {
         Follow follow2 = makeComponent.makeFollow(userA, userC);
         followRepository.save(follow2);
 
-        List<Users> followIdList = new ArrayList<>();
+        Set<Users> followIdList = new HashSet<>();
         followIdList.add(userB);
         followIdList.add(userC);
 

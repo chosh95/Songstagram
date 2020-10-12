@@ -18,7 +18,9 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Controller
 @RequiredArgsConstructor
@@ -61,9 +63,9 @@ public class LikesController {
                                   Model model){
         Posts posts = postsService.findById(postId).orElse(new Posts());
         Users loginUser = usersService.findById(userId).orElse(new Users());
-        List<Long> likeUserIdList = likesService.findLikeUserIdList(posts); // 게시글에 좋아요 누른 user id 목록 가져오기
+        Set<Long> likeUserIdList = likesService.findLikeUserIdList(posts); // 게시글에 좋아요 누른 user id 목록 가져오기
 
-        List<FollowListDto> userDto = new ArrayList<>();
+        Set<FollowListDto> userDto = new HashSet<>();
         for (Long likeUserId : likeUserIdList) {
             Users users = usersService.findById(likeUserId).orElse(new Users()); // 좋아요 누른 user id로 user 가져오기
             userDto.add(followService.convertDto(loginUser, users)); // 좋아요 누른 user 정보들 dto로 전환, 팔로우 여부까지 표시

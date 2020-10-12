@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
@@ -62,7 +63,7 @@ public class CommentsService {
     }
     
     //해당 게시글에 있는 댓글 목록 가져오기 : user 정보까지 한번에
-    public List<Comments> findCommentsAndUsersByPosts(Posts posts){
+    public Set<Comments> findCommentsAndUsersByPosts(Posts posts){
         return commentsRepository.findCommentsAndUsersByPosts(posts);
     }
 

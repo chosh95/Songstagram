@@ -15,6 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 @Controller
 @RequiredArgsConstructor
@@ -56,7 +57,7 @@ public class FollowController {
     public String followerListGet(@PathVariable("userId") Long userId,
                                HttpSession session, Model model) {
         Users loginUser = (Users) session.getAttribute("loginUser");
-        List<Users> follower = followService.getFollower(userId); // 선택한 유저의 팔로워 목록
+        Set<Users> follower = followService.getFollower(userId); // 선택한 유저의 팔로워 목록
         List<FollowListDto> followDto = new ArrayList<>();
         for (Users users : follower) {
             followDto.add(followService.convertDto(loginUser, users)); // 팔로워 유저들 dto로 전환
@@ -72,7 +73,7 @@ public class FollowController {
     public String followingListGet(@PathVariable("userId") Long userId,
                                 HttpSession session, Model model) {
         Users loginUser = (Users) session.getAttribute("loginUser");
-        List<Users> follower = followService.getFollowing(userId); // 선택한 유저의 팔로잉 목록
+        Set<Users> follower = followService.getFollowing(userId); // 선택한 유저의 팔로잉 목록
         List<FollowListDto> followDto = new ArrayList<>();
         for (Users users : follower) {
             followDto.add(followService.convertDto(loginUser, users)); // 팔로잉 유저들 dto로 전환

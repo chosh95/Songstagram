@@ -11,9 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -107,7 +105,7 @@ class LikesServiceTest {
         Likes likes2 = makeComponent.makeLikes(posts, users2);
         likesService.save(likes2);
 
-        List<Long> idList = new ArrayList<>();
+        Set<Long> idList = new HashSet<>();
         idList.add(users.getId());
         idList.add(users2.getId());
 

@@ -9,6 +9,7 @@ import javax.validation.Validator;
 import javax.validation.ValidatorFactory;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -26,7 +27,7 @@ class PostDtoTest {
 
     @Test
     public void PostDto_Test(){
-        List<Long> likeList = new ArrayList<>();
+        Set<Long> likeList = new HashSet<>();
         likeList.add(1L);
 
         PostDto postDto = PostDto.builder()

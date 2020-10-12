@@ -11,7 +11,9 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -54,7 +56,7 @@ class LikesRepositoryTest {
         Likes likes2 = makeComponent.makeLikes(posts, users2);
         likesRepository.save(likes2);
 
-        List<Likes> likesList = new ArrayList<>();
+        Set<Likes> likesList = new HashSet<>();
         likesList.add(likes);
         likesList.add(likes2);
 
