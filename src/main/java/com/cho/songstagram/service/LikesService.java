@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -46,8 +47,8 @@ public class LikesService {
 
     // 게시글에 좋아요 누른 user id 목록 반환
     public List<Long> findLikeUserIdList(Posts posts){
-//        List<Likes> byPosts = likesRepository.findByPosts(posts); //쿼리를 통해 좋아요 목록을 가져온다.
-        List<Likes> byPosts = posts.getLikesList(); // posts에 fetch join을 통해 미리 가져온 좋아요 목록을 활용한다.
+//        Set<Likes> byPosts = likesRepository.findByPosts(posts); //쿼리를 통해 좋아요 목록을 가져온다.
+        Set<Likes> byPosts = posts.getLikesList(); // posts에 fetch join을 통해 미리 가져온 좋아요 목록을 활용한다.
         List<Long> likesUserIdList = new ArrayList<>();
         for (Likes likes : byPosts) {
             likesUserIdList.add(likes.getUsers().getId());

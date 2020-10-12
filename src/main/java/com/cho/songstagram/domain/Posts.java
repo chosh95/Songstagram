@@ -7,8 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 @Entity
 @Getter
@@ -31,10 +30,10 @@ public class Posts extends BaseTimeEntity{
     private Users users; // 작성자
 
     @OneToMany(mappedBy = "posts", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Comments> commentsList; // 게시글에 달린 댓글 목록
+    private Set<Comments> commentsList; // 게시글에 달린 댓글 목록
 
     @OneToMany(mappedBy = "posts", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Likes> likesList; // 게시글에 누른 좋아요 목록
+    private Set<Likes> likesList; // 게시글에 누른 좋아요 목록
 
     @Builder
     public Posts(String singer, String songName, String content, String picture, Users users){
@@ -43,8 +42,8 @@ public class Posts extends BaseTimeEntity{
         this.content = content;
         this.picture = picture;
         this.users = users;
-        likesList = new ArrayList<>();
-        commentsList = new ArrayList<>();
+        likesList = new HashSet<>();
+        commentsList = new HashSet<>();
     }
 
     // 게시글 수정 기능시 사용
