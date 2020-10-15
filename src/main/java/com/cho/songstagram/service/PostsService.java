@@ -107,7 +107,7 @@ public class PostsService {
 
     // 작성자가 오늘 작성한 글의 수
     public Long getPostsCntByUserToday(Long userId){
-        Users users = usersService.findById(userId).orElse(new Users());
+        Users users = usersService.findById(userId).orElseGet(Users::new);
         LocalDate today = LocalDate.now();
         return postsRepository.getPostsCntByUserToday(users,today);
     }
@@ -125,7 +125,7 @@ public class PostsService {
 
     // Posts 객체 생성해서 반환
     public Posts makePost(PostDto postDto, Long userId, String picture){
-        Users users = usersService.findById(userId).orElse(new Users());
+        Users users = usersService.findById(userId).orElseGet(Users::new);
         return Posts.builder() // 게시글 생성
                 .singer(postDto.getSinger())
                 .songName(postDto.getSongName())

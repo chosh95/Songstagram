@@ -1,6 +1,7 @@
 package com.cho.songstagram.service;
 
 import com.cho.songstagram.domain.Users;
+import com.cho.songstagram.makeComponent.MakeComponent;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -15,11 +16,11 @@ import static org.junit.jupiter.api.Assertions.*;
 class UsersServiceTest {
 
     @Autowired UsersService usersService;
-
+    @Autowired MakeComponent makeComponent;
     @Test
     public void 회원_중복시_오류가_발생한다(){
-        Users user1 = makeUser();
-        Users user2 = makeUser();
+        Users user1 = makeComponent.makeUsers();
+        Users user2 = makeComponent.makeUsers();
 
         usersService.save(user1);
         IllegalStateException exception = assertThrows(
@@ -32,7 +33,7 @@ class UsersServiceTest {
 
     @Test
     public void 회원_삭제(){
-        Users user1 = makeUser();
+        Users user1 = makeComponent.makeUsers();
 
         usersService.save(user1);
         assertTrue(usersService.findByEmail("abc@abc.com").isPresent());
@@ -44,27 +45,20 @@ class UsersServiceTest {
 
     @Test
     public void 회원_아이디로_찾기(){
-        Users user1 = makeUser();
+        Users user1 = makeComponent.makeUsers();
 
         usersService.save(user1);
 
-        assertEquals(user1,usersService.findById(user1.getId()).orElse(new Users()));
+        assertEquals(user1,usersService.findById(user1.getId()).orElseGet(Users::new));
     }
 
     @Test
     public void 회원_이메일로_찾기(){
-        Users user1 = makeUser();
+        Users user1 = makeComponent.makeUsers();
 
         usersService.save(user1);
 
-        assertEquals(user1,usersService.findByEmail(user1.getEmail()).orElse(new Users()));
+        assertEquals(user1,usersService.findByEmail(user1.getEmail()).orElseGet(Users::new));
     }
 
-    public Users makeUser(){
-        return Users.builder()
-                .email("abc@abc.com")
-                .password("1234")
-                .name("kim")
-                .build();
-    }
 }

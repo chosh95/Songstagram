@@ -35,7 +35,7 @@ class LikesServiceTest {
         Likes likes = makeComponent.makeLikes(posts, users);
         likesService.save(likes);
 
-        assertEquals(likes,likesService.findByPostsAndUsers(posts,users).orElse(new Likes()));
+        assertEquals(likes,likesService.findByPostsAndUsers(posts,users).orElseGet(Likes::new));
     }
 
     @Test
@@ -86,7 +86,7 @@ class LikesServiceTest {
         Likes likes = makeComponent.makeLikes(posts, users);
         likesService.save(likes);
 
-        assertEquals(likes,likesService.findByPostsAndUsers(posts,users).orElse(new Likes()));
+        assertEquals(likes,likesService.findByPostsAndUsers(posts,users).orElseGet(Likes::new));
     }
 
     @Test

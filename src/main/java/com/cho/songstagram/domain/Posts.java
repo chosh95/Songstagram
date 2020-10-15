@@ -1,13 +1,12 @@
 package com.cho.songstagram.domain;
 
-import com.sun.org.apache.bcel.internal.generic.ACONST_NULL;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
 
 import javax.persistence.*;
-import java.util.*;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Getter

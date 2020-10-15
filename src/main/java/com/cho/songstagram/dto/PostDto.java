@@ -1,12 +1,10 @@
 package com.cho.songstagram.dto;
 
-import com.cho.songstagram.domain.Users;
 import lombok.Builder;
 import lombok.Data;
 import lombok.RequiredArgsConstructor;
 
 import javax.validation.constraints.NotBlank;
-import java.util.List;
 import java.util.Set;
 
 @Data

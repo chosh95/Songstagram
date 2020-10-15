@@ -2,8 +2,6 @@ package com.cho.songstagram.dto;
 
 import lombok.Data;
 
-import javax.persistence.criteria.CriteriaBuilder;
-
 @Data
 public class PageDto {
 

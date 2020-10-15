@@ -44,9 +44,9 @@ class CommentsServiceTest {
         commentsService.save(posts.getId(),users.getId(),commentDto);
 
         Comments comments1 = commentsService.findCommentsByPosts(posts).get(0);
-        assertEquals(comments.getContent(),commentsRepository.findById(comments1.getId()).orElse(new Comments()).getContent());
-        assertEquals(comments.getUsers(),commentsRepository.findById(comments1.getId()).orElse(new Comments()).getUsers());
-        assertEquals(comments.getPosts(),commentsRepository.findById(comments1.getId()).orElse(new Comments()).getPosts());
+        assertEquals(comments.getContent(),commentsRepository.findById(comments1.getId()).orElseGet(Comments::new).getContent());
+        assertEquals(comments.getUsers(),commentsRepository.findById(comments1.getId()).orElseGet(Comments::new).getUsers());
+        assertEquals(comments.getPosts(),commentsRepository.findById(comments1.getId()).orElseGet(Comments::new).getPosts());
     }
 
     @Test

@@ -31,7 +31,7 @@ class PostsServiceTest {
         Posts posts = makeComponent.makePosts(user1);
         postsService.save(posts);
 
-        assertEquals(posts,postsService.findById(posts.getId()).orElse(new Posts()));
+        assertEquals(posts,postsService.findById(posts.getId()).orElseGet(Posts::new));
     }
 
     @Test
@@ -42,7 +42,7 @@ class PostsServiceTest {
         Posts posts = makeComponent.makePosts(user1);
 
         postsService.save(posts);
-        assertNotNull(postsService.findById(posts.getId()).orElse(new Posts()));
+        assertNotNull(postsService.findById(posts.getId()).orElseGet(Posts::new));
 
         postsService.delete(posts);
         assertEquals(postsService.findById(posts.getId()), Optional.empty());
@@ -56,7 +56,7 @@ class PostsServiceTest {
         Posts posts = makeComponent.makePosts(user1);
         postsService.save(posts);
 
-        assertEquals(posts,postsService.findById(posts.getId()).orElse(new Posts()));
+        assertEquals(posts,postsService.findById(posts.getId()).orElseGet(Posts::new));
     }
 
     @Test

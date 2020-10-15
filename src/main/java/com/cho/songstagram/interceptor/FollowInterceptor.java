@@ -1,6 +1,5 @@
 package com.cho.songstagram.interceptor;
 
-import com.cho.songstagram.domain.Posts;
 import com.cho.songstagram.domain.Users;
 import com.cho.songstagram.service.FollowService;
 import com.cho.songstagram.service.UsersService;
@@ -26,7 +25,7 @@ public class FollowInterceptor extends HandlerInterceptorAdapter {
         
         Map<String,String> attribute = (Map<String,String>) request.getAttribute(HandlerMapping.URI_TEMPLATE_VARIABLES_ATTRIBUTE); // Model 에서 값 가져오기 위함
         String userId = attribute.get("userId"); 
-        Users users = usersService.findById(Long.parseLong(userId)).orElse(new Users()); // 유저 정보 가져오기
+        Users users = usersService.findById(Long.parseLong(userId)).orElseGet(Users::new); // 유저 정보 가져오기
 
         if(followService.isFollowing(loginUser,users)) { // 로그인한 유저가 선택한 유저를 이미 팔로우 중인지 확인
             response.sendRedirect("/follow/already");

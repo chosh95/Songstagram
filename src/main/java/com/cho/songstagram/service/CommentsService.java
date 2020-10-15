@@ -26,8 +26,8 @@ public class CommentsService {
     //유저, 게시글 가져와서 빌터 패턴으로 댓글 생성 후 db에 저장
     @Transactional
     public void save(Long postId, Long userId, CommentDto commentDto) {
-        Posts posts = postsService.findById(postId).orElse(new Posts());
-        Users users = usersService.findById(userId).orElse(new Users());
+        Posts posts = postsService.findById(postId).orElseGet(Posts::new);
+        Users users = usersService.findById(userId).orElseGet(Users::new);
 
         Comments comments = Comments.builder()
                 .content(commentDto.getComment())
@@ -44,7 +44,7 @@ public class CommentsService {
     // 아이디에 해당하는 댓글 db에서 삭제
     @Transactional
     public void delete(Long commentId){
-        Comments comments = commentsRepository.findById(commentId).orElse(new Comments());
+        Comments comments = commentsRepository.findById(commentId).orElseGet(Comments::new);
 
         comments.getPosts().getCommentsList().remove(comments);
         comments.getUsers().getComemntsList().remove(comments);

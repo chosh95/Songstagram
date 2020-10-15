@@ -1,6 +1,5 @@
 package com.cho.songstagram.controller;
 
-import com.cho.songstagram.domain.Follow;
 import com.cho.songstagram.domain.Users;
 import com.cho.songstagram.dto.FollowListDto;
 import com.cho.songstagram.service.FollowService;
@@ -29,8 +28,8 @@ public class FollowController {
     public String followGet(@PathVariable("userId") Long userId,
                          @PathVariable("loginUserId") Long loginUserId,
                          HttpServletRequest request){
-        Users from = usersService.findById(loginUserId).orElse(new Users());
-        Users to = usersService.findById(userId).orElse(new Users());
+        Users from = usersService.findById(loginUserId).orElseGet(Users::new);
+        Users to = usersService.findById(userId).orElseGet(Users::new);
         followService.save(from,to); //로그인 유저가 선택한 유저를 팔로우
 
 //      이전 페이지로 복귀
@@ -43,8 +42,8 @@ public class FollowController {
     public String unfollowGet(@PathVariable("userId") Long userId,
                            @PathVariable("loginUserId") Long loginUserId,
                            HttpServletRequest request){
-        Users from = usersService.findById(loginUserId).orElse(new Users());
-        Users to = usersService.findById(userId).orElse(new Users());
+        Users from = usersService.findById(loginUserId).orElseGet(Users::new);
+        Users to = usersService.findById(userId).orElseGet(Users::new);
         followService.delete(from,to); //로그인 유저가 선택한 유저를 언팔로우
 
 //      이전 페이지로 복귀

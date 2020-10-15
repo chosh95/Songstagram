@@ -24,7 +24,7 @@ public class CommentDeleteInterceptor extends HandlerInterceptorAdapter {
         
         Map<String,String> attribute = (Map<String, String>) request.getAttribute(HandlerMapping.URI_TEMPLATE_VARIABLES_ATTRIBUTE); //Model에 있는 값 가져오기
         String commentId = attribute.get("commentId"); //댓글 id로 댓글 객체 가져오기
-        Comments comments = commentsService.findById(Long.parseLong(commentId)).orElse(new Comments()); 
+        Comments comments = commentsService.findById(Long.parseLong(commentId)).orElseGet(Comments::new);
         
         if(!comments.getUsers().getId().equals(loginUser.getId())) { // 로그인 유저 아이디와 댓글단 아이디가 다르면 권한 없음
             response.sendRedirect("/comment/noAuthority");

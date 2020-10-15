@@ -35,8 +35,8 @@ public class LikesController {
     @GetMapping("/likes/save/{postId}&{userId}")
     public String saveLikesGet(@PathVariable("postId") Long postId,
                                @PathVariable("userId") Long userId) throws IOException {
-        Users users = usersService.findById(userId).orElse(new Users());
-        Posts posts = postsService.findById(postId).orElse(new Posts());
+        Users users = usersService.findById(userId).orElseGet(Users::new);
+        Posts posts = postsService.findById(postId).orElseGet(Posts::new);
         Likes likes = Likes.builder() // 유저와 게시글 id에 맞게 like 객체 생성
                 .posts(posts)
                 .users(users)
@@ -49,9 +49,9 @@ public class LikesController {
     @GetMapping("/likes/delete/{postId}&{userId}")
     public String deleteLikesGet(@PathVariable("postId") Long postId,
                                  @PathVariable("userId") Long userId){
-        Users users = usersService.findById(userId).orElse(new Users());
-        Posts posts = postsService.findById(postId).orElse(new Posts());
-        Likes likes = likesService.findByPostsAndUsers(posts, users).orElse(new Likes()); // 게시글에 user가 누른 좋아요 객체 가져오기
+        Users users = usersService.findById(userId).orElseGet(Users::new);
+        Posts posts = postsService.findById(postId).orElseGet(Posts::new);
+        Likes likes = likesService.findByPostsAndUsers(posts, users).orElseGet(Likes::new); // 게시글에 user가 누른 좋아요 객체 가져오기
         likesService.delete(likes); // 해당 좋아요 정보 db에서 삭제
         return "redirect:/post/read/{postId}";
     }
@@ -61,13 +61,13 @@ public class LikesController {
     public String likeUserListGet(@PathVariable("postId") Long postId,
                                   @PathVariable("userId") Long userId,
                                   Model model){
-        Posts posts = postsService.findById(postId).orElse(new Posts());
-        Users loginUser = usersService.findById(userId).orElse(new Users());
+        Posts posts = postsService.findById(postId).orElseGet(Posts::new);
+        Users loginUser = usersService.findById(userId).orElseGet(Users::new);
         Set<Long> likeUserIdList = likesService.findLikeUserIdList(posts); // 게시글에 좋아요 누른 user id 목록 가져오기
 
         Set<FollowListDto> userDto = new HashSet<>();
         for (Long likeUserId : likeUserIdList) {
-            Users users = usersService.findById(likeUserId).orElse(new Users()); // 좋아요 누른 user id로 user 가져오기
+            Users users = usersService.findById(likeUserId).orElseGet(Users::new); // 좋아요 누른 user id로 user 가져오기
             userDto.add(followService.convertDto(loginUser, users)); // 좋아요 누른 user 정보들 dto로 전환, 팔로우 여부까지 표시
         }
 

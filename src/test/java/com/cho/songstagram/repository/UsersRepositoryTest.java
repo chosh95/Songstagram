@@ -22,7 +22,7 @@ class UsersRepositoryTest {
 
         usersRepository.save(users);
 
-        assertEquals(users,usersRepository.findById(users.getId()).orElse(new Users()));
+        assertEquals(users,usersRepository.findById(users.getId()).orElseGet(Users::new));
     }
 
     @Test
@@ -31,6 +31,6 @@ class UsersRepositoryTest {
 
         usersRepository.save(users);
 
-        assertEquals(users,usersRepository.findByEmail(users.getEmail()).orElse(new Users()));
+        assertEquals(users,usersRepository.findByEmail(users.getEmail()).orElseGet(Users::new));
     }
 }

@@ -37,7 +37,7 @@ class LikesRepositoryTest {
         Likes likes = makeComponent.makeLikes(posts, users);
         likesRepository.save(likes);
 
-        assertEquals(likes,likesRepository.findByPostsAndUsers(posts,users).orElse(new Likes()));
+        assertEquals(likes,likesRepository.findByPostsAndUsers(posts,users).orElseGet(Likes::new));
     }
 
     @Test

@@ -24,7 +24,7 @@ public class UserInterceptor extends HandlerInterceptorAdapter {
 
         Map<String,String> attribute = (Map<String,String>) request.getAttribute(HandlerMapping.URI_TEMPLATE_VARIABLES_ATTRIBUTE); // Model에서 값 가져오기
         String userId = attribute.get("userId");
-        Users users = usersService.findById(Long.parseLong(userId)).orElse(new Users()); // 유저 정보 가져오기
+        Users users = usersService.findById(Long.parseLong(userId)).orElseGet(Users::new); // 유저 정보 가져오기
 
         if(!users.getId().equals(loginUser.getId())) { // 로그인 유저와 수정/삭제하려는 유저가 다르면 차단
             response.sendRedirect("/user/noAuthority");
