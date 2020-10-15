@@ -14,6 +14,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.persistence.NoResultException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
@@ -97,7 +98,7 @@ public class PostsController {
     // 게시글 업데이트 화면으로 연결하는 컨트롤러
     @GetMapping("/post/update/{postId}")
     public String updateGet(@PathVariable("postId") Long postId, @ModelAttribute("postDto") PostDto postDto, Model model) {
-        Posts posts = postsService.findById(postId).orElseGet(Posts::new); // 게시글 id로 찾아오기
+        Posts posts = postsService.findById(postId).orElseThrow(() -> new NoResultException("잘못된 Post 정보 입니다.")); // 게시글 id로 찾아오기
         postDto.setContent(posts.getContent()); // dto에 post 정보 넣어서 기존 정보 제공
         postDto.setPicture(posts.getPicture()); 
         postDto.setSinger(posts.getSinger());
@@ -116,7 +117,7 @@ public class PostsController {
             return "post/update";
         }
 
-        Posts posts = postsService.findById(postId).orElseGet(Posts::new); // 게시글 찾아와서
+        Posts posts = postsService.findById(postId).orElseThrow(() -> new NoResultException("잘못된 Post 정보 입니다.")); // 게시글 찾아와서
         posts.update(postDto.getSinger(), postDto.getSongName(), postDto.getContent()); // update 한 후
         postsService.update(posts); // db에 저장
         return "redirect:/post/read/{postId}";
@@ -129,7 +130,7 @@ public class PostsController {
         List<PostDto> postDtoList = postsService.getUserLikeListPage(userId, page, 5); // 유저가 좋아요 한 게시글 postDto로 전환 후 가져오기
         model.addAttribute("postDtoList", postDtoList);
 
-        Users users = usersService.findById(userId).orElseGet(Users::new); // 유저가 누른 좋아요 size 구하기 위해 user 가져옴
+        Users users = usersService.findById(userId).orElseThrow(() -> new NoResultException("잘못된 Post 정보 입니다."));; // 유저가 누른 좋아요 size 구하기 위해 user 가져옴
         PageDto pageDto = new PageDto(page, 5, users.getLikesList().size(), 5); // 페이지네이션
         model.addAttribute("pageDto", pageDto);
 
@@ -152,7 +153,7 @@ public class PostsController {
     // 게시글 삭제 기능
     @GetMapping("/post/delete/{postId}")
     public String deleteGet(@PathVariable("postId") Long postId){
-        Posts posts = postsService.findById(postId).orElseGet(Posts::new); // 게시글 찾기
+        Posts posts = postsService.findById(postId).orElseThrow(() -> new NoResultException("잘못된 Post 정보 입니다."));; // 게시글 찾기
         s3Service.deletePost(posts.getPicture()); // S3 버킷에 올린 사진 삭제
         postsService.delete(posts); // 게시글 db에서 삭제
         return "post/delete";

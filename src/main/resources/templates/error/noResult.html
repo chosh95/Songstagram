@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorator="layout/default">
+
+<th:block layout:fragment="content">
+    <!-- Begin Page Content -->
+    <div class="container-fluid" style="margin-top: 100px">
+        <div style="text-align: center">
+            <span th:if="${errorMessage != null}">
+                <h3 th:text="${errorMessage}"></h3>
+            </span>
+            <span th:if="${errorMessage == null}">
+                <h3>잘못된 접근입니다.</h3>
+            </span>
+        </div>
+    </div>
+</th:block>
+</html>

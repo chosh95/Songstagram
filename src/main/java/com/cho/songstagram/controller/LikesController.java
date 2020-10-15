@@ -14,6 +14,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
+import javax.persistence.NoResultException;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -35,8 +36,8 @@ public class LikesController {
     @GetMapping("/likes/save/{postId}&{userId}")
     public String saveLikesGet(@PathVariable("postId") Long postId,
                                @PathVariable("userId") Long userId) throws IOException {
-        Users users = usersService.findById(userId).orElseGet(Users::new);
-        Posts posts = postsService.findById(postId).orElseGet(Posts::new);
+        Users users = usersService.findById(userId).orElseThrow(() -> new NoResultException("잘못된 User 정보 입니다."));
+        Posts posts = postsService.findById(postId).orElseThrow(() -> new NoResultException("잘못된 Post 정보 입니다."));
         Likes likes = Likes.builder() // 유저와 게시글 id에 맞게 like 객체 생성
                 .posts(posts)
                 .users(users)
@@ -49,8 +50,8 @@ public class LikesController {
     @GetMapping("/likes/delete/{postId}&{userId}")
     public String deleteLikesGet(@PathVariable("postId") Long postId,
                                  @PathVariable("userId") Long userId){
-        Users users = usersService.findById(userId).orElseGet(Users::new);
-        Posts posts = postsService.findById(postId).orElseGet(Posts::new);
+        Users users = usersService.findById(userId).orElseThrow(() -> new NoResultException("잘못된 User 정보 입니다."));
+        Posts posts = postsService.findById(postId).orElseThrow(() -> new NoResultException("잘못된 Post 정보 입니다."));
         Likes likes = likesService.findByPostsAndUsers(posts, users).orElseGet(Likes::new); // 게시글에 user가 누른 좋아요 객체 가져오기
         likesService.delete(likes); // 해당 좋아요 정보 db에서 삭제
         return "redirect:/post/read/{postId}";
@@ -62,12 +63,12 @@ public class LikesController {
                                   @PathVariable("userId") Long userId,
                                   Model model){
         Posts posts = postsService.findById(postId).orElseGet(Posts::new);
-        Users loginUser = usersService.findById(userId).orElseGet(Users::new);
+        Users loginUser = usersService.findById(userId).orElseThrow(() -> new NoResultException("잘못된 User 정보 입니다."));
         Set<Long> likeUserIdList = likesService.findLikeUserIdList(posts); // 게시글에 좋아요 누른 user id 목록 가져오기
 
         Set<FollowListDto> userDto = new HashSet<>();
         for (Long likeUserId : likeUserIdList) {
-            Users users = usersService.findById(likeUserId).orElseGet(Users::new); // 좋아요 누른 user id로 user 가져오기
+            Users users = usersService.findById(likeUserId).orElseThrow(() -> new NoResultException("잘못된 User 정보 입니다.")); // 좋아요 누른 user id로 user 가져오기
             userDto.add(followService.convertDto(loginUser, users)); // 좋아요 누른 user 정보들 dto로 전환, 팔로우 여부까지 표시
         }
 
