@@ -6,15 +6,16 @@ import com.cho.songstagram.domain.Users;
 import com.cho.songstagram.dto.CommentDto;
 import com.cho.songstagram.dto.PageDto;
 import com.cho.songstagram.dto.PostDto;
+import com.cho.songstagram.exception.NoResultException;
 import com.cho.songstagram.service.*;
 import lombok.RequiredArgsConstructor;
+import lombok.SneakyThrows;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.persistence.NoResultException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
@@ -97,7 +98,7 @@ public class PostsController {
 
     // 게시글 업데이트 화면으로 연결하는 컨트롤러
     @GetMapping("/post/update/{postId}")
-    public String updateGet(@PathVariable("postId") Long postId, @ModelAttribute("postDto") PostDto postDto, Model model) {
+    public String updateGet(@PathVariable("postId") Long postId, @ModelAttribute("postDto") PostDto postDto, Model model) throws NoResultException {
         Posts posts = postsService.findById(postId).orElseThrow(() -> new NoResultException("잘못된 Post 정보 입니다.")); // 게시글 id로 찾아오기
         postDto.setContent(posts.getContent()); // dto에 post 정보 넣어서 기존 정보 제공
         postDto.setPicture(posts.getPicture()); 
@@ -110,7 +111,7 @@ public class PostsController {
     // 게시글 업데이트 처리 컨트롤러
     @PostMapping("/post/update/{postId}")
     public String updatePost(@PathVariable("postId") Long postId,
-                             @Valid @ModelAttribute("postDto") PostDto postDto, BindingResult result, Model model) {
+                             @Valid @ModelAttribute("postDto") PostDto postDto, BindingResult result, Model model) throws NoResultException {
 
         if (result.hasErrors()) {
             model.addAttribute("postId", postId); //에러 있을시 다시 update 화면으로
@@ -124,13 +125,14 @@ public class PostsController {
     }
 
     // 좋아요 누른 목록 보여주는 controller
+    @SneakyThrows
     @GetMapping("/post/likeList/{userId}")
     public String likeListGet(@RequestParam(value = "page", defaultValue = "1") int page,
                            @PathVariable("userId") Long userId, Model model) {
         List<PostDto> postDtoList = postsService.getUserLikeListPage(userId, page, 5); // 유저가 좋아요 한 게시글 postDto로 전환 후 가져오기
         model.addAttribute("postDtoList", postDtoList);
 
-        Users users = usersService.findById(userId).orElseThrow(() -> new NoResultException("잘못된 Post 정보 입니다."));; // 유저가 누른 좋아요 size 구하기 위해 user 가져옴
+        Users users = usersService.findById(userId).orElseThrow(() -> new NoResultException("잘못된 Post 정보 입니다.")); // 유저가 누른 좋아요 size 구하기 위해 user 가져옴
         PageDto pageDto = new PageDto(page, 5, users.getLikesList().size(), 5); // 페이지네이션
         model.addAttribute("pageDto", pageDto);
 
@@ -152,8 +154,8 @@ public class PostsController {
 
     // 게시글 삭제 기능
     @GetMapping("/post/delete/{postId}")
-    public String deleteGet(@PathVariable("postId") Long postId){
-        Posts posts = postsService.findById(postId).orElseThrow(() -> new NoResultException("잘못된 Post 정보 입니다."));; // 게시글 찾기
+    public String deleteGet(@PathVariable("postId") Long postId) throws NoResultException {
+        Posts posts = postsService.findById(postId).orElseThrow(() -> new NoResultException("잘못된 Post 정보 입니다.")); // 게시글 찾기
         s3Service.deletePost(posts.getPicture()); // S3 버킷에 올린 사진 삭제
         postsService.delete(posts); // 게시글 db에서 삭제
         return "post/delete";

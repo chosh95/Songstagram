@@ -40,9 +40,9 @@ public class UsersController {
     // 로그인 처리
     @PostMapping("/user/login")
     public String loginUserPost(@Valid @ModelAttribute("loginUserDto") LoginUserDto loginUserDto,
-                            BindingResult result, Model model, HttpSession session){
+                            BindingResult result, Model model, HttpSession session) throws NoResultException {
 
-        Users users = usersService.findByEmail(loginUserDto.getEmail()).orElseThrow(() -> new javax.persistence.NoResultException("잘못된 User 정보 입니다.")); // 이메일로 유저 확인
+        Users users = usersService.findByEmail(loginUserDto.getEmail()).orElseThrow(() -> new NoResultException("잘못된 User 정보 입니다.")); // 이메일로 유저 확인
 
         //오류 검사. id, pw가 틀리면 메세지 전송
         if(users.getId()==null || !passwordEncoder.matches(loginUserDto.getPassword(),users.getPassword())) {
@@ -85,9 +85,9 @@ public class UsersController {
     //회원 가입 처리
     @PostMapping("/user/signIn")
     public String signInUserPost(@Valid @ModelAttribute("signInUserDto") SignInUserDto signInUserDto,
-                         BindingResult result, Model model, @RequestParam("files") MultipartFile files) throws IOException {
+                         BindingResult result, Model model, @RequestParam("files") MultipartFile files) throws IOException, NoResultException {
 
-        Users users = usersService.findByEmail(signInUserDto.getEmail()).orElseThrow(() -> new javax.persistence.NoResultException("잘못된 User 정보 입니다.")); // 중복 확인
+        Users users = usersService.findByEmail(signInUserDto.getEmail()).orElseThrow(() -> new NoResultException("잘못된 User 정보 입니다.")); // 중복 확인
 
         if(result.hasErrors() || users.getId()!=null || !signInUserDto.matchPassword()){
             if(users.getId()!=null) // 아이디 중복 시
@@ -145,8 +145,8 @@ public class UsersController {
     //유저 정보 수정 페이지
     @GetMapping("/user/update/{userId}")
     public String updateUserGet(@PathVariable("userId") Long userId,
-                                @ModelAttribute("updateUserDto") UpdateUserDto updateUserDto){
-        Users users = usersService.findById(userId).orElseThrow(() -> new javax.persistence.NoResultException("잘못된 User 정보 입니다."));
+                                @ModelAttribute("updateUserDto") UpdateUserDto updateUserDto) throws NoResultException {
+        Users users = usersService.findById(userId).orElseThrow(() -> new NoResultException("잘못된 User 정보 입니다."));
         updateUserDto.setName(users.getName()); // 기본 정보 제공
         updateUserDto.setPicture(users.getPicture());
         return "user/update";
@@ -156,8 +156,8 @@ public class UsersController {
     @PostMapping("/user/update/{userId}")
     public String updateUserPost(@PathVariable("userId") Long userId, @RequestParam("files") MultipartFile files,
                                  @Valid @ModelAttribute("updateUserDto") UpdateUserDto updateUserDto,
-                                 BindingResult result, HttpSession session) throws IOException {
-        Users users = usersService.findById(userId).orElseThrow(() -> new javax.persistence.NoResultException("잘못된 User 정보 입니다.")); //유저 정보 가져오기
+                                 BindingResult result, HttpSession session) throws IOException, NoResultException {
+        Users users = usersService.findById(userId).orElseThrow(() -> new NoResultException("잘못된 User 정보 입니다.")); //유저 정보 가져오기
 
         if(result.hasErrors()) // 입력값에 오류 있을시
             return "user/update";
@@ -186,9 +186,9 @@ public class UsersController {
     @PostMapping("/user/delete/{userId}")
     public String deleteUser(@PathVariable("userId") Long userId,
                              @Valid @ModelAttribute("deleteUserDto")DeleteUserDto deleteUserDto,
-                             BindingResult result, Model model, HttpSession session){
+                             BindingResult result, Model model, HttpSession session) throws NoResultException {
         
-        Users users = usersService.findById(userId).orElseThrow(() -> new javax.persistence.NoResultException("잘못된 User 정보 입니다.")); //유저 정보 가져오기
+        Users users = usersService.findById(userId).orElseThrow(() -> new NoResultException("잘못된 User 정보 입니다.")); //유저 정보 가져오기
         if(!passwordEncoder.matches(deleteUserDto.getPassword(),users.getPassword())){ //확인 비밀번호 일치 여부 확인
             model.addAttribute("pwMsg","비밀번호가 틀렸습니다.");
             model.addAttribute("userId",userId);

@@ -2,6 +2,7 @@ package com.cho.songstagram.controller;
 
 import com.cho.songstagram.domain.Users;
 import com.cho.songstagram.dto.FollowListDto;
+import com.cho.songstagram.exception.NoResultException;
 import com.cho.songstagram.service.FollowService;
 import com.cho.songstagram.service.UsersService;
 import lombok.RequiredArgsConstructor;
@@ -10,7 +11,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
-import javax.persistence.NoResultException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
@@ -28,7 +28,7 @@ public class FollowController {
     @GetMapping("/follow/{userId}&{loginUserId}")
     public String followGet(@PathVariable("userId") Long userId,
                          @PathVariable("loginUserId") Long loginUserId,
-                         HttpServletRequest request) {
+                         HttpServletRequest request) throws NoResultException {
         Users from = usersService.findById(loginUserId).orElseThrow(() -> new NoResultException("잘못된 User 정보 입니다."));
         Users to = usersService.findById(userId).orElseThrow(() -> new NoResultException("잘못된 User 정보 입니다."));
         followService.save(from,to); //로그인 유저가 선택한 유저를 팔로우
@@ -42,7 +42,7 @@ public class FollowController {
     @GetMapping("/unfollow/{userId}&{loginUserId}")
     public String unfollowGet(@PathVariable("userId") Long userId,
                            @PathVariable("loginUserId") Long loginUserId,
-                           HttpServletRequest request){
+                           HttpServletRequest request) throws NoResultException {
         Users from = usersService.findById(loginUserId).orElseThrow(() -> new NoResultException("잘못된 User 정보 입니다."));
         Users to = usersService.findById(userId).orElseThrow(() -> new NoResultException("잘못된 User 정보 입니다."));
         followService.delete(from,to); //로그인 유저가 선택한 유저를 언팔로우
