@@ -107,6 +107,7 @@ public class UsersController {
                 .build();
 
         usersService.save(newUser); // db에 유저 저장
+        
         return "redirect:/user/login"; // 로그인 화면으로 유도
     }
 
@@ -147,8 +148,10 @@ public class UsersController {
     public String updateUserGet(@PathVariable("userId") Long userId,
                                 @ModelAttribute("updateUserDto") UpdateUserDto updateUserDto) throws NoResultException {
         Users users = usersService.findById(userId).orElseThrow(() -> new NoResultException("잘못된 User 정보 입니다."));
+        
         updateUserDto.setName(users.getName()); // 기본 정보 제공
         updateUserDto.setPicture(users.getPicture());
+        
         return "user/update";
     }
 
@@ -165,6 +168,7 @@ public class UsersController {
             s3Service.deleteUser(users.getPicture()); // 기본 프로필 이미지가 아니면, 프로필 이미지 S3에서 삭제
         
         String picture = s3Service.userUpload(files); // 새로운 이미지 S3에 업로드
+        
         users.updatePicture(picture);
         users.updateName(updateUserDto.getName());
         usersService.update(users); //유저 정보 db에 저장
@@ -179,6 +183,7 @@ public class UsersController {
     public String deleteUserGet(@PathVariable("userId") Long userId,
                                 @ModelAttribute("deleteUserDto")DeleteUserDto deleteUserDto, Model model){
         model.addAttribute("userId",userId); //아이디 정보 제공
+        
         return "user/delete";
     }
 
@@ -189,12 +194,13 @@ public class UsersController {
                              BindingResult result, Model model, HttpSession session) throws NoResultException {
         
         Users users = usersService.findById(userId).orElseThrow(() -> new NoResultException("잘못된 User 정보 입니다.")); //유저 정보 가져오기
+        
         if(!passwordEncoder.matches(deleteUserDto.getPassword(),users.getPassword())){ //확인 비밀번호 일치 여부 확인
             model.addAttribute("pwMsg","비밀번호가 틀렸습니다.");
             model.addAttribute("userId",userId);
             return "user/delete";
         }
-        if(result.hasErrors()){ //그 이외 에러. @NotBlank, @Size
+        if(result.hasErrors()){ //그 이외 에러. @NotBlank, @Size 등
             model.addAttribute("userId",userId);
             return "user/delete";
         }
@@ -208,7 +214,9 @@ public class UsersController {
         }
         
         usersService.delete(users); //db에서 유저 삭제
+
         session.invalidate(); //로그인 세션 삭제
+
         return "redirect:/";
     }
 

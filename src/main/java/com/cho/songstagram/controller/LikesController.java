@@ -37,7 +37,9 @@ public class LikesController {
                 .posts(posts)
                 .users(users)
                 .build();
+
         likesService.save(likes);
+
         return "redirect:/post/read/{postId}";
     }
 
@@ -48,7 +50,9 @@ public class LikesController {
         Users users = usersService.findById(userId).orElseThrow(() -> new NoResultException("잘못된 User 정보 입니다."));
         Posts posts = postsService.findById(postId).orElseThrow(() -> new NoResultException("잘못된 Post 정보 입니다."));
         Likes likes = likesService.findByPostsAndUsers(posts, users).orElseGet(Likes::new); // 게시글에 user가 누른 좋아요 객체 가져오기
+
         likesService.delete(likes); // 해당 좋아요 정보 db에서 삭제
+
         return "redirect:/post/read/{postId}";
     }
 
@@ -69,6 +73,7 @@ public class LikesController {
 
         model.addAttribute("userDto",userDto);
         model.addAttribute("postId",postId);
+
         return "likes/likeUserList";
     }
 

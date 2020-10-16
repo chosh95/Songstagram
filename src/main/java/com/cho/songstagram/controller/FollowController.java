@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -33,8 +34,9 @@ public class FollowController {
         Users to = usersService.findById(userId).orElseThrow(() -> new NoResultException("잘못된 User 정보 입니다."));
         followService.save(from,to); //로그인 유저가 선택한 유저를 팔로우
 
-//      이전 페이지로 복귀
+        // 이전 페이지로 복귀
         String referer = request.getHeader("Referer");
+
         return "redirect:" + referer;
     }
 
@@ -43,12 +45,15 @@ public class FollowController {
     public String unfollowGet(@PathVariable("userId") Long userId,
                            @PathVariable("loginUserId") Long loginUserId,
                            HttpServletRequest request) throws NoResultException {
+
         Users from = usersService.findById(loginUserId).orElseThrow(() -> new NoResultException("잘못된 User 정보 입니다."));
         Users to = usersService.findById(userId).orElseThrow(() -> new NoResultException("잘못된 User 정보 입니다."));
+
         followService.delete(from,to); //로그인 유저가 선택한 유저를 언팔로우
 
-//      이전 페이지로 복귀
+        // 이전 페이지로 복귀
         String referer = request.getHeader("Referer");
+
         return "redirect:" + referer;
     }
 
@@ -56,15 +61,18 @@ public class FollowController {
     @GetMapping("/followerList/{userId}")
     public String followerListGet(@PathVariable("userId") Long userId,
                                HttpSession session, Model model) {
+
         Users loginUser = (Users) session.getAttribute("loginUser");
+
         Set<Users> follower = followService.getFollower(userId); // 선택한 유저의 팔로워 목록
-        List<FollowListDto> followDto = new ArrayList<>();
+        Set<FollowListDto> followDto = new HashSet<>(); // dto list에 담아서 view에 전환
         for (Users users : follower) {
             followDto.add(followService.convertDto(loginUser, users)); // 팔로워 유저들 dto로 전환
         }
         
         model.addAttribute("followDto",followDto); // 팔로워 유저들 dto list
         model.addAttribute("userId",userId); //다시 프로필로 되돌아오기 위한 userId
+        
         return "follow/followerList";
     }
 
@@ -72,15 +80,18 @@ public class FollowController {
     @GetMapping("/followingList/{userId}")
     public String followingListGet(@PathVariable("userId") Long userId,
                                 HttpSession session, Model model) {
+
         Users loginUser = (Users) session.getAttribute("loginUser");
+
         Set<Users> follower = followService.getFollowing(userId); // 선택한 유저의 팔로잉 목록
-        List<FollowListDto> followDto = new ArrayList<>();
+        Set<FollowListDto> followDto = new HashSet<>();
         for (Users users : follower) {
             followDto.add(followService.convertDto(loginUser, users)); // 팔로잉 유저들 dto로 전환
         }
         
         model.addAttribute("followDto",followDto); // 팔로잉 유저 dto list
         model.addAttribute("userId",userId); //다시 프로필로 되돌아오기 위한 userId
+
         return "follow/followingList";
     }
 

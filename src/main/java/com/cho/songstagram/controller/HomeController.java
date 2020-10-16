@@ -28,6 +28,7 @@ public class HomeController {
 
         model.addAttribute("postsList",postsList);
         model.addAttribute("pageDto",pageDto);
+
         return "index";
     }
 

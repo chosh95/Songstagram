@@ -21,6 +21,7 @@ import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -56,6 +57,7 @@ public class PostsController {
         }
 
         Users loginUser = (Users) session.getAttribute("loginUser"); // loginUser 세션에서 가져오기
+
         Long postsCntByUserToday = postsService.getPostsCntByUserToday(loginUser.getId()); // 작성자가 오늘 작성한 글의 수를 구한다.
         if(postsCntByUserToday >= 4){ // 하루에 4번 이상 글을 작성했을 시
             ipBanService.banIp(request); // 해당 request로 들어온 ip를 차단한다.
@@ -85,7 +87,7 @@ public class PostsController {
 //        List<Comments> commentsList = commentsService.findCommentsByPosts(posts); // 게시글의 댓글 가져오기, 쿼리문 사용
         Set<Comments> commentsList = commentsService.findCommentsAndUsersByPosts(posts); // 댓글 목록과 사용자 정보 한번에 가져오기
 
-        List<CommentDto> commentDtoList = new ArrayList<>(); //dto로 전환해서 반환할 list
+        Set<CommentDto> commentDtoList = new HashSet<>(); //dto로 전환해서 반환할 list
         for (Comments comments : commentsList) 
             commentDtoList.add(commentsService.convertToDto(comments)); // dto 전환
         model.addAttribute("commentsList", commentDtoList); // model에 댓글 dto 추가
@@ -93,6 +95,7 @@ public class PostsController {
         String youtubeLink = "https://www.youtube.com/results?search_query="; // 유튜브 링크 생성
         youtubeLink += postDto.getSinger() + "+" + postDto.getSongName(); // 가수명과 곡 제목으로 링크 완성
         model.addAttribute("youtubeLink",youtubeLink);
+
         return "post/read";
     }
 
@@ -100,11 +103,13 @@ public class PostsController {
     @GetMapping("/post/update/{postId}")
     public String updateGet(@PathVariable("postId") Long postId, @ModelAttribute("postDto") PostDto postDto, Model model) throws NoResultException {
         Posts posts = postsService.findById(postId).orElseThrow(() -> new NoResultException("잘못된 Post 정보 입니다.")); // 게시글 id로 찾아오기
+
         postDto.setContent(posts.getContent()); // dto에 post 정보 넣어서 기존 정보 제공
-        postDto.setPicture(posts.getPicture()); 
         postDto.setSinger(posts.getSinger());
         postDto.setSongName(posts.getSongName());
+
         model.addAttribute("postId", postId);
+
         return "post/update";
     }
 
@@ -121,6 +126,7 @@ public class PostsController {
         Posts posts = postsService.findById(postId).orElseThrow(() -> new NoResultException("잘못된 Post 정보 입니다.")); // 게시글 찾아와서
         posts.update(postDto.getSinger(), postDto.getSongName(), postDto.getContent()); // update 한 후
         postsService.update(posts); // db에 저장
+
         return "redirect:/post/read/{postId}";
     }
 
@@ -156,8 +162,10 @@ public class PostsController {
     @GetMapping("/post/delete/{postId}")
     public String deleteGet(@PathVariable("postId") Long postId) throws NoResultException {
         Posts posts = postsService.findById(postId).orElseThrow(() -> new NoResultException("잘못된 Post 정보 입니다.")); // 게시글 찾기
+
         s3Service.deletePost(posts.getPicture()); // S3 버킷에 올린 사진 삭제
         postsService.delete(posts); // 게시글 db에서 삭제
+
         return "post/delete";
     }
 

@@ -12,8 +12,9 @@ public class ExceptionController {
 
     @ExceptionHandler({RuntimeException.class, NoResultException.class})
     public String noResultHandle(Exception e, Model model){
-        String errorMessage = e.getMessage();
-        model.addAttribute("errorMessage",errorMessage);
+
+        model.addAttribute("errorMessage",e.getMessage());
+
         return "error/noResult";
     }
 
