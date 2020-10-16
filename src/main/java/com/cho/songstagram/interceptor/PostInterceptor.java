@@ -7,6 +7,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.servlet.HandlerMapping;
 import org.springframework.web.servlet.handler.HandlerInterceptorAdapter;
 
+import javax.persistence.NoResultException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -24,7 +25,8 @@ public class PostInterceptor extends HandlerInterceptorAdapter {
 
         Map<String,String> attribute = (Map<String,String>) request.getAttribute(HandlerMapping.URI_TEMPLATE_VARIABLES_ATTRIBUTE); // Model 에서 값 가져오기
         String postId = attribute.get("postId");
-        Posts posts = postsService.findById(Long.parseLong(postId)).orElseGet(Posts::new); // 작성글 가져오기
+
+        Posts posts = postsService.findById(Long.parseLong(postId)).orElseThrow(() -> new RuntimeException("잘못된 Post 정보 입니다.")); // 작성글 가져오기
 
         if(!posts.getUsers().getId().equals(loginUser.getId())) { // 게시글 작성자가 로그인한 유저가 아니면 차단
             response.sendRedirect("/post/noAuthority");
