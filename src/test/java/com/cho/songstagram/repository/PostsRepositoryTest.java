@@ -150,7 +150,7 @@ class PostsRepositoryTest {
         Posts post3 = makeComponent.makePosts(users);
         postsRepository.save(post3);
 
-        Long postsCntByUserToday = postsRepository.getPostsCntByUserToday(users, LocalDate.now());
+        Long postsCntByUserToday = postsRepository.getPostsCntByUserToday(users, LocalDate.now().atStartOfDay(), LocalDate.now().plusDays(1L).atStartOfDay());
         assertEquals(postsCntByUserToday,3L);
     }
 }

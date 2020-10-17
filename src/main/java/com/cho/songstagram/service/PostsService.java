@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
@@ -108,8 +109,11 @@ public class PostsService {
     // 작성자가 오늘 작성한 글의 수
     public Long getPostsCntByUserToday(Long userId){
         Users users = usersService.findById(userId).orElseGet(Users::new);
-        LocalDate today = LocalDate.now();
-        return postsRepository.getPostsCntByUserToday(users,today);
+
+        LocalDateTime todayDate = LocalDate.now().atStartOfDay();
+        LocalDateTime tomorrowDate = LocalDate.now().plusDays(1L).atStartOfDay();
+        
+        return postsRepository.getPostsCntByUserToday(users,todayDate,tomorrowDate);
     }
 
     // 유저가 팔로우하는 사람들의 모든 게시글 가져오기
