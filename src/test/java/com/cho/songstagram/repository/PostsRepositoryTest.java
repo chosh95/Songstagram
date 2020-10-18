@@ -95,7 +95,7 @@ class PostsRepositoryTest {
         userList.add(users2);
 
         //user 목록에서 user가 작성한 게시글 목록을 찾아온다.
-        Page<Posts> postsByUsers = postsRepository.getPostsCntByUsersList(userList, PageRequest.of(0, 2));
+        Page<Posts> postsByUsers = postsRepository.getPostsCntByUsersSet(userList, PageRequest.of(0, 2));
         assertEquals(postsByUsers.getContent().get(0),post1);
         assertEquals(postsByUsers.getContent().get(1),post2);
     }
@@ -118,7 +118,7 @@ class PostsRepositoryTest {
         usersList.add(users);
         usersList.add(users2);
 
-        Long postsCntByUsersList = postsRepository.getPostsCntByUsersList(usersList);
+        Long postsCntByUsersList = postsRepository.getPostsCntByUsersSet(usersList);
         assertEquals(postsCntByUsersList,3L);
     }
 

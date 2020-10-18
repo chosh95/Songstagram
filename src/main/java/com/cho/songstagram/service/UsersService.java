@@ -6,7 +6,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -40,8 +39,8 @@ public class UsersService {
         return usersRepository.findById(id); // id로 User 찾기
     }
 
-    public Optional<Users> findByIdFetch(Long id){
-        return usersRepository.findWithPostsById(id);
+    public Optional<Users> findUserFetchById(Long id){
+        return usersRepository.findUserFetchById(id);
     }
 
     private void checkDuplicate(String email){

@@ -97,7 +97,7 @@ public class PostsService {
     //팔로우 한 사람들의 게시글 목록
     public List<PostDto> getFollowListPage(Long userId, int page, int contentPageCnt){
         Set<Users> users = followService.getFollowing(userId);
-        Page<Posts> posts = postsRepository.getPostsCntByUsersList(users, PageRequest.of(page - 1, contentPageCnt, Sort.by("createdDate").descending()));
+        Page<Posts> posts = postsRepository.getPostsCntByUsersSet(users, PageRequest.of(page - 1, contentPageCnt, Sort.by("createdDate").descending()));
         List<Posts> content = posts.getContent();
         List<PostDto> dtoList = new ArrayList<>();
         for (Posts posts1 : content) {
@@ -119,7 +119,7 @@ public class PostsService {
     // 유저가 팔로우하는 사람들의 모든 게시글 가져오기
     public Long getFollowPostCount(Long userId){
         Set<Users> users = followService.getFollowing(userId);
-        return postsRepository.getPostsCntByUsersList(users);
+        return postsRepository.getPostsCntByUsersSet(users);
     }
 
     // 유저가 작성한 총 게시글 수 구하는 함수

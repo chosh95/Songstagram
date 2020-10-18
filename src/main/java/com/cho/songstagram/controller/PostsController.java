@@ -20,7 +20,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -71,7 +70,7 @@ public class PostsController {
         return "redirect:/";
     }
 
-    // post, user, likelist -> (3번), comment, user -> ( 1 + N)번 걸리던 쿼리를 fetch join을 활용해 2번으로 줄였다.
+    // { post, user, likelist -> (3번) }, { comment, user -> ( 1 + N번) } 걸리던 쿼리를 fetch join을 활용해 2번으로 줄였다.
     // 게시글 확인하는 컨트롤러
     @GetMapping("/post/read/{postId}")
     public String readGet(@PathVariable("postId") Long postId,
@@ -82,7 +81,6 @@ public class PostsController {
         PostDto postDto = postsService.convertToDto(posts); // 게시글 보여줄 dto로 전환
         model.addAttribute("post", postDto); //model에 dto 추가
 
-
 //        List<Comments> commentsList = posts.getCommentsList(); // 게시글의 댓글 가져오기, 멤버 변수 사용
 //        List<Comments> commentsList = commentsService.findCommentsByPosts(posts); // 게시글의 댓글 가져오기, 쿼리문 사용
         Set<Comments> commentsList = commentsService.findCommentsAndUsersByPosts(posts); // 댓글 목록과 사용자 정보 한번에 가져오기
@@ -92,8 +90,7 @@ public class PostsController {
             commentDtoList.add(commentsService.convertToDto(comments)); // dto 전환
         model.addAttribute("commentsList", commentDtoList); // model에 댓글 dto 추가
 
-        String youtubeLink = "https://www.youtube.com/results?search_query="; // 유튜브 링크 생성
-        youtubeLink += postDto.getSinger() + "+" + postDto.getSongName(); // 가수명과 곡 제목으로 링크 완성
+        String youtubeLink = "https://www.youtube.com/results?search_query=" + postDto.getSinger() + "+" + postDto.getSongName(); // 유튜브 링크 생성
         model.addAttribute("youtubeLink",youtubeLink);
 
         return "post/read";

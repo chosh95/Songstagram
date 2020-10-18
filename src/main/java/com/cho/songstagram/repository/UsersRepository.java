@@ -13,5 +13,5 @@ public interface UsersRepository extends JpaRepository<Users, Long> {
     Optional<Users> findByEmail(String email); // 이메일 가진 user 반환
 
     @EntityGraph(attributePaths =  {"postsList", "follower", "following"}, type = EntityGraph.EntityGraphType.LOAD)
-    Optional<Users> findWithPostsById(Long id);
+    Optional<Users> findUserFetchById(Long id); // user 아이디를 통해 작성글목록, 팔로워, 팔로잉 정보를 fetch join으로 가져온다.
 }
