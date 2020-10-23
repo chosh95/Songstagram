@@ -35,7 +35,7 @@ class CommentControllerTest {
     @Autowired PostsService postsService;
     @Autowired CommentsService commentsService;
     @Autowired MockMvc mockMvc;
-    @Autowired MakeComponent makeComponent;
+    MakeComponent makeComponent = new MakeComponent();
 
     @Test
     public void 댓글_등록_테스트() throws Exception {
@@ -46,9 +46,7 @@ class CommentControllerTest {
         postsService.save(posts);
 
         mockMvc.perform(post("/comment/write/" + posts.getId().toString() + "&" + users.getId().toString())
-                .sessionAttr("loginUser",users)
-                .param("postId",posts.getId().toString())
-                .param("userId",users.getId().toString()))
+                .sessionAttr("loginUser",users))
                 .andExpect(status().is3xxRedirection())
                 .andExpect(redirectedUrl("/post/read/" + posts.getId().toString()));
 
@@ -86,9 +84,8 @@ class CommentControllerTest {
         Users users = makeComponent.makeUsers();
         usersService.save(users);
 
-        mockMvc.perform(
-                get("/comment/noAuthority")
-                        .sessionAttr("loginUser",users))
+        mockMvc.perform(get("/comment/noAuthority")
+                .sessionAttr("loginUser",users))
                 .andExpect(status().isOk())
                 .andExpect(view().name("comment/noAuthority"));
     }

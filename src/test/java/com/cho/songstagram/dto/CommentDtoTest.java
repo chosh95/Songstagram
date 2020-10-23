@@ -28,7 +28,6 @@ class CommentDtoTest {
     @Autowired PostsService postsService;
     @Autowired CommentsService commentsService;
     @Autowired CommentsRepository commentsRepository;
-    @Autowired MakeComponent makeComponent;
     private static Validator validator;
 
     @BeforeAll

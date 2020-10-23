@@ -51,7 +51,8 @@ public class HomeConfig implements WebMvcConfigurer {
                 .addPathPatterns("/user/delete/**");
         // 팔로우 인터셉터 : 이미 팔로우 한 경우 다시 팔로우 하는 걸 방지
         registry.addInterceptor(new FollowInterceptor(followService,usersService))
-                .addPathPatterns("/follow/**");
+                .addPathPatterns("/follow/**")
+                .excludePathPatterns("/follow/already");
         // 좋아요 인터셉터 : 이미 좋아요 한 경우 다시 좋아요 하는 걸 방지
         registry.addInterceptor(new LikesInterceptor(likesService,usersService,postsService))
                 .addPathPatterns("/likes/save/**");

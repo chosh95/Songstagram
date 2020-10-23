@@ -21,7 +21,7 @@ class PostsServiceTest {
 
     @Autowired PostsService postsService;
     @Autowired UsersService usersService;
-    @Autowired MakeComponent makeComponent;
+    MakeComponent makeComponent = new MakeComponent();
 
     @Test
     public void 게시글_저장(){

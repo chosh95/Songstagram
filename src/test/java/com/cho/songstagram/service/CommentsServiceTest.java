@@ -26,7 +26,7 @@ class CommentsServiceTest {
     @Autowired PostsService postsService;
     @Autowired CommentsService commentsService;
     @Autowired CommentsRepository commentsRepository;
-    @Autowired MakeComponent makeComponent;
+    MakeComponent makeComponent = new MakeComponent();
 
     @Test
     public void 댓글_저장() {

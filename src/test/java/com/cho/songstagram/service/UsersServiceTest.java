@@ -16,7 +16,8 @@ import static org.junit.jupiter.api.Assertions.*;
 class UsersServiceTest {
 
     @Autowired UsersService usersService;
-    @Autowired MakeComponent makeComponent;
+    MakeComponent makeComponent = new MakeComponent();
+
     @Test
     public void 회원_중복시_오류가_발생한다(){
         Users user1 = makeComponent.makeUsers();

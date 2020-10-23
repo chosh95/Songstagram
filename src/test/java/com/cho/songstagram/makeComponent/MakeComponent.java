@@ -3,7 +3,6 @@ package com.cho.songstagram.makeComponent;
 import com.cho.songstagram.domain.*;
 import org.springframework.stereotype.Component;
 
-@Component
 public class MakeComponent {
 
     public Users makeUsers(){

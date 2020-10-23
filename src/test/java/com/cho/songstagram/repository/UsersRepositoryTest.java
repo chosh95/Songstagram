@@ -4,17 +4,17 @@ import com.cho.songstagram.domain.Users;
 import com.cho.songstagram.makeComponent.MakeComponent;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@SpringBootTest
-@Transactional
+@DataJpaTest
 class UsersRepositoryTest {
 
     @Autowired UsersRepository usersRepository;
-    @Autowired MakeComponent makeComponent;
+    MakeComponent makeComponent = new MakeComponent();
 
     @Test
     public void 회원_저장(){

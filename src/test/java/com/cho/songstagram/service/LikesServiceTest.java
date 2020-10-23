@@ -22,7 +22,7 @@ class LikesServiceTest {
     @Autowired LikesService likesService;
     @Autowired PostsService postsService;
     @Autowired UsersService usersService;
-    @Autowired MakeComponent makeComponent;
+    MakeComponent makeComponent = new MakeComponent();
 
     @Test
     public void 좋아요_저장() throws InterruptedException {

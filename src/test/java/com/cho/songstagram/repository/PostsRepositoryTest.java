@@ -6,6 +6,7 @@ import com.cho.songstagram.domain.Users;
 import com.cho.songstagram.makeComponent.MakeComponent;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -20,14 +21,13 @@ import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@SpringBootTest
-@Transactional
+@DataJpaTest
 class PostsRepositoryTest {
 
     @Autowired PostsRepository postsRepository;
     @Autowired UsersRepository usersRepository;
     @Autowired LikesRepository likesRepository;
-    @Autowired MakeComponent makeComponent;
+    MakeComponent makeComponent = new MakeComponent();
 
     @Test
     public void 작성한_게시글_목록_페이징() throws InterruptedException {

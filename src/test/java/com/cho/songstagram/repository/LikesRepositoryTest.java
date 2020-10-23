@@ -7,6 +7,7 @@ import com.cho.songstagram.makeComponent.MakeComponent;
 import com.cho.songstagram.service.LikesService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -17,14 +18,13 @@ import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@SpringBootTest
-@Transactional
+@DataJpaTest
 class LikesRepositoryTest {
 
     @Autowired LikesRepository likesRepository;
     @Autowired PostsRepository postsRepository;
     @Autowired UsersRepository usersRepository;
-    @Autowired MakeComponent makeComponent;
+    MakeComponent makeComponent = new MakeComponent();
 
     @Test
     public void 게시글과_작성자로_좋아요_찾기(){

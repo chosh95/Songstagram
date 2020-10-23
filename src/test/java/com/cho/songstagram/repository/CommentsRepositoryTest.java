@@ -5,11 +5,14 @@ import com.cho.songstagram.domain.Posts;
 import com.cho.songstagram.domain.Users;
 import com.cho.songstagram.makeComponent.MakeComponent;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.web.client.AutoConfigureWebClient;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Import;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
@@ -17,14 +20,13 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
-@SpringBootTest
-@Transactional
+@DataJpaTest
 class CommentsRepositoryTest {
 
     @Autowired UsersRepository usersRepository;
     @Autowired PostsRepository postsRepository;
     @Autowired CommentsRepository commentsRepository;
-    @Autowired MakeComponent makeComponent;
+    MakeComponent makeComponent = new MakeComponent();
 
     @Test
     public void 게시글에_작성한_댓글목록_가져오기(){

@@ -18,7 +18,7 @@ class FollowServiceTest {
     @Autowired FollowService followService;
     @Autowired FollowRepository followRepository;
     @Autowired UsersService usersService;
-    @Autowired MakeComponent makeComponent;
+    MakeComponent makeComponent = new MakeComponent();
 
     @Test
     public void 팔로우_정보_저장(){
