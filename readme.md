@@ -116,7 +116,7 @@ HTTPS 적용 (2020. 08. 24 update) : [https://www.songstagram.ml](https://www.so
 
 게시글을 자세히 볼 수 있다. 곡명, 글, 사진, 댓글, 좋아요 등을 확인할 수 있다.
 
-![](https://github.com/chosh95/Songstagram/blob/master/Image/read.png?raw=true)
+![](https://github.com/chosh95/Songstagram/blob/master/Image/read2.png?raw=true)
 
 
 
