@@ -128,10 +128,9 @@ public class PostsController {
     }
 
     // 좋아요 누른 목록 보여주는 controller
-    @SneakyThrows
     @GetMapping("/post/likeList/{userId}")
     public String likeListGet(@RequestParam(value = "page", defaultValue = "1") int page,
-                           @PathVariable("userId") Long userId, Model model) {
+                           @PathVariable("userId") Long userId, Model model) throws NoResultException {
         List<PostDto> postDtoList = postsService.getUserLikeListPage(userId, page, 5); // 유저가 좋아요 한 게시글 postDto로 전환 후 가져오기
         model.addAttribute("postDtoList", postDtoList);
 
