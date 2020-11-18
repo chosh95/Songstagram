@@ -40,6 +40,7 @@ class LikesControllerTest {
 
         mockMvc.perform(MockMvcRequestBuilders.get("/likes/save/"+posts.getId()+"&"+users.getId())
                 .sessionAttr("loginUser",users))
+                .andExpect(MockMvcResultMatchers.redirectedUrl("/post/read/" + posts.getId()))
                 .andExpect(MockMvcResultMatchers.status().is3xxRedirection());
     }
 
