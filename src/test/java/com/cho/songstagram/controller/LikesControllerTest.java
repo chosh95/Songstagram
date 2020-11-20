@@ -1,5 +1,6 @@
 package com.cho.songstagram.controller;
 
+import com.cho.songstagram.domain.Likes;
 import com.cho.songstagram.domain.Posts;
 import com.cho.songstagram.domain.Users;
 import com.cho.songstagram.makeComponent.MakeComponent;
@@ -16,7 +17,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 import org.springframework.transaction.annotation.Transactional;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 
 @SpringBootTest
 @Transactional
@@ -44,5 +45,22 @@ class LikesControllerTest {
                 .andExpect(MockMvcResultMatchers.status().is3xxRedirection());
     }
 
+    @Test
+    public void 좋아요_취소_테스트() throws Exception{
+        Users users = makeComponent.makeUsers();
+        usersService.save(users);
 
+        Posts posts = makeComponent.makePosts(users);
+        postsService.save(posts);
+
+        Likes likes = makeComponent.makeLikes(posts, users);
+        likesService.save(likes);
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/likes/delete/"+posts.getId()+"&"+users.getId())
+                .sessionAttr("loginUser",users))
+                .andExpect(MockMvcResultMatchers.redirectedUrl("/post/read/"+posts.getId()))
+                .andExpect(MockMvcResultMatchers.status().is3xxRedirection());
+
+        assertFalse(likesService.findByPostsAndUsers(posts, users).isPresent());
+    }
 }
